@@ -9,6 +9,12 @@ const baseConfig = defineConfig({
                 'src/index\\.ts$',
             ],
         },
+        'not-to-unresolvable': {
+            to: [
+                /** This is used in some tests and it might not be generated yet. */
+                'test-files/generated/client\\.js',
+            ],
+        },
     },
     omitRules: [
         // enter rule names here to omit
