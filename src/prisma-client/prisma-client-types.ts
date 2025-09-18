@@ -1,0 +1,105 @@
+import {
+    type BasePrismaClient,
+    type MaybePromise,
+    type PartialWithUndefined,
+} from '@augment-vir/common';
+import {type UniversalTestContext} from '@augment-vir/test';
+import {type DynamicClientExtensionThis} from '@prisma/client/runtime/client.js';
+import {type RequireExactlyOne} from 'type-fest';
+import {type PostgresConnectionParams} from './postgres-client.js';
+import {type SqliteConnectionParams} from './sqlite-client.js';
+
+/**
+ * Internal outputs of each Prisma client engine constructor.
+ *
+ * @category Internal
+ */
+export type EngineClientOutput<PrismaClient extends BasePrismaClient> = {
+    databasePath: string | undefined;
+    basePrismaClient: PrismaClient;
+    wasJustInitialized: boolean;
+};
+
+/**
+ * The supported database engines by this package's `createPrismaClient` function.
+ *
+ * @category Internal
+ */
+export enum PrismaDatabaseEngine {
+    Postgres = 'postgres',
+    Sqlite = 'sqlite',
+}
+
+/**
+ * Mapping of supported database engines to their connection parameters.
+ *
+ * @category Internal
+ */
+export type DatabaseConnectionParams = {
+    [PrismaDatabaseEngine.Postgres]: PostgresConnectionParams;
+    [PrismaDatabaseEngine.Sqlite]: SqliteConnectionParams;
+};
+
+/**
+ * Connection parameters for dev and test databases.
+ *
+ * @category Internal
+ */
+export type DevDatabaseConnection = {
+    test?: UniversalTestContext | string | undefined;
+    /**
+     * - `true`: reset the database right now. (Recommended for tests.)
+     * - `false`: never reset the database.
+     */
+    resetDatabase: boolean;
+};
+
+/**
+ * All parameters for `createPrismaClient`.
+ *
+ * @category Internal
+ */
+export type CreatePrismaClientParams<
+    Engine extends PrismaDatabaseEngine,
+    PrismaClient extends BasePrismaClient = BasePrismaClient,
+> = {
+    schemaPath: string;
+    connection: RequireExactlyOne<{
+        /** For databases in dev or in tests. */
+        dev: DevDatabaseConnection;
+        /** For connection to live databases in production-like environments. */
+        liveConnection: DatabaseConnectionParams[Engine];
+    }>;
+} & PartialWithUndefined<{
+    /**
+     * If defined, this will override the folder for all file system databases.
+     *
+     * @default
+     * - join('<dir of package-lock.json>', '.not-committed', 'db')
+     * - join(process.cwd(), '.not-committed', 'db')
+     */
+    databaseDir: string;
+    /** A script intended for adding prisma client extensions. */
+    extendScript: (params: {
+        prismaClient: PrismaClient;
+    }) => DynamicClientExtensionThis<any, any, any>;
+    /**
+     * - When set: this script will be executed _only if `connection.dev` is set_ and only if the
+     *   database was just freshly setup, or if it was just reset.
+     * - When omitted or `undefined`: no seeding will ever be executed.
+     */
+    seedScript: (params: {
+        test: UniversalTestContext | string | undefined;
+        prismaClient: PrismaClient;
+    }) => MaybePromise<void>;
+}>;
+
+/**
+ * Output from `createPrismaClient`.
+ *
+ * @category Internal
+ */
+export type CreatePrismaClientOutput<PrismaClient extends BasePrismaClient> = {
+    prismaClient: PrismaClient;
+    databasePath: string | undefined;
+};
