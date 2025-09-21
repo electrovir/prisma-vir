@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
@@ -28,6 +28,11 @@
     "main": "src/index.ts",
     "module": "src/index.ts",
     "types": "src/index.ts",
+    "bin": {
+        "prisma-internal-enums": "./dist/prisma-generators/internal-enums.generator.js",
+        "prisma-shapes": "./dist/prisma-generators/shapes.generator.js",
+        "prisma-string-dates": "./dist/prisma-generators/string-dates.generator.js"
+    },
     "scripts": {
         "compile": "npm run init && virmator compile",
         "docs": "virmator docs",
@@ -62,6 +67,7 @@
         "@prisma/adapter-better-sqlite3": "^6.16.2",
         "@prisma/adapter-pg": "^6.16.2",
         "@prisma/client": "^6.16.2",
+        "@prisma/generator-helper": "^6.16.2",
         "@stylistic/eslint-plugin": "^5.3.1",
         "@stylistic/eslint-plugin-ts": "^4.4.1",
         "@types/better-sqlite3": "^7.6.13",
@@ -102,6 +108,7 @@
         "@prisma/adapter-better-sqlite3": "*",
         "@prisma/adapter-pg": "*",
         "@prisma/client": "*",
+        "@prisma/generator-helper": "*",
         "prisma": "*"
     },
     "engines": {
