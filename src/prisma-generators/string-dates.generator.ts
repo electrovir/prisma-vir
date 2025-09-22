@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /** This generator replaces all model `Date` types with `UtcIsoString` types. */
 
 import {addRegExpFlags, awaitedForEach, log} from '@augment-vir/common';

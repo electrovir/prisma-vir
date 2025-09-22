@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * This generator pulls all internal Prisma enums into the `enums.ts` file so they can be used by
  * browsers.

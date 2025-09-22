@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * This generator generates `object-shape-tester` `Shape` instances for each model. This currently
  * does not generate shapes for relations between models.
