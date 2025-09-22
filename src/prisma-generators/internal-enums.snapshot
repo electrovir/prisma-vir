@@ -1,0 +1,81 @@
+Index: enums.ts
+===================================================================
+--- enums.ts
++++ enums.ts
+@@ -11,4 +11,32 @@
+ 
+ 
+ // This file is empty because there are no enums in the schema.
+ export {}
++
++// Internal Enums
++
++export const ModelName = {
++    UserSimple: 'UserSimple',
++} as const;
++
++export type ModelName = (typeof ModelName)[keyof typeof ModelName];
++export const TransactionIsolationLevel = {
++    Serializable: 'Serializable',
++} as const;
++
++export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
++export const UserSimpleScalarFieldEnum = {
++    id: 'id',
++    createdAt: 'createdAt',
++    updatedAt: 'updatedAt',
++    email: 'email',
++    password: 'password',
++} as const;
++
++export type UserSimpleScalarFieldEnum = (typeof UserSimpleScalarFieldEnum)[keyof typeof UserSimpleScalarFieldEnum];
++export const SortOrder = {
++    asc: 'asc',
++    desc: 'desc',
++} as const;
++
++export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
+\ No newline at end of file
+
+
+Index: class.ts
+===================================================================
+--- class.ts
++++ class.ts
+@@ -25,10 +25,10 @@
+       "value": "/Users/electrovir/repos/electrovir/prisma-vir/test-files/generated",
+       "fromEnvVar": null
+     },
+     "config": {
+-      "engineType": "client",
+-      "moduleFormat": "esm"
++      "moduleFormat": "esm",
++      "engineType": "client"
+     },
+     "binaryTargets": [
+       {
+         "fromEnvVar": null,
+@@ -39,9 +39,9 @@
+     "previewFeatures": [
+       "relationJoins",
+       "strictUndefinedChecks"
+     ],
+-    "sourceFilePath": "/Users/electrovir/repos/electrovir/prisma-vir/test-files/simple-schema.prisma",
++    "sourceFilePath": "/Users/electrovir/repos/electrovir/prisma-vir/test-files/temp-schema-internal-enums.prisma",
+     "isCustomOutput": true
+   },
+   "relativePath": "..",
+   "clientVersion": "6.16.2",
+@@ -58,10 +58,10 @@
+         "value": null
+       }
+     }
+   },
+-  "inlineSchema": "generator jsClientSimple {\n  provider        = \"prisma-client\"\n  previewFeatures = [\"strictUndefinedChecks\", \"relationJoins\"]\n  output          = \"./generated\"\n  engineType      = \"client\"\n  moduleFormat    = \"esm\"\n}\n\ndatasource dbSimple {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel UserSimple {\n  id        String   @id @default(uuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  email    String\n  password String\n}\n",
+-  "inlineSchemaHash": "6b3c999642b8924b5fe0e45d3b893d0ea7060f5eb1cfb9f9bda9e99825ea4684",
++  "inlineSchema": "generator jsClientSimple {\n  provider        = \"prisma-client\"\n  previewFeatures = [\"strictUndefinedChecks\", \"relationJoins\"]\n  output          = \"./generated\"\n  engineType      = \"client\"\n  moduleFormat    = \"esm\"\n}\n\ndatasource dbSimple {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel UserSimple {\n  id        String   @id @default(uuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  email    String\n  password String\n}\n\ngenerator TEST {\n  provider = \"tsx ../src/prisma-generators/internal-enums.generator.ts\"\n  output   = \"./generated\"\n}\n",
++  "inlineSchemaHash": "a81457070718749773860af2749ecb0e217c64214c99a5c836930f7a9a53a933",
+   "copyEngine": true,
+   "runtimeDataModel": {
+     "models": {},
+     "enums": {},

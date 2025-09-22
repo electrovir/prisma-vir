@@ -1,5 +1,5 @@
 import {assertWrap} from '@augment-vir/assert';
-import {type MaybePromise, randomString} from '@augment-vir/common';
+import {type MaybePromise, type PartialWithUndefined, randomString} from '@augment-vir/common';
 import {sanitizePath} from '@augment-vir/node';
 import {readFile, writeFile} from 'node:fs/promises';
 import {dirname, join} from 'node:path';
@@ -13,16 +13,26 @@ import {dirname, join} from 'node:path';
 export async function createTempSchema({
     originalSchemaPath,
     transform,
-}: {
-    originalSchemaPath: string;
-    transform?:
-        | ((params: {
-              originalSchemaContents: string;
-              originalSchemaPath: string;
-          }) => MaybePromise<string>)
-        | undefined;
-}): Promise<{tempSchemaPath: string}> {
-    const tempSchemaName = `schema-${Date.now()}-${sanitizePath(randomString(4))}.prisma`;
+    key,
+}: Readonly<
+    {
+        originalSchemaPath: string;
+    } & PartialWithUndefined<{
+        transform: (params: {
+            originalSchemaContents: string;
+            originalSchemaPath: string;
+        }) => MaybePromise<string>;
+        key: string;
+    }>
+>): Promise<{tempSchemaPath: string}> {
+    const tempKey =
+        key ||
+        [
+            Date.now(),
+            sanitizePath(randomString(4)),
+        ].join('-');
+
+    const tempSchemaName = `temp-schema-${tempKey}.prisma`;
     const tempSchemaPath = join(dirname(originalSchemaPath), tempSchemaName);
 
     const originalSchemaContents = String(await readFile(originalSchemaPath));
@@ -48,12 +58,15 @@ export async function createTempSchema({
 export async function createTempSchemaWithReplacedDatasourceUrl({
     datasourceReplacement,
     originalSchemaPath,
-}: {
+    key,
+}: Readonly<{
     originalSchemaPath: string;
     datasourceReplacement: string;
-}) {
+    key?: string | undefined;
+}>) {
     return await createTempSchema({
         originalSchemaPath,
+        key,
         transform({originalSchemaContents}) {
             enum DatasourceStatus {
                 NotFound = 'not-found',

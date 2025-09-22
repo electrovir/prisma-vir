@@ -87,7 +87,6 @@ generatorHelper.generatorHandler({
         const contents = [
             ...headerParts,
             '',
-            '',
             ...modelBlocks,
             '',
         ].join('\n');

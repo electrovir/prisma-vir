@@ -202,6 +202,7 @@ describe(
                 it: 'adds a mix of keyed and array data',
                 input: [
                     {
+                        // @ts-ignore: might not be generated yet
                         User: [
                             {
                                 email: 'fake@example.com',
@@ -234,6 +235,7 @@ describe(
             {
                 it: 'adds keyed-only data',
                 input: {
+                    // @ts-ignore: might not be generated yet
                     User: [
                         {
                             email: 'fake@example.com',
@@ -265,6 +267,7 @@ describe(
             {
                 it: 'leaves out excluded entries',
                 input: {
+                    // @ts-ignore: might not be generated yet
                     User: [
                         {
                             email: 'fake@example.com',
@@ -298,6 +301,7 @@ describe(
             {
                 it: 'fails with informative message',
                 input: {
+                    // @ts-ignore: might not be generated yet
                     User: [
                         // @ts-ignore: intentionally missing fields
                         {},

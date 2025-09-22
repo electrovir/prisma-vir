@@ -10,3 +10,4 @@ export const testSqliteDbPath = join(notCommittedDirPath, 'dev.db');
 export const generatedPrismaClientDirPath = join(testFilesDir, 'generated');
 export const testPrismaMigrationsDirPath = join(testFilesDir, 'migrations');
 export const dbDirPath = join(notCommittedDirPath, 'db');
+export const simplePrismaSchemaPath = join(testFilesDir, 'simple-schema.prisma');

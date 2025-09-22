@@ -57,7 +57,15 @@ generatorHelper.generatorHandler({
                 'enums.ts',
             );
 
-            await appendFile(enumsFilePath, enumBlocks.join('\n'));
+            await appendFile(
+                enumsFilePath,
+                [
+                    '',
+                    '// Internal Enums',
+                    '',
+                    ...enumBlocks,
+                ].join('\n'),
+            );
             log.faint(`Internal enums added to ${relative(process.cwd(), enumsFilePath)}`);
         } catch (error) {
             log.error('Failed to generate internal enums:', error);
