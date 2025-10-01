@@ -45,8 +45,12 @@ export type DatabaseConnectionParams = {
  *
  * @category Internal
  */
-export type DevDatabaseConnection = {
-    test?: UniversalTestContext | string | undefined;
+export type DevDatabaseConnection = PartialWithUndefined<{
+    /** Use a different directory for the database, for tests. */
+    test: UniversalTestContext | string;
+    /** Allow multiple databases with the same dev params but with different names. */
+    databaseName: string;
+}> & {
     /**
      * - `true`: reset the database right now. (Recommended for tests.)
      * - `false`: never reset the database.

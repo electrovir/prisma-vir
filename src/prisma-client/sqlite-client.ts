@@ -1,5 +1,6 @@
 import {assert, assertWrap, check} from '@augment-vir/assert';
 import {
+    addSuffix,
     type BasePrismaClient,
     type PartialWithUndefined,
     type SelectFrom,
@@ -13,7 +14,7 @@ import {dirname, join} from 'node:path';
 import {type Constructor} from 'type-fest';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {createTempSchemaWithReplacedDatasourceUrl} from '../prisma-schema/temp-schema.js';
-import {getDefaultDatabaseDirPath} from './default-path.js';
+import {getDefaultTopLevelDatabaseDirPath} from './default-path.js';
 import {
     type CreatePrismaClientParams,
     type DevDatabaseConnection,
@@ -104,19 +105,27 @@ type ExtraAdapterProperties = {
 export function createSqliteDatabaseUrl({
     databaseDir,
     test,
+    databaseName,
 }: PartialWithUndefined<{
     test: string | UniversalTestContext;
     databaseDir: string;
+    databaseName: string;
 }> = {}) {
-    const databaseName = test
+    const databaseDirName = test
         ? check.isString(test)
             ? sanitizePath(test)
             : extractTestNameAsDir(test)
         : 'dev';
 
-    assert.isTruthy(databaseName);
+    assert.isTruthy(databaseDirName);
 
-    const databasePath = join(databaseDir || getDefaultDatabaseDirPath(), databaseName) + '.db';
+    const databaseFileName = addSuffix({value: databaseName || 'db', suffix: '.db'});
+
+    const databasePath = join(
+        databaseDir || getDefaultTopLevelDatabaseDirPath(),
+        databaseDirName,
+        databaseFileName,
+    );
 
     return {
         path: databasePath,
@@ -128,7 +137,11 @@ async function createDevSqliteAdapter(
     devParams: DevDatabaseConnection,
     databaseDir: string | undefined,
 ): Promise<PrismaBetterSQLite3 & ExtraAdapterProperties> {
-    const {path, url} = createSqliteDatabaseUrl({databaseDir, test: devParams.test});
+    const {path, url} = createSqliteDatabaseUrl({
+        databaseDir,
+        test: devParams.test,
+        databaseName: devParams.databaseName,
+    });
     await mkdir(dirname(path), {recursive: true});
     const didDatabaseExistAlready = existsSync(path);
 

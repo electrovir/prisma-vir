@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "0.1.1",
+    "version": "1.0.0",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
@@ -54,7 +54,6 @@
         "@augment-vir/assert": "^31.38.0",
         "@augment-vir/common": "^31.38.0",
         "@augment-vir/node": "^31.38.0",
-        "prisma-pglite": "^1.0.1",
         "terminate": "^2.8.0",
         "type-fest": "^5.0.1",
         "url-vir": "^2.1.6"
@@ -99,10 +98,11 @@
         "prettier-plugin-toml": "^2.0.6",
         "prisma": "^6.16.3",
         "prisma-map": "^3.0.0",
+        "prisma-pglite": "^2.0.0",
         "typedoc": "^0.28.13",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.45.0",
-        "virmator": "^14.0.4"
+        "virmator": "^14.1.0"
     },
     "peerDependencies": {
         "@prisma/adapter-better-sqlite3": "*",
@@ -110,7 +110,8 @@
         "@prisma/client": "*",
         "@prisma/generator-helper": "*",
         "date-vir": "*",
-        "prisma": "*"
+        "prisma": "*",
+        "prisma-pglite": ">=2"
     },
     "engines": {
         "node": ">=22"

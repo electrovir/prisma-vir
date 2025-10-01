@@ -115,49 +115,6 @@ Index: commonInputTypes.ts
  }
 
 
-Index: class.ts
-===================================================================
---- class.ts
-+++ class.ts
-@@ -25,10 +25,10 @@
-       "value": "/Users/electrovir/repos/electrovir/prisma-vir/test-files/generated",
-       "fromEnvVar": null
-     },
-     "config": {
--      "moduleFormat": "esm",
--      "engineType": "client"
-+      "engineType": "client",
-+      "moduleFormat": "esm"
-     },
-     "binaryTargets": [
-       {
-         "fromEnvVar": null,
-@@ -39,9 +39,9 @@
-     "previewFeatures": [
-       "relationJoins",
-       "strictUndefinedChecks"
-     ],
--    "sourceFilePath": "/Users/electrovir/repos/electrovir/prisma-vir/test-files/simple-schema.prisma",
-+    "sourceFilePath": "/Users/electrovir/repos/electrovir/prisma-vir/test-files/temp-schema-string-dates.prisma",
-     "isCustomOutput": true
-   },
-   "relativePath": "..",
-   "clientVersion": "6.16.3",
-@@ -58,10 +58,10 @@
-         "value": null
-       }
-     }
-   },
--  "inlineSchema": "generator jsClientSimple {\n  provider        = \"prisma-client\"\n  previewFeatures = [\"strictUndefinedChecks\", \"relationJoins\"]\n  output          = \"./generated\"\n  engineType      = \"client\"\n  moduleFormat    = \"esm\"\n}\n\ndatasource dbSimple {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel UserSimple {\n  id        String   @id @default(uuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  email    String\n  password String\n}\n",
--  "inlineSchemaHash": "6b3c999642b8924b5fe0e45d3b893d0ea7060f5eb1cfb9f9bda9e99825ea4684",
-+  "inlineSchema": "generator jsClientSimple {\n  provider        = \"prisma-client\"\n  previewFeatures = [\"strictUndefinedChecks\", \"relationJoins\"]\n  output          = \"./generated\"\n  engineType      = \"client\"\n  moduleFormat    = \"esm\"\n}\n\ndatasource dbSimple {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel UserSimple {\n  id        String   @id @default(uuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  email    String\n  password String\n}\n\ngenerator TEST {\n  provider = \"tsx ../src/prisma-generators/string-dates.generator.ts\"\n  output   = \"./generated\"\n}\n",
-+  "inlineSchemaHash": "edf2535c2515cb623d4bf2a1d1a6200732934462e4c845df98baed8ac11681c0",
-   "copyEngine": true,
-   "runtimeDataModel": {
-     "models": {},
-     "enums": {},
-
-
 Index: prismaNamespace.ts
 ===================================================================
 --- prismaNamespace.ts

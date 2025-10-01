@@ -51,7 +51,8 @@ describe(createSqlitePrismaClient.name, () => {
             join(
                 '.not-committed',
                 'db',
-                'create_sqlite_prisma_client_creates_a_test_sqlite_client.db',
+                'create_sqlite_prisma_client_creates_a_test_sqlite_client',
+                'db.db',
             ),
         );
 
@@ -99,7 +100,7 @@ describe(createSqlitePrismaClient.name, () => {
 
         assert.strictEquals(
             relative(repoDirPath, databasePath),
-            join('.not-committed', 'db', 'dev.db'),
+            join('.not-committed', 'db', 'dev', 'db.db'),
         );
 
         const mockUser = {
@@ -158,7 +159,12 @@ describe(createSqlitePrismaClient.name, () => {
 
         assert.strictEquals(
             relative(repoDirPath, databasePath),
-            join('.not-committed', 'db', 'create_sqlite_prisma_client_works_with_migrations.db'),
+            join(
+                '.not-committed',
+                'db',
+                'create_sqlite_prisma_client_works_with_migrations',
+                'db.db',
+            ),
         );
 
         const mockUser = {
@@ -206,7 +212,7 @@ describe(createSqlitePrismaClient.name, () => {
 
         assert.strictEquals(
             relative(repoDirPath, databasePath),
-            join('.not-committed', 'db', 'hello_there.db'),
+            join('.not-committed', 'db', 'hello_there', 'db.db'),
         );
 
         const mockUser = {

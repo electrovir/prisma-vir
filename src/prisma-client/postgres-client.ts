@@ -3,7 +3,7 @@ import {PrismaPg} from '@prisma/adapter-pg';
 import {createPgliteAdapter} from 'prisma-pglite';
 import {type Constructor} from 'type-fest';
 import {buildUrl} from 'url-vir';
-import {getDefaultDatabaseDirPath} from './default-path.js';
+import {getDefaultTopLevelDatabaseDirPath} from './default-path.js';
 import {
     type CreatePrismaClientParams,
     type EngineClientOutput,
@@ -86,18 +86,17 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
         >
     >,
 ): Promise<EngineClientOutput<PrismaClient>> {
-    const devParams = connection.dev;
-
-    const shouldResetDatabase: boolean = !!devParams && connection.dev.resetDatabase;
+    const shouldResetDatabase: boolean = !!connection.dev && connection.dev.resetDatabase;
 
     /* node:coverage disable: we cannot create a real Postgres server in tests. */
     const adapter =
         'dev' in connection
             ? await createPgliteAdapter({
                   schemaFilePath: schemaPath,
-                  test: devParams?.test,
+                  databaseName: connection.dev.databaseName,
+                  dbDirName: connection.dev.test,
                   resetDatabase: shouldResetDatabase,
-                  pgliteDirPath: databaseDir || getDefaultDatabaseDirPath(),
+                  dbParentDirPath: databaseDir || getDefaultTopLevelDatabaseDirPath(),
               })
             : new PrismaPg({
                   connectionString: createPostgresDatabaseUrl(connection.liveConnection),

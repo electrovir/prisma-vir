@@ -10,6 +10,8 @@ import {prismaApi} from '../prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from '../prisma-api/prisma-database.mock.js';
 import {createTempSchema} from '../prisma-schema/temp-schema.js';
 
+const filesToExclude = ['class.ts'];
+
 export function createGeneratorTest(importMeta: ImportMeta) {
     return it('generates', async () => {
         const generatorName = basename(importMeta.filename).replace('.generator.test.ts', '');
@@ -38,6 +40,7 @@ generator TEST {
 
             const dirContentsBefore = await readAllDirContents(generatedPrismaClientDirPath, {
                 recursive: true,
+                excludeList: filesToExclude,
             });
 
             await clearTestDatabaseOutputs();
@@ -47,6 +50,7 @@ generator TEST {
 
             const dirContentsAfter = await readAllDirContents(generatedPrismaClientDirPath, {
                 recursive: true,
+                excludeList: filesToExclude,
             });
 
             const patch = createDirContentsPatch(dirContentsBefore, dirContentsAfter);

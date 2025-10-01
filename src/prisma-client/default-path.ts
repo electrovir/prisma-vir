@@ -7,7 +7,7 @@ import {join} from 'node:path';
  *
  * @category Internal
  */
-export function getDefaultDatabaseDirPath(dirName: string = 'db') {
+export function getDefaultTopLevelDatabaseDirPath(dirName: string = 'db') {
     const packageLockJsonPath = findAncestor(process.cwd(), (currentPath) => {
         return existsSync(join(currentPath, 'package-lock.json'));
     });
