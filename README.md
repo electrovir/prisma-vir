@@ -22,6 +22,5 @@ Use `prismaApi` to run Prisma commands as an API.
 
 This package exposes the following generators:
 
--   `prisma-internal-enums`: copies all internal Prisma enums into the `enums.ts` file
 -   `prisma-shapes`: generates [`object-shape-tester`](https://www.npmjs.com/package/object-shape-tester) `Shape` instances for each model.
 -   `prisma-string-dates`: converts all `Date` or `string` types for date fields into `UtcIsoString` from [`date-vir`](https://www.npmjs.com/package/date-vir).
