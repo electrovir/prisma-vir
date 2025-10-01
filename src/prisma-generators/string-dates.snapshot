@@ -124,10 +124,10 @@ Index: class.ts
        "fromEnvVar": null
      },
      "config": {
--      "engineType": "client",
--      "moduleFormat": "esm"
-+      "moduleFormat": "esm",
-+      "engineType": "client"
+-      "moduleFormat": "esm",
+-      "engineType": "client"
++      "engineType": "client",
++      "moduleFormat": "esm"
      },
      "binaryTargets": [
        {
@@ -142,7 +142,7 @@ Index: class.ts
      "isCustomOutput": true
    },
    "relativePath": "..",
-   "clientVersion": "6.16.2",
+   "clientVersion": "6.16.3",
 @@ -58,10 +58,10 @@
          "value": null
        }
@@ -173,7 +173,7 @@ Index: prismaNamespace.ts
   * WARNING: This is an internal file that is subject to change!
   *
   * 🛑 Under no circumstances should you import this file directly! 🛑
-@@ -205,9 +206,9 @@
+@@ -204,9 +205,9 @@
   * Is T a Record?
   */
  type IsObject<T extends any> = T extends Array<any>
@@ -184,7 +184,7 @@ Index: prismaNamespace.ts
  : T extends Uint8Array
  ? False
  : T extends BigInt
-@@ -676,17 +677,17 @@
+@@ -675,17 +676,17 @@
    ? GetLogType<T[number]>
    : never;
  

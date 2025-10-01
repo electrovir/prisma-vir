@@ -7,10 +7,10 @@ Index: class.ts
        "fromEnvVar": null
      },
      "config": {
--      "engineType": "client",
--      "moduleFormat": "esm"
-+      "moduleFormat": "esm",
-+      "engineType": "client"
+-      "moduleFormat": "esm",
+-      "engineType": "client"
++      "engineType": "client",
++      "moduleFormat": "esm"
      },
      "binaryTargets": [
        {
@@ -25,7 +25,7 @@ Index: class.ts
      "isCustomOutput": true
    },
    "relativePath": "..",
-   "clientVersion": "6.16.2",
+   "clientVersion": "6.16.3",
 @@ -58,10 +58,10 @@
          "value": null
        }
