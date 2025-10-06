@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
@@ -39,9 +39,8 @@
         "init": "npm run install --prefix node_modules/better-sqlite3",
         "lint": "virmator lint fix",
         "publish": "virmator publish npm run test:all",
-        "start": "tsx src/index.ts",
-        "test": "virmator test node --test-concurrency=1",
-        "test:all": "npm run compile && runstorm --names tests,spelling,format,docs,deps,lint \"npm run test:coverage\" \"npm run test:spelling\" \"npm run test:format\" \"npm run test:docs\" \"npm run test:deps\" \"npm run test:lint\"",
+        "test": "npm run compile && virmator test node --test-concurrency=1",
+        "test:all": "npm run test && runstorm --names tests,spelling,format,docs,deps,lint \"npm run test:coverage\" \"npm run test:spelling\" \"npm run test:format\" \"npm run test:docs\" \"npm run test:deps\" \"npm run test:lint\"",
         "test:coverage": "virmator test node coverage --test-concurrency=1",
         "test:deps": "virmator deps check",
         "test:docs": "virmator docs check",
@@ -54,6 +53,7 @@
         "@augment-vir/assert": "^31.39.0",
         "@augment-vir/common": "^31.39.0",
         "@augment-vir/node": "^31.39.0",
+        "fsm-vir": "^3.0.0",
         "terminate": "^2.8.0",
         "type-fest": "^5.0.1",
         "url-vir": "^2.1.6"
@@ -97,7 +97,7 @@
         "prettier-plugin-sort-json": "^4.1.1",
         "prettier-plugin-toml": "^2.0.6",
         "prisma": "^6.16.3",
-        "prisma-map": "^3.0.0",
+        "prisma-map": "^3.0.1",
         "prisma-pglite": "^2.0.0",
         "typedoc": "^0.28.13",
         "typescript": "^5.9.3",

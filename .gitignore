@@ -13,3 +13,5 @@ node_modules/
 tsconfig.tsbuildinfo
 
 test-files/generated
+test-files/migrations
+test-files/temp-*
