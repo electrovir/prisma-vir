@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
@@ -30,7 +30,8 @@
     "types": "src/index.ts",
     "bin": {
         "prisma-shapes": "./dist/prisma-generators/shapes.generator.js",
-        "prisma-string-dates": "./dist/prisma-generators/string-dates.generator.js"
+        "prisma-string-dates": "./dist/prisma-generators/string-dates.generator.js",
+        "prisma-tagged-ids": "./dist/prisma-generators/tagged-ids.generator.js"
     },
     "scripts": {
         "compile": "npm run init && virmator compile",
