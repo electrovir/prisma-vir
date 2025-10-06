@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import {assert, check, waitUntil} from '@augment-vir/assert';
 import {
     awaitedForEach,
