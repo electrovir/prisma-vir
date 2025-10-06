@@ -7,6 +7,11 @@ export const generatorVersion: string = assertWrap.isDefined(
     (await readPackageJson(repoDirPath)).version,
 );
 
+/**
+ * Handles a generator's output and converts it to a string.
+ *
+ * @category Internal
+ */
 export function resolveGeneratorOutput(output: string | EnvValue | undefined | null): string {
     if (!output) {
         return '.';

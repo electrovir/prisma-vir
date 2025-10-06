@@ -5,5 +5,5 @@ export * from './prisma-client/default-path.js';
 export * from './prisma-client/postgres-client.js';
 export * from './prisma-client/prisma-client-types.js';
 export * from './prisma-client/sqlite-client.js';
-export * from './prisma-generators/generator-util.js';
+export {resolveGeneratorOutput} from './prisma-generators/generator-util.js';
 export * from './prisma-schema/temp-schema.js';
