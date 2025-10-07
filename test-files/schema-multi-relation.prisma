@@ -1,0 +1,36 @@
+generator jsClientMulti {
+    provider        = "prisma-client"
+    previewFeatures = ["strictUndefinedChecks", "relationJoins"]
+    output          = "./generated"
+    engineType      = "client"
+    moduleFormat    = "esm"
+}
+
+datasource dbMulti {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+model UserMulti {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    email    String
+    password String
+    authorOf PostMulti[] @relation("authorRelation")
+    editorOf PostMulti[] @relation("editorRelation")
+}
+
+model PostMulti {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    content String
+
+    author   UserMulti @relation(fields: [authorId], references: [id], name: "authorRelation")
+    editor   UserMulti @relation(fields: [editorId], references: [id], name: "editorRelation")
+    authorId String
+    editorId String
+}

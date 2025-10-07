@@ -1,53 +1,706 @@
-Index: UserSimple.ts
+Index: commonInputTypes.ts
 ===================================================================
---- UserSimple.ts
-+++ UserSimple.ts
-@@ -1,5 +1,7 @@
+--- commonInputTypes.ts
++++ commonInputTypes.ts
+@@ -12,20 +12,20 @@
+ import * as $Enums from "./enums.js"
+ import type * as Prisma from "./internal/prismaNamespace.js"
+ 
+ 
+-export type StringFilter<$PrismaModel = never> = {
+-  equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  in?: string[] | runtime.Types.Skip
+-  notIn?: string[] | runtime.Types.Skip
+-  lt?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  lte?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gt?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gte?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  contains?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  startsWith?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  not?: Prisma.NestedStringFilter<$PrismaModel> | string | runtime.Types.Skip
++export type StringFilter<$PrismaModel = never, FieldType = string> = {
++  equals?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  in?: FieldType[] | runtime.Types.Skip
++  notIn?: FieldType[] | runtime.Types.Skip
++  lt?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  lte?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gt?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gte?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  contains?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  startsWith?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  endsWith?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  not?: Prisma.NestedStringFilter<$PrismaModel> | FieldType | runtime.Types.Skip
+ }
+ 
+ export type DateTimeFilter<$PrismaModel = never> = {
+   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+@@ -37,20 +37,20 @@
+   gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+   not?: Prisma.NestedDateTimeFilter<$PrismaModel> | Date | string | runtime.Types.Skip
+ }
+ 
+-export type StringWithAggregatesFilter<$PrismaModel = never> = {
+-  equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  in?: string[] | runtime.Types.Skip
+-  notIn?: string[] | runtime.Types.Skip
+-  lt?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  lte?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gt?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gte?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  contains?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  startsWith?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  not?: Prisma.NestedStringWithAggregatesFilter<$PrismaModel> | string | runtime.Types.Skip
++export type StringWithAggregatesFilter<$PrismaModel = never, FieldType = string> = {
++  equals?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  in?: FieldType[] | runtime.Types.Skip
++  notIn?: FieldType[] | runtime.Types.Skip
++  lt?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  lte?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gt?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gte?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  contains?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  startsWith?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  endsWith?: FieldType | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  not?: Prisma.NestedStringWithAggregatesFilter<$PrismaModel> | FieldType | runtime.Types.Skip
+   _count?: Prisma.NestedIntFilter<$PrismaModel> | runtime.Types.Skip
+   _min?: Prisma.NestedStringFilter<$PrismaModel> | runtime.Types.Skip
+   _max?: Prisma.NestedStringFilter<$PrismaModel> | runtime.Types.Skip
+ }
+@@ -136,4 +136,9 @@
+   _max?: Prisma.NestedDateTimeFilter<$PrismaModel> | runtime.Types.Skip
+ }
+ 
+ 
++
++
++export type StringFieldUpdateOperationsInput<FieldType = string> = {
++  set?: FieldType | runtime.Types.Skip
++}
+\ No newline at end of file
+
+
+Index: PostMulti.ts
+===================================================================
+--- PostMulti.ts
++++ PostMulti.ts
+@@ -1,5 +1,9 @@
 +import {type Tagged} from 'type-fest';
  
-+export type UserSimpleId = Tagged<string, 'model-UserSimple-id-field-id', {model: 'UserSimple', field: 'id'}>;
++export type PostMultiId = Tagged<string, 'model-PostMulti-field-id', {model: 'PostMulti', field: 'id'}>;
++export type UserMultiId = Tagged<string, 'model-UserMulti-field-id', {model: 'UserMulti', field: 'id'}>;
++
  /* !!! This is code generated by Prisma. Do not edit directly. !!! */
  /* eslint-disable */
  // @ts-nocheck 
  /*
-@@ -23,17 +25,17 @@
-   _max: UserSimpleMaxAggregateOutputType | null
+@@ -23,23 +27,23 @@
+   _max: PostMultiMaxAggregateOutputType | null
  }
  
- export type UserSimpleMinAggregateOutputType = {
+ export type PostMultiMinAggregateOutputType = {
 -  id: string | null
-+  id: UserSimpleId | null
++  id: PostMultiId | null
    createdAt: Date | null
    updatedAt: Date | null
-   email: string | null
-   password: string | null
+   content: string | null
+-  authorId: string | null
+-  editorId: string | null
++  authorId: UserMultiId | null
++  editorId: UserMultiId | null
  }
  
- export type UserSimpleMaxAggregateOutputType = {
+ export type PostMultiMaxAggregateOutputType = {
 -  id: string | null
-+  id: UserSimpleId | null
++  id: PostMultiId | null
    createdAt: Date | null
    updatedAt: Date | null
-   email: string | null
-   password: string | null
-@@ -146,9 +148,9 @@
-   _max?: UserSimpleMaxAggregateInputType
+   content: string | null
+-  authorId: string | null
+-  editorId: string | null
++  authorId: UserMultiId | null
++  editorId: UserMultiId | null
  }
  
- export type UserSimpleGroupByOutputType = {
+ export type PostMultiCountAggregateOutputType = {
+   id: number
+@@ -152,14 +156,14 @@
+   _max?: PostMultiMaxAggregateInputType
+ }
+ 
+ export type PostMultiGroupByOutputType = {
 -  id: string
-+  id: UserSimpleId
++  id: PostMultiId
+   createdAt: Date
+   updatedAt: Date
+   content: string
+-  authorId: string
+-  editorId: string
++  authorId: UserMultiId
++  editorId: UserMultiId
+   _count: PostMultiCountAggregateOutputType | null
+   _min: PostMultiMinAggregateOutputType | null
+   _max: PostMultiMaxAggregateOutputType | null
+ }
+@@ -182,14 +186,14 @@
+ export type PostMultiWhereInput = {
+   AND?: Prisma.PostMultiWhereInput | Prisma.PostMultiWhereInput[] | runtime.Types.Skip
+   OR?: Prisma.PostMultiWhereInput[] | runtime.Types.Skip
+   NOT?: Prisma.PostMultiWhereInput | Prisma.PostMultiWhereInput[] | runtime.Types.Skip
+-  id?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
++  id?: Prisma.StringFilter<"PostMulti", PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFilter<"PostMulti"> | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFilter<"PostMulti"> | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
+-  authorId?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
+-  editorId?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
++  authorId?: Prisma.StringFilter<"PostMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
++  editorId?: Prisma.StringFilter<"PostMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
+   author?: Prisma.XOR<Prisma.UserMultiScalarRelationFilter, Prisma.UserMultiWhereInput> | runtime.Types.Skip
+   editor?: Prisma.XOR<Prisma.UserMultiScalarRelationFilter, Prisma.UserMultiWhereInput> | runtime.Types.Skip
+ }
+ 
+@@ -204,17 +208,17 @@
+   editor?: Prisma.UserMultiOrderByWithRelationInput | runtime.Types.Skip
+ }
+ 
+ export type PostMultiWhereUniqueInput = Prisma.AtLeast<{
+-  id?: string | runtime.Types.Skip
++  id?: PostMultiId | runtime.Types.Skip
+   AND?: Prisma.PostMultiWhereInput | Prisma.PostMultiWhereInput[] | runtime.Types.Skip
+   OR?: Prisma.PostMultiWhereInput[] | runtime.Types.Skip
+   NOT?: Prisma.PostMultiWhereInput | Prisma.PostMultiWhereInput[] | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFilter<"PostMulti"> | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFilter<"PostMulti"> | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
+-  authorId?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
+-  editorId?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
++  authorId?: Prisma.StringFilter<"PostMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
++  editorId?: Prisma.StringFilter<"PostMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
+   author?: Prisma.XOR<Prisma.UserMultiScalarRelationFilter, Prisma.UserMultiWhereInput> | runtime.Types.Skip
+   editor?: Prisma.XOR<Prisma.UserMultiScalarRelationFilter, Prisma.UserMultiWhereInput> | runtime.Types.Skip
+ }, "id">
+ 
+@@ -233,75 +237,75 @@
+ export type PostMultiScalarWhereWithAggregatesInput = {
+   AND?: Prisma.PostMultiScalarWhereWithAggregatesInput | Prisma.PostMultiScalarWhereWithAggregatesInput[] | runtime.Types.Skip
+   OR?: Prisma.PostMultiScalarWhereWithAggregatesInput[] | runtime.Types.Skip
+   NOT?: Prisma.PostMultiScalarWhereWithAggregatesInput | Prisma.PostMultiScalarWhereWithAggregatesInput[] | runtime.Types.Skip
+-  id?: Prisma.StringWithAggregatesFilter<"PostMulti"> | string | runtime.Types.Skip
++  id?: Prisma.StringWithAggregatesFilter<"PostMulti", PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PostMulti"> | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PostMulti"> | Date | string | runtime.Types.Skip
+   content?: Prisma.StringWithAggregatesFilter<"PostMulti"> | string | runtime.Types.Skip
+-  authorId?: Prisma.StringWithAggregatesFilter<"PostMulti"> | string | runtime.Types.Skip
+-  editorId?: Prisma.StringWithAggregatesFilter<"PostMulti"> | string | runtime.Types.Skip
++  authorId?: Prisma.StringWithAggregatesFilter<"PostMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
++  editorId?: Prisma.StringWithAggregatesFilter<"PostMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
+ }
+ 
+ export type PostMultiCreateInput = {
+-  id?: string | runtime.Types.Skip
++  id?: PostMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   content: string
+   author: Prisma.UserMultiCreateNestedOneWithoutAuthorOfInput
+   editor: Prisma.UserMultiCreateNestedOneWithoutEditorOfInput
+ }
+ 
+ export type PostMultiUncheckedCreateInput = {
+-  id?: string | runtime.Types.Skip
++  id?: PostMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   content: string
+-  authorId: string
+-  editorId: string
++  authorId: UserMultiId
++  editorId: UserMultiId
+ }
+ 
+ export type PostMultiUpdateInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   author?: Prisma.UserMultiUpdateOneRequiredWithoutAuthorOfNestedInput | runtime.Types.Skip
+   editor?: Prisma.UserMultiUpdateOneRequiredWithoutEditorOfNestedInput | runtime.Types.Skip
+ }
+ 
+ export type PostMultiUncheckedUpdateInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+-  authorId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+-  editorId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  authorId?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
++  editorId?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+ }
+ 
+ export type PostMultiCreateManyInput = {
+-  id?: string | runtime.Types.Skip
++  id?: PostMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   content: string
+-  authorId: string
+-  editorId: string
++  authorId: UserMultiId
++  editorId: UserMultiId
+ }
+ 
+ export type PostMultiUpdateManyMutationInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+ }
+ 
+ export type PostMultiUncheckedUpdateManyInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+-  authorId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+-  editorId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  authorId?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
++  editorId?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+ }
+ 
+ export type PostMultiListRelationFilter = {
+   every?: Prisma.PostMultiWhereInput | runtime.Types.Skip
+@@ -424,21 +428,21 @@
+   deleteMany?: Prisma.PostMultiScalarWhereInput | Prisma.PostMultiScalarWhereInput[] | runtime.Types.Skip
+ }
+ 
+ export type PostMultiCreateWithoutAuthorInput = {
+-  id?: string | runtime.Types.Skip
++  id?: PostMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   content: string
+   editor: Prisma.UserMultiCreateNestedOneWithoutEditorOfInput
+ }
+ 
+ export type PostMultiUncheckedCreateWithoutAuthorInput = {
+-  id?: string | runtime.Types.Skip
++  id?: PostMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   content: string
+-  editorId: string
++  editorId: UserMultiId
+ }
+ 
+ export type PostMultiCreateOrConnectWithoutAuthorInput = {
+   where: Prisma.PostMultiWhereUniqueInput
+@@ -449,21 +453,21 @@
+   data: Prisma.PostMultiCreateManyAuthorInput | Prisma.PostMultiCreateManyAuthorInput[]
+ }
+ 
+ export type PostMultiCreateWithoutEditorInput = {
+-  id?: string | runtime.Types.Skip
++  id?: PostMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   content: string
+   author: Prisma.UserMultiCreateNestedOneWithoutAuthorOfInput
+ }
+ 
+ export type PostMultiUncheckedCreateWithoutEditorInput = {
+-  id?: string | runtime.Types.Skip
++  id?: PostMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   content: string
+-  authorId: string
++  authorId: UserMultiId
+ }
+ 
+ export type PostMultiCreateOrConnectWithoutEditorInput = {
+   where: Prisma.PostMultiWhereUniqueInput
+@@ -493,14 +497,14 @@
+ export type PostMultiScalarWhereInput = {
+   AND?: Prisma.PostMultiScalarWhereInput | Prisma.PostMultiScalarWhereInput[] | runtime.Types.Skip
+   OR?: Prisma.PostMultiScalarWhereInput[] | runtime.Types.Skip
+   NOT?: Prisma.PostMultiScalarWhereInput | Prisma.PostMultiScalarWhereInput[] | runtime.Types.Skip
+-  id?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
++  id?: Prisma.StringFilter<"PostMulti", PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFilter<"PostMulti"> | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFilter<"PostMulti"> | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
+-  authorId?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
+-  editorId?: Prisma.StringFilter<"PostMulti"> | string | runtime.Types.Skip
++  authorId?: Prisma.StringFilter<"PostMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
++  editorId?: Prisma.StringFilter<"PostMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
+ }
+ 
+ export type PostMultiUpsertWithWhereUniqueWithoutEditorInput = {
+   where: Prisma.PostMultiWhereUniqueInput
+@@ -518,69 +522,69 @@
+   data: Prisma.XOR<Prisma.PostMultiUpdateManyMutationInput, Prisma.PostMultiUncheckedUpdateManyWithoutEditorInput>
+ }
+ 
+ export type PostMultiCreateManyAuthorInput = {
+-  id?: string | runtime.Types.Skip
++  id?: PostMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   content: string
+-  editorId: string
++  editorId: UserMultiId
+ }
+ 
+ export type PostMultiCreateManyEditorInput = {
+-  id?: string | runtime.Types.Skip
++  id?: PostMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   content: string
+-  authorId: string
++  authorId: UserMultiId
+ }
+ 
+ export type PostMultiUpdateWithoutAuthorInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   editor?: Prisma.UserMultiUpdateOneRequiredWithoutEditorOfNestedInput | runtime.Types.Skip
+ }
+ 
+ export type PostMultiUncheckedUpdateWithoutAuthorInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+-  editorId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  editorId?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+ }
+ 
+ export type PostMultiUncheckedUpdateManyWithoutAuthorInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+-  editorId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  editorId?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+ }
+ 
+ export type PostMultiUpdateWithoutEditorInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   author?: Prisma.UserMultiUpdateOneRequiredWithoutAuthorOfNestedInput | runtime.Types.Skip
+ }
+ 
+ export type PostMultiUncheckedUpdateWithoutEditorInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+-  authorId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  authorId?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+ }
+ 
+ export type PostMultiUncheckedUpdateManyWithoutEditorInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<PostMultiId> | PostMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   content?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+-  authorId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  authorId?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+ }
+ 
+ 
+ 
+@@ -646,14 +650,14 @@
+     author: Prisma.$UserMultiPayload<ExtArgs>
+     editor: Prisma.$UserMultiPayload<ExtArgs>
+   }
+   scalars: runtime.Types.Extensions.GetPayloadResult<{
+-    id: string
++    id: PostMultiId
+     createdAt: Date
+     updatedAt: Date
+     content: string
+-    authorId: string
+-    editorId: string
++    authorId: UserMultiId
++    editorId: UserMultiId
+   }, ExtArgs["result"]["postMulti"]>
+   composites: {}
+ }
+ 
+
+
+Index: UserMulti.ts
+===================================================================
+--- UserMulti.ts
++++ UserMulti.ts
+@@ -1,5 +1,8 @@
++import {type Tagged} from 'type-fest';
+ 
++export type UserMultiId = Tagged<string, 'model-UserMulti-field-id', {model: 'UserMulti', field: 'id'}>;
++
+ /* !!! This is code generated by Prisma. Do not edit directly. !!! */
+ /* eslint-disable */
+ // @ts-nocheck 
+ /*
+@@ -23,17 +26,17 @@
+   _max: UserMultiMaxAggregateOutputType | null
+ }
+ 
+ export type UserMultiMinAggregateOutputType = {
+-  id: string | null
++  id: UserMultiId | null
+   createdAt: Date | null
+   updatedAt: Date | null
+   email: string | null
+   password: string | null
+ }
+ 
+ export type UserMultiMaxAggregateOutputType = {
+-  id: string | null
++  id: UserMultiId | null
+   createdAt: Date | null
+   updatedAt: Date | null
+   email: string | null
+   password: string | null
+@@ -146,9 +149,9 @@
+   _max?: UserMultiMaxAggregateInputType
+ }
+ 
+ export type UserMultiGroupByOutputType = {
+-  id: string
++  id: UserMultiId
    createdAt: Date
    updatedAt: Date
    email: string
    password: string
-@@ -351,9 +353,9 @@
- export type $UserSimplePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-   name: "UserSimple"
-   objects: {}
+@@ -175,9 +178,9 @@
+ export type UserMultiWhereInput = {
+   AND?: Prisma.UserMultiWhereInput | Prisma.UserMultiWhereInput[] | runtime.Types.Skip
+   OR?: Prisma.UserMultiWhereInput[] | runtime.Types.Skip
+   NOT?: Prisma.UserMultiWhereInput | Prisma.UserMultiWhereInput[] | runtime.Types.Skip
+-  id?: Prisma.StringFilter<"UserMulti"> | string | runtime.Types.Skip
++  id?: Prisma.StringFilter<"UserMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFilter<"UserMulti"> | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFilter<"UserMulti"> | Date | string | runtime.Types.Skip
+   email?: Prisma.StringFilter<"UserMulti"> | string | runtime.Types.Skip
+   password?: Prisma.StringFilter<"UserMulti"> | string | runtime.Types.Skip
+@@ -195,9 +198,9 @@
+   editorOf?: Prisma.PostMultiOrderByRelationAggregateInput | runtime.Types.Skip
+ }
+ 
+ export type UserMultiWhereUniqueInput = Prisma.AtLeast<{
+-  id?: string | runtime.Types.Skip
++  id?: UserMultiId | runtime.Types.Skip
+   AND?: Prisma.UserMultiWhereInput | Prisma.UserMultiWhereInput[] | runtime.Types.Skip
+   OR?: Prisma.UserMultiWhereInput[] | runtime.Types.Skip
+   NOT?: Prisma.UserMultiWhereInput | Prisma.UserMultiWhereInput[] | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFilter<"UserMulti"> | Date | string | runtime.Types.Skip
+@@ -222,17 +225,17 @@
+ export type UserMultiScalarWhereWithAggregatesInput = {
+   AND?: Prisma.UserMultiScalarWhereWithAggregatesInput | Prisma.UserMultiScalarWhereWithAggregatesInput[] | runtime.Types.Skip
+   OR?: Prisma.UserMultiScalarWhereWithAggregatesInput[] | runtime.Types.Skip
+   NOT?: Prisma.UserMultiScalarWhereWithAggregatesInput | Prisma.UserMultiScalarWhereWithAggregatesInput[] | runtime.Types.Skip
+-  id?: Prisma.StringWithAggregatesFilter<"UserMulti"> | string | runtime.Types.Skip
++  id?: Prisma.StringWithAggregatesFilter<"UserMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserMulti"> | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserMulti"> | Date | string | runtime.Types.Skip
+   email?: Prisma.StringWithAggregatesFilter<"UserMulti"> | string | runtime.Types.Skip
+   password?: Prisma.StringWithAggregatesFilter<"UserMulti"> | string | runtime.Types.Skip
+ }
+ 
+ export type UserMultiCreateInput = {
+-  id?: string | runtime.Types.Skip
++  id?: UserMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   email: string
+   password: string
+@@ -240,9 +243,9 @@
+   editorOf?: Prisma.PostMultiCreateNestedManyWithoutEditorInput | runtime.Types.Skip
+ }
+ 
+ export type UserMultiUncheckedCreateInput = {
+-  id?: string | runtime.Types.Skip
++  id?: UserMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   email: string
+   password: string
+@@ -250,9 +253,9 @@
+   editorOf?: Prisma.PostMultiUncheckedCreateNestedManyWithoutEditorInput | runtime.Types.Skip
+ }
+ 
+ export type UserMultiUpdateInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+@@ -260,9 +263,9 @@
+   editorOf?: Prisma.PostMultiUpdateManyWithoutEditorNestedInput | runtime.Types.Skip
+ }
+ 
+ export type UserMultiUncheckedUpdateInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+@@ -270,25 +273,25 @@
+   editorOf?: Prisma.PostMultiUncheckedUpdateManyWithoutEditorNestedInput | runtime.Types.Skip
+ }
+ 
+ export type UserMultiCreateManyInput = {
+-  id?: string | runtime.Types.Skip
++  id?: UserMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   email: string
+   password: string
+ }
+ 
+ export type UserMultiUpdateManyMutationInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+ }
+ 
+ export type UserMultiUncheckedUpdateManyInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+@@ -322,12 +325,10 @@
+   is?: Prisma.UserMultiWhereInput | runtime.Types.Skip
+   isNot?: Prisma.UserMultiWhereInput | runtime.Types.Skip
+ }
+ 
+-export type StringFieldUpdateOperationsInput = {
+-  set?: string | runtime.Types.Skip
+-}
+ 
++
+ export type DateTimeFieldUpdateOperationsInput = {
+   set?: Date | string | runtime.Types.Skip
+ }
+ 
+@@ -359,18 +360,18 @@
+   update?: Prisma.XOR<Prisma.XOR<Prisma.UserMultiUpdateToOneWithWhereWithoutEditorOfInput, Prisma.UserMultiUpdateWithoutEditorOfInput>, Prisma.UserMultiUncheckedUpdateWithoutEditorOfInput> | runtime.Types.Skip
+ }
+ 
+ export type UserMultiCreateWithoutAuthorOfInput = {
+-  id?: string | runtime.Types.Skip
++  id?: UserMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   email: string
+   password: string
+   editorOf?: Prisma.PostMultiCreateNestedManyWithoutEditorInput | runtime.Types.Skip
+ }
+ 
+ export type UserMultiUncheckedCreateWithoutAuthorOfInput = {
+-  id?: string | runtime.Types.Skip
++  id?: UserMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   email: string
+   password: string
+@@ -382,18 +383,18 @@
+   create: Prisma.XOR<Prisma.UserMultiCreateWithoutAuthorOfInput, Prisma.UserMultiUncheckedCreateWithoutAuthorOfInput>
+ }
+ 
+ export type UserMultiCreateWithoutEditorOfInput = {
+-  id?: string | runtime.Types.Skip
++  id?: UserMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   email: string
+   password: string
+   authorOf?: Prisma.PostMultiCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+ }
+ 
+ export type UserMultiUncheckedCreateWithoutEditorOfInput = {
+-  id?: string | runtime.Types.Skip
++  id?: UserMultiId | runtime.Types.Skip
+   createdAt?: Date | string | runtime.Types.Skip
+   updatedAt?: Date | string | runtime.Types.Skip
+   email: string
+   password: string
+@@ -416,18 +417,18 @@
+   data: Prisma.XOR<Prisma.UserMultiUpdateWithoutAuthorOfInput, Prisma.UserMultiUncheckedUpdateWithoutAuthorOfInput>
+ }
+ 
+ export type UserMultiUpdateWithoutAuthorOfInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   editorOf?: Prisma.PostMultiUpdateManyWithoutEditorNestedInput | runtime.Types.Skip
+ }
+ 
+ export type UserMultiUncheckedUpdateWithoutAuthorOfInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+@@ -445,18 +446,18 @@
+   data: Prisma.XOR<Prisma.UserMultiUpdateWithoutEditorOfInput, Prisma.UserMultiUncheckedUpdateWithoutEditorOfInput>
+ }
+ 
+ export type UserMultiUpdateWithoutEditorOfInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   authorOf?: Prisma.PostMultiUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+ }
+ 
+ export type UserMultiUncheckedUpdateWithoutEditorOfInput = {
+-  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
++  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
+   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+@@ -553,9 +554,9 @@
+     authorOf: Prisma.$PostMultiPayload<ExtArgs>[]
+     editorOf: Prisma.$PostMultiPayload<ExtArgs>[]
+   }
    scalars: runtime.Types.Extensions.GetPayloadResult<{
 -    id: string
-+    id: UserSimpleId
++    id: UserMultiId
      createdAt: Date
      updatedAt: Date
      email: string

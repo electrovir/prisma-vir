@@ -12,14 +12,14 @@ import {createTempSchema} from '../prisma-schema/temp-schema.js';
 
 const filesToExclude = ['class.ts'];
 
-export function createGeneratorTest(importMeta: ImportMeta) {
+export function createGeneratorTest(importMeta: ImportMeta, schemaPath = simplePrismaSchemaPath) {
     return it('generates', async () => {
         const generatorName = basename(importMeta.filename).replace('.generator.test.ts', '');
 
         await clearTestDatabaseOutputs();
 
         const {tempSchemaPath} = await createTempSchema({
-            originalSchemaPath: simplePrismaSchemaPath,
+            originalSchemaPath: schemaPath,
             key: generatorName,
             transform({originalSchemaContents}) {
                 return (
@@ -35,7 +35,7 @@ generator TEST {
         });
         try {
             await prismaApi.client.generate({
-                schemaPath: simplePrismaSchemaPath,
+                schemaPath,
             });
 
             const dirContentsBefore = await readAllDirContents(generatedPrismaClientDirPath, {

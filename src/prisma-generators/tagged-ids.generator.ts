@@ -2,20 +2,28 @@
 
 import {assert, check, waitUntil} from '@augment-vir/assert';
 import {
+    type ArrayElement,
+    arrayToObject,
     awaitedForEach,
     escapeStringForRegExp,
     filterMap,
+    getObjectTypedEntries,
+    removePrefix,
     removeSuffix,
     safeMatch,
     typedObjectFromEntries,
 } from '@augment-vir/common';
 import {readFileIfExists} from '@augment-vir/node';
-import generatorHelper, {type DMMF} from '@prisma/generator-helper';
+import generatorHelper from '@prisma/generator-helper';
 import {runFsm} from 'fsm-vir';
 import {existsSync} from 'node:fs';
 import {readdir, writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {generatorVersion, resolveGeneratorOutput} from './generator-util.js';
+
+/** This is removed from the model files and placed into `commonInputTypes.ts` */
+const stringFieldUpdateOperationsInputString =
+    'export type StringFieldUpdateOperationsInput = {\n  set?: string | runtime.Types.Skip\n}';
 
 generatorHelper.generatorHandler({
     onManifest() {
@@ -54,94 +62,404 @@ generatorHelper.generatorHandler({
             }),
         );
 
-        const modelsWithIds = filterMap(
+        await fixCommonInputTypes(outputDir);
+
+        type FieldRelation = {
+            relationModelName: string;
+            relationModelId: string;
+        };
+
+        type FieldInfo = {
+            fileModelName: string;
+            fieldName: string;
+            relation: FieldRelation | undefined;
+        };
+
+        const relationFields: {
+            [ModelNameWithRelation in string]: {
+                [RelationIdFieldName in string]: FieldRelation;
+            };
+        } = arrayToObject(
             options.dmmf.datamodel.models,
             (model) => {
-                const idField = model.fields.find(({name, isId}) => name === 'id' && isId);
+                const relationEntries = filterMap(
+                    model.fields,
+                    (field): undefined | [string, FieldRelation] => {
+                        if (
+                            !field.relationToFields ||
+                            !check.isLengthAtLeast(field.relationToFields, 1)
+                        ) {
+                            return undefined;
+                        }
+
+                        assert.isLengthExactly(
+                            field.relationToFields,
+                            1,
+                            `Unable to handle relation to multiple fields for field '${field.name}' in model '${model.name}'.`,
+                        );
+
+                        assert.isDefined(
+                            field.relationFromFields,
+                            `Found no relation to fields for field '${field.name}' in model '${model.name}'.`,
+                        );
+                        assert.isLengthAtLeast(
+                            field.relationFromFields,
+                            1,
+                            `Found empty relation fields for field '${field.name}' in model '${model.name}'.`,
+                        );
+                        assert.isLengthExactly(
+                            field.relationFromFields,
+                            1,
+                            `Unable to handle relation from multiple fields for field '${field.name}' in model '${model.name}'.`,
+                        );
+
+                        const relationToField = field.relationToFields[0];
+                        const relationFromField = field.relationFromFields[0];
+
+                        return [
+                            relationFromField,
+                            {
+                                relationModelName: field.type,
+                                relationModelId: relationToField,
+                            },
+                        ];
+                    },
+                    check.isTruthy,
+                );
 
                 return {
-                    idField,
-                    modelName: model.name,
+                    key: model.name,
+                    value: typedObjectFromEntries(relationEntries),
                 };
             },
-
-            (fieldInfo): fieldInfo is {modelName: string; idField: DMMF.Field} =>
-                !!fieldInfo.idField,
+            {
+                useRequired: true,
+            },
         );
 
-        await awaitedForEach(modelsWithIds, async ({idField: {name: idFieldName}, modelName}) => {
-            const modelFilePath = modelFiles[modelName]?.path;
+        const idFieldsByModel: {[FileModelName in string]: {[FieldName in string]: FieldInfo}} =
+            arrayToObject(
+                options.dmmf.datamodel.models,
+                (model) => {
+                    const fieldEntries = filterMap(
+                        model.fields,
+                        (field): [string, FieldInfo] | undefined => {
+                            if (field.isId) {
+                                return [
+                                    field.name,
+                                    {
+                                        fileModelName: model.name,
+                                        fieldName: field.name,
+                                        relation: undefined,
+                                    },
+                                ] as const;
+                            }
 
-            assert.isDefined(modelFilePath, `No model file found for model: '${modelName}'`);
+                            const relation = relationFields[model.name]?.[field.name];
 
-            const modelFileContents = (await readFileIfExists(modelFilePath)) || '';
-            const modelFileLines = modelFileContents.trim().split('\n');
-            assert.isLengthAtLeast(modelFileLines, 1, `No model file found at: '${modelFilePath}'`);
+                            if (relation) {
+                                return [
+                                    field.name,
+                                    {
+                                        fileModelName: model.name,
+                                        fieldName: field.name,
+                                        relation,
+                                    },
+                                ] as const;
+                            }
 
-            const newIdTypeName = [
-                modelName,
-                'Id',
-            ].join('');
+                            return undefined;
+                        },
+                        check.isTruthy,
+                    );
 
-            const modelIdRegExp = new RegExp(
-                `^(\\s*['"]?${escapeStringForRegExp(idFieldName)}['"]?:)([^|]+ | )?string(.*)$`,
+                    return {
+                        key: model.name,
+                        value: typedObjectFromEntries(fieldEntries),
+                    };
+                },
+                {
+                    useRequired: true,
+                },
             );
 
-            runFsm<number, string>({
-                /** Type object depth. */
-                initState: 0,
-                inputs: modelFileLines,
-                nextState({input, state}) {
-                    if (state === 0 && input.trim().startsWith('export type')) {
-                        return {
-                            nextState: 1,
-                        };
-                    } else if (state > 0) {
-                        if (input.includes('}')) {
-                            return {
-                                nextState: state - 1,
-                            };
-                        } else if (input.includes('{')) {
-                            return {
-                                nextState: state + 1,
-                            };
-                        }
-                    }
+        await awaitedForEach(
+            getObjectTypedEntries(idFieldsByModel),
+            async ([
+                modelName,
+                fields,
+            ]) => {
+                const modelFilePath = modelFiles[modelName]?.path;
 
-                    return undefined;
-                },
-                actions: {
-                    preNextState({input, state, index}) {
-                        if (state > 0) {
-                            const matches = safeMatch(input, modelIdRegExp);
+                assert.isDefined(modelFilePath, `No model file found for model: '${modelName}'`);
 
-                            if (check.isLengthExactly(matches, 4)) {
-                                const values: string[] = [
-                                    matches[1],
-                                    matches[2],
-                                    newIdTypeName,
-                                    matches[3],
-                                ];
+                const modelFileContents = (await readFileIfExists(modelFilePath)) || '';
+                const modelFileLines = modelFileContents.trim().split('\n');
+                assert.isLengthAtLeast(
+                    modelFileLines,
+                    1,
+                    `No model file found at: '${modelFilePath}'`,
+                );
 
-                                modelFileLines[index] = values.join('');
-                            }
-                        }
+                const tsIdTypeStrings = new Set<string>();
+
+                getObjectTypedEntries(fields).forEach(
+                    ([
+                        fieldName,
+                        fieldInfo,
+                    ]) => {
+                        const modelForIdName: string =
+                            fieldInfo.relation?.relationModelName || fieldInfo.fileModelName;
+                        const idNameInModel =
+                            fieldInfo.relation?.relationModelId || fieldInfo.fieldName;
+
+                        const newIdTypeName = [
+                            modelForIdName,
+                            'Id',
+                        ].join('');
+
+                        const modelIdRegExp = new RegExp(
+                            `^(\\s*['"]?${escapeStringForRegExp(fieldName)}['"]?\\??:)(.+)\\bstring\\b(.*)$`,
+                        );
+
+                        runFsm<number, string>({
+                            /** Type object depth. */
+                            initState: 0,
+                            inputs: modelFileLines,
+                            nextState({input, state}) {
+                                if (state === 0 && input.trim().startsWith('export type')) {
+                                    return {
+                                        nextState: 1,
+                                    };
+                                } else if (state > 0) {
+                                    if (input.includes('}')) {
+                                        return {
+                                            nextState: state - 1,
+                                        };
+                                    } else if (input.includes('{')) {
+                                        return {
+                                            nextState: state + 1,
+                                        };
+                                    }
+                                }
+
+                                return undefined;
+                            },
+                            actions: {
+                                preNextState({input, state, index}) {
+                                    if (state > 0) {
+                                        const modelIdMatches = safeMatch(input, modelIdRegExp);
+
+                                        if (check.isLengthExactly(modelIdMatches, 4)) {
+                                            const values: string[] = [
+                                                modelIdMatches[1],
+                                                modelIdMatches[2],
+                                                newIdTypeName,
+                                                modelIdMatches[3],
+                                            ];
+
+                                            const latestLine = values.join('');
+
+                                            modelFileLines[index] = latestLine;
+
+                                            const inputTypeMatches = inputTypesToFix.map(
+                                                ({usageRegExp}) => {
+                                                    return safeMatch(latestLine, usageRegExp);
+                                                },
+                                            );
+
+                                            const commonTypeMatches = inputTypeMatches.find(
+                                                (matches) => {
+                                                    return check.isLengthExactly(matches, 3);
+                                                },
+                                            );
+
+                                            if (commonTypeMatches) {
+                                                const insertion = commonTypeMatches[2].startsWith(
+                                                    '<',
+                                                )
+                                                    ? commonTypeMatches[2].replace(
+                                                          '> ',
+                                                          `, ${newIdTypeName}> `,
+                                                      )
+                                                    : [
+                                                          `<${newIdTypeName}>`,
+                                                          commonTypeMatches[2],
+                                                      ].join('');
+
+                                                const values: string[] = [
+                                                    commonTypeMatches[1],
+                                                    insertion,
+                                                ];
+
+                                                modelFileLines[index] = values.join('');
+                                            }
+                                        }
+                                    }
+                                },
+                            },
+                        });
+
+                        tsIdTypeStrings.add(
+                            `export type ${newIdTypeName} = Tagged<string, 'model-${modelForIdName}-field-${idNameInModel}', {model: '${modelForIdName}', field: '${idNameInModel}'}>;`,
+                        );
                     },
-                },
-            });
+                );
 
-            const fileHeader = [
-                "import {type Tagged} from 'type-fest';",
-                `export type ${newIdTypeName} = Tagged<string, 'model-${modelName}-id-field-${idFieldName}', {model: '${modelName}', field: '${idFieldName}'}>;`,
-            ].join('\n\n');
+                const newFileContents = [
+                    "import {type Tagged} from 'type-fest';",
+                    '',
+                    ...Array.from(tsIdTypeStrings),
+                    '',
+                    ...modelFileLines,
+                    '',
+                ]
+                    .join('\n')
+                    .replaceAll(stringFieldUpdateOperationsInputString, '');
 
-            const newFileContents = [
-                fileHeader,
-                ...modelFileLines,
-                '',
-            ].join('\n');
-
-            await writeFile(modelFilePath, newFileContents);
-        });
+                await writeFile(modelFilePath, newFileContents);
+            },
+        );
     },
 });
+
+const inputTypesToFix = [
+    'StringFilter',
+    'StringWithAggregatesFilter',
+    'StringFieldUpdateOperationsInput',
+].map((typeName) => {
+    return {
+        typeName,
+        definitionRegExp: new RegExp(`^export type ${typeName}\\b`),
+        usageRegExp: new RegExp(`^(.+:.+\\bPrisma.${typeName}\\b)(.*)$`),
+    };
+});
+
+// eslint-disable-next-line sonarjs/slow-regex
+const fieldTypeRegExp = /^(.+:)(.+)\bstring\b(.*)$/;
+const fieldTypeName = 'FieldType';
+
+async function fixCommonInputTypes(outputDirPath: string) {
+    const commonInputTypesFilePath = join(outputDirPath, 'commonInputTypes.ts');
+    const fileContents = await waitUntil.isTruthy(
+        async () => {
+            return (await readFileIfExists(commonInputTypesFilePath)) || '';
+        },
+        undefined,
+        `Failed to find: '${commonInputTypesFilePath}'`,
+    );
+
+    const fileLines = [
+        fileContents,
+        stringFieldUpdateOperationsInputString,
+    ]
+        .join('\n\n')
+        .split('\n');
+
+    runFsm<
+        {
+            depth: number;
+            match?: ArrayElement<typeof inputTypesToFix> | undefined;
+            linesAtDepth: number;
+        },
+        string
+    >({
+        /** Type object depth. */
+        initState: {
+            depth: 0,
+            linesAtDepth: 0,
+        },
+        inputs: fileLines,
+        nextState({input, state}) {
+            if (state.depth === 0) {
+                const matchedName = inputTypesToFix.find(({definitionRegExp: regExp}) => {
+                    return input.match(regExp);
+                });
+
+                if (matchedName) {
+                    return {
+                        nextState: {
+                            depth: 1,
+                            linesAtDepth: 0,
+                            match: matchedName,
+                        },
+                    };
+                }
+            } else if (state.depth > 0) {
+                if (input.includes('}')) {
+                    const newDepth = state.depth - 1;
+
+                    return {
+                        nextState: {
+                            match: newDepth === 0 ? undefined : state.match,
+                            linesAtDepth: 0,
+                            depth: newDepth,
+                        },
+                    };
+                } else if (input.includes('{')) {
+                    return {
+                        nextState: {
+                            ...state,
+                            linesAtDepth: 0,
+                            depth: state.depth + 1,
+                        },
+                    };
+                } else {
+                    return {
+                        nextState: {
+                            ...state,
+                            linesAtDepth: state.linesAtDepth + 1,
+                        },
+                    };
+                }
+            }
+
+            return undefined;
+        },
+        actions: {
+            postNextState({input, state, index}) {
+                if (state.depth === 1 && state.match && state.linesAtDepth === 0) {
+                    const [matchString] = safeMatch(input, state.match.definitionRegExp);
+
+                    assert.isTruthy(
+                        matchString,
+                        `Failed to extract match for '${state.match.definitionRegExp}' from '${input}'`,
+                    );
+
+                    const afterMatch = removePrefix({value: input, prefix: matchString});
+
+                    if (afterMatch.startsWith('<')) {
+                        fileLines[index] = input.replace(
+                            '> = {',
+                            `, ${fieldTypeName} = string> = {`,
+                        );
+                    } else {
+                        fileLines[index] = [
+                            matchString,
+                            `<${fieldTypeName} = string>`,
+                            afterMatch,
+                        ].join('');
+                    }
+                }
+            },
+            preNextState({input, state, index}) {
+                if (state.depth > 0 && state.match) {
+                    const matches = safeMatch(input, fieldTypeRegExp);
+
+                    if (check.isLengthExactly(matches, 4)) {
+                        const values: string[] = [
+                            matches[1],
+                            matches[2],
+                            fieldTypeName,
+                            matches[3],
+                        ];
+
+                        fileLines[index] = values.join('');
+                    }
+                }
+            },
+        },
+    });
+
+    await writeFile(commonInputTypesFilePath, fileLines.join('\n'));
+}

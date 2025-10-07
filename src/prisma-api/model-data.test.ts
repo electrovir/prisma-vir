@@ -210,6 +210,7 @@ describe(
                                 password: 'fake password',
                             },
                         ],
+                        // @ts-ignore: might be generated with tagged ids
                         Region: {
                             region1: {
                                 regionName: 'fake',
@@ -243,6 +244,7 @@ describe(
                             password: 'fake password',
                         },
                     ],
+                    // @ts-ignore: might be generated with tagged ids
                     Region: {
                         region1: {
                             regionName: 'fake',
@@ -281,10 +283,19 @@ describe(
                             password: 'fake password 2',
                         },
                     ],
-                    Region: [{regionName: 'fake'}],
+                    Region: [
+                        {
+                            // @ts-ignore: might be generated with tagged ids
+                            regionName: 'fake',
+                        },
+                    ],
                 },
                 expect: {
-                    region: [{regionName: 'fake'}],
+                    region: [
+                        {
+                            regionName: 'fake',
+                        },
+                    ],
                     user: [
                         {
                             email: 'fake2@example.com',
