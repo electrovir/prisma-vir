@@ -19,7 +19,10 @@ import {runFsm} from 'fsm-vir';
 import {existsSync} from 'node:fs';
 import {readdir, writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
-import {generatorVersion, resolveGeneratorOutput} from './generator-util.js';
+import {resolveGeneratorOutput} from './generator-util/generator-output.js';
+import {createIdTypeName} from './generator-util/id-name.js';
+import {extractRelations, type FieldRelation} from './generator-util/relation.js';
+import {generatorVersion} from './generator-util/version.js';
 
 /** This is removed from the model files and placed into `commonInputTypes.ts` */
 const stringFieldUpdateOperationsInputString =
@@ -64,78 +67,13 @@ generatorHelper.generatorHandler({
 
         await fixCommonInputTypes(outputDir);
 
-        type FieldRelation = {
-            relationModelName: string;
-            relationModelId: string;
-        };
-
         type FieldInfo = {
             fileModelName: string;
             fieldName: string;
             relation: FieldRelation | undefined;
         };
 
-        const relationFields: {
-            [ModelNameWithRelation in string]: {
-                [RelationIdFieldName in string]: FieldRelation;
-            };
-        } = arrayToObject(
-            options.dmmf.datamodel.models,
-            (model) => {
-                const relationEntries = filterMap(
-                    model.fields,
-                    (field): undefined | [string, FieldRelation] => {
-                        if (
-                            !field.relationToFields ||
-                            !check.isLengthAtLeast(field.relationToFields, 1)
-                        ) {
-                            return undefined;
-                        }
-
-                        assert.isLengthExactly(
-                            field.relationToFields,
-                            1,
-                            `Unable to handle relation to multiple fields for field '${field.name}' in model '${model.name}'.`,
-                        );
-
-                        assert.isDefined(
-                            field.relationFromFields,
-                            `Found no relation to fields for field '${field.name}' in model '${model.name}'.`,
-                        );
-                        assert.isLengthAtLeast(
-                            field.relationFromFields,
-                            1,
-                            `Found empty relation fields for field '${field.name}' in model '${model.name}'.`,
-                        );
-                        assert.isLengthExactly(
-                            field.relationFromFields,
-                            1,
-                            `Unable to handle relation from multiple fields for field '${field.name}' in model '${model.name}'.`,
-                        );
-
-                        const relationToField = field.relationToFields[0];
-                        const relationFromField = field.relationFromFields[0];
-
-                        return [
-                            relationFromField,
-                            {
-                                relationModelName: field.type,
-                                relationModelId: relationToField,
-                            },
-                        ];
-                    },
-                    check.isTruthy,
-                );
-
-                return {
-                    key: model.name,
-                    value: typedObjectFromEntries(relationEntries),
-                };
-            },
-            {
-                useRequired: true,
-            },
-        );
+        const relationFields = extractRelations(options.dmmf);
 
         const idFieldsByModel: {[FileModelName in string]: {[FieldName in string]: FieldInfo}} =
             arrayToObject(
@@ -213,10 +151,10 @@ generatorHelper.generatorHandler({
                         const idNameInModel =
                             fieldInfo.relation?.relationModelId || fieldInfo.fieldName;
 
-                        const newIdTypeName = [
-                            modelForIdName,
-                            'Id',
-                        ].join('');
+                        const newIdTypeName = createIdTypeName({
+                            modelName: modelForIdName,
+                            fieldName: idNameInModel,
+                        });
 
                         const modelIdRegExp = new RegExp(
                             `^(\\s*['"]?${escapeStringForRegExp(fieldName)}['"]?\\??:)(.+)\\bstring\\b(.*)$`,

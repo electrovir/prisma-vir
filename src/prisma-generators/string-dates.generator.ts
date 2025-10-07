@@ -7,7 +7,8 @@ import {joinFilesToDir, readDirRecursive} from '@augment-vir/node';
 import generatorHelper from '@prisma/generator-helper';
 import {readFile, writeFile} from 'node:fs/promises';
 import {relative} from 'node:path';
-import {generatorVersion, resolveGeneratorOutput} from './generator-util.js';
+import {resolveGeneratorOutput} from './generator-util/generator-output.js';
+import {generatorVersion} from './generator-util/version.js';
 
 type Replacement = {
     match: RegExp | string;

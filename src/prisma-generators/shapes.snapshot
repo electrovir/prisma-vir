@@ -2,16 +2,30 @@ Index: shapes.gen.ts
 ===================================================================
 --- shapes.gen.ts
 +++ shapes.gen.ts
-@@ -0,0 +1,12 @@
+@@ -0,0 +1,26 @@
 +/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */
-+import {defineShape, enumShape, unionShape, unknownShape} from 'object-shape-tester';
++// @ts-nocheck
++import {defineShape, enumShape, unionShape, unknownShape, typedStringShape} from 'object-shape-tester';
 +import {JsonValue} from '@prisma/client/runtime/client.js';
 +import {utcIsoStringShape} from 'date-vir';
++import {type UserMultiId} from './models/UserMulti.js';
++import {type PostMultiId} from './models/PostMulti.js';
 +
-+export const UserSimpleShape = defineShape({
-+    id: '',
++export const UserMultiIdShape = typedStringShape<UserMultiId>();
++export const PostMultiIdShape = typedStringShape<PostMultiId>();
++
++export const UserMultiShape = defineShape({
++    id: UserMultiIdShape,
 +    createdAt: utcIsoStringShape(),
 +    updatedAt: utcIsoStringShape(),
 +    email: '',
 +    password: '',
++});
++export const PostMultiShape = defineShape({
++    id: PostMultiIdShape,
++    createdAt: utcIsoStringShape(),
++    updatedAt: utcIsoStringShape(),
++    content: '',
++    authorId: UserMultiIdShape,
++    editorId: UserMultiIdShape,
 +});

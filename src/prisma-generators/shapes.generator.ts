@@ -6,11 +6,13 @@
  */
 
 import {check} from '@augment-vir/assert';
-import {indent, log} from '@augment-vir/common';
+import {getObjectTypedEntries, indent, log} from '@augment-vir/common';
 import generatorHelper, {type DMMF, type EnvValue} from '@prisma/generator-helper';
 import {mkdir, writeFile} from 'node:fs/promises';
 import {dirname, join, relative} from 'node:path';
-import {generatorVersion} from './generator-util.js';
+import {createIdTypeName} from './generator-util/id-name.js';
+import {extractRelations} from './generator-util/relation.js';
+import {generatorVersion} from './generator-util/version.js';
 
 function scalarPlaceholderCode(field: DMMF.Field): string {
     if (field.type === 'String') {
@@ -43,12 +45,44 @@ generatorHelper.generatorHandler({
     },
     async onGenerate(options) {
         const allEnums = new Set<string>();
+        const relations = extractRelations(options.dmmf);
+        const usedIdShapes: {
+            [ShapeName in string]: {
+                typeName: string;
+                modelName: string;
+            };
+        } = {};
 
         const modelBlocks: string[] = options.dmmf.datamodel.models.map((model) => {
             const lines: string[] = model.fields
                 .map((field) => {
                     if (field.kind === 'scalar') {
-                        const base = scalarPlaceholderCode(field);
+                        const relation = relations[model.name]?.[field.name];
+                        const relationIdName = relation
+                            ? createIdTypeName({
+                                  modelName: relation.relationModelName,
+                                  fieldName: relation.relationModelId,
+                              })
+                            : undefined;
+
+                        const currentIdName =
+                            !relation && field.isId
+                                ? createIdTypeName({
+                                      modelName: model.name,
+                                      fieldName: field.name,
+                                  })
+                                : undefined;
+                        const idName = currentIdName || relationIdName;
+                        const idShapeName = idName ? `${idName}Shape` : undefined;
+
+                        if (idName && idShapeName) {
+                            usedIdShapes[idShapeName] = {
+                                typeName: idName,
+                                modelName: relation?.relationModelName || model.name,
+                            };
+                        }
+
+                        const base = idShapeName || scalarPlaceholderCode(field);
                         let code = field.isList ? `[${base}]` : base;
                         if (!field.isRequired) {
                             code = `unionShape(null, ${code})`;
@@ -76,18 +110,39 @@ generatorHelper.generatorHandler({
             return `export const ${model.name}Shape = defineShape({\n${lines.join('\n')}\n});`;
         });
 
-        const headerParts: string[] = [
+        const idImports: string[] = getObjectTypedEntries(usedIdShapes).map(
+            ([
+                ,
+                {typeName, modelName},
+            ]) => {
+                return `import {type ${typeName}} from './models/${modelName}.js';`;
+            },
+        );
+        const idShapes: string[] = getObjectTypedEntries(usedIdShapes).map(
+            ([
+                shapeName,
+                {typeName},
+            ]) => {
+                return `export const ${shapeName} = typedStringShape<${typeName}>();`;
+            },
+        );
+
+        const importParts: string[] = [
             '/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */',
-            "import {defineShape, enumShape, unionShape, unknownShape} from 'object-shape-tester';",
+            '// @ts-nocheck',
+            "import {defineShape, enumShape, unionShape, unknownShape, typedStringShape} from 'object-shape-tester';",
             "import {JsonValue} from '@prisma/client/runtime/client.js';",
             "import {utcIsoStringShape} from 'date-vir';",
             allEnums.size
                 ? `import {${Array.from(allEnums).sort().join(', ')}} from './enums.js';`
                 : undefined,
+            ...idImports,
         ].filter(check.isTruthy);
 
         const contents = [
-            ...headerParts,
+            ...importParts,
+            '',
+            ...idShapes,
             '',
             ...modelBlocks,
             '',

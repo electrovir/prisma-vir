@@ -1,6 +1,10 @@
 import {assertWrap} from '@augment-vir/assert';
-import {type MaybePromise, type PartialWithUndefined, randomString} from '@augment-vir/common';
-import {sanitizePath} from '@augment-vir/node';
+import {
+    type MaybePromise,
+    type PartialWithUndefined,
+    randomString,
+    sanitizeFilePath,
+} from '@augment-vir/common';
 import {readFile, writeFile} from 'node:fs/promises';
 import {dirname, join} from 'node:path';
 
@@ -29,7 +33,7 @@ export async function createTempSchema({
         key ||
         [
             Date.now(),
-            sanitizePath(randomString(4)),
+            sanitizeFilePath(randomString(4)),
         ].join('-');
 
     const tempSchemaName = `temp-schema-${tempKey}.prisma`;

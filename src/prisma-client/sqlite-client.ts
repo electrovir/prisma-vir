@@ -1,11 +1,11 @@
 import {assert, assertWrap, check} from '@augment-vir/assert';
 import {
     addSuffix,
+    sanitizeFilePath,
     type BasePrismaClient,
     type PartialWithUndefined,
     type SelectFrom,
 } from '@augment-vir/common';
-import {sanitizePath} from '@augment-vir/node';
 import {extractTestNameAsDir, type UniversalTestContext} from '@augment-vir/test';
 import {PrismaBetterSQLite3} from '@prisma/adapter-better-sqlite3';
 import {existsSync} from 'node:fs';
@@ -113,7 +113,7 @@ export function createSqliteDatabaseUrl({
 }> = {}) {
     const databaseDirName = test
         ? check.isString(test)
-            ? sanitizePath(test)
+            ? sanitizeFilePath(test)
             : extractTestNameAsDir(test)
         : 'dev';
 
