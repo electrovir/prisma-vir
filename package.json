@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
@@ -112,7 +112,7 @@
         "@prisma/client": "*",
         "@prisma/generator-helper": "*",
         "date-vir": "*",
-        "object-shape-tester": ">6.7",
+        "object-shape-tester": ">=6.7",
         "prisma": "*",
         "prisma-pglite": ">=2"
     },
