@@ -6,10 +6,14 @@ describe(createIdTypeName.name, () => {
         {
             it: 'handles camel case inputs',
             input: {
-                modelName: 'UserPost',
+                fileModelName: 'UserPost',
                 fieldName: 'id',
             },
-            expect: 'UserPostId',
+            expect: {
+                originalFieldName: 'id',
+                originalModelName: 'UserPost',
+                taggedIdName: 'UserPostId',
+            },
         },
     ]);
 });

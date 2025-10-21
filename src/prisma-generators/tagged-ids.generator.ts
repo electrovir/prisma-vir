@@ -20,8 +20,12 @@ import {existsSync} from 'node:fs';
 import {readdir, writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {resolveGeneratorOutput} from './generator-util/generator-output.js';
-import {createIdTypeName} from './generator-util/id-name.js';
-import {extractRelations, type FieldRelation} from './generator-util/relation.js';
+import {
+    createIdTypeName,
+    createTaggedIdParams,
+    type TaggedIdField,
+} from './generator-util/id-name.js';
+import {extractRelations} from './generator-util/relation.js';
 import {generatorVersion} from './generator-util/version.js';
 
 /** This is removed from the model files and placed into `commonInputTypes.ts` */
@@ -67,71 +71,30 @@ generatorHelper.generatorHandler({
 
         await fixCommonInputTypes(outputDir);
 
-        type FieldInfo = {
-            fileModelName: string;
-            fieldName: string;
-            relation: FieldRelation | undefined;
-        };
-
         const relationFields = extractRelations(options.dmmf);
 
-        const idFieldsByModel: {[FileModelName in string]: {[FieldName in string]: FieldInfo}} =
-            arrayToObject(
-                options.dmmf.datamodel.models,
-                (model) => {
-                    const fieldEntries = filterMap(
-                        model.fields,
-                        (field): [string, FieldInfo] | undefined => {
-                            const relation = relationFields[model.name]?.[field.name];
-                            const isCommentTagged: boolean =
-                                !!field.documentation?.includes('@taggedId()');
+        const idFieldsByModel: {
+            [FileModelName in string]: {[FieldName in string]: TaggedIdField};
+        } = arrayToObject(
+            options.dmmf.datamodel.models,
+            (model) => {
+                const fieldEntries = filterMap(
+                    model.fields,
+                    (field) => {
+                        return createTaggedIdParams(relationFields, model, field);
+                    },
+                    check.isTruthy,
+                );
 
-                            if (field.isId || isCommentTagged) {
-                                if (relation) {
-                                    throw new Error(
-                                        `Cannot tag an @id() or @taggedId() field that is also a relation id: ${model.name}.${field.name}`,
-                                    );
-                                } else if (field.isId && isCommentTagged) {
-                                    throw new Error(
-                                        `Cannot tag an @id() field with @taggedId(): ${model.name}.${field.name}`,
-                                    );
-                                }
-
-                                return [
-                                    field.name,
-                                    {
-                                        fileModelName: model.name,
-                                        fieldName: field.name,
-                                        relation: undefined,
-                                    },
-                                ] as const;
-                            }
-
-                            if (relation) {
-                                return [
-                                    field.name,
-                                    {
-                                        fileModelName: model.name,
-                                        fieldName: field.name,
-                                        relation,
-                                    },
-                                ] as const;
-                            }
-
-                            return undefined;
-                        },
-                        check.isTruthy,
-                    );
-
-                    return {
-                        key: model.name,
-                        value: typedObjectFromEntries(fieldEntries),
-                    };
-                },
-                {
-                    useRequired: true,
-                },
-            );
+                return {
+                    key: model.name,
+                    value: typedObjectFromEntries(fieldEntries),
+                };
+            },
+            {
+                useRequired: true,
+            },
+        );
 
         await awaitedForEach(
             getObjectTypedEntries(idFieldsByModel),
@@ -158,15 +121,11 @@ generatorHelper.generatorHandler({
                         fieldName,
                         fieldInfo,
                     ]) => {
-                        const modelForIdName: string =
-                            fieldInfo.relation?.relationModelName || fieldInfo.fileModelName;
-                        const idNameInModel =
-                            fieldInfo.relation?.relationModelId || fieldInfo.fieldName;
-
-                        const newIdTypeName = createIdTypeName({
-                            modelName: modelForIdName,
-                            fieldName: idNameInModel,
-                        });
+                        const {
+                            taggedIdName: newIdTypeName,
+                            originalFieldName: idFieldName,
+                            originalModelName: modelNameForId,
+                        } = createIdTypeName(fieldInfo);
 
                         const modelIdRegExp = new RegExp(
                             `^(\\s*['"]?${escapeStringForRegExp(fieldName)}['"]?\\??:)(.+)\\bstring\\b(.*)$`,
@@ -251,7 +210,7 @@ generatorHelper.generatorHandler({
                         });
 
                         tsIdTypeStrings.add(
-                            `export type ${newIdTypeName} = Tagged<string, 'model-${modelForIdName}-field-${idNameInModel}', {model: '${modelForIdName}', field: '${idNameInModel}'}>;`,
+                            `export type ${newIdTypeName} = Tagged<string, 'model-${modelNameForId}-field-${idFieldName}', {model: '${modelNameForId}', field: '${idFieldName}'}>;`,
                         );
                     },
                 );

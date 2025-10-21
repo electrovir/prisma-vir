@@ -10,7 +10,7 @@ import {getObjectTypedEntries, indent, log} from '@augment-vir/common';
 import generatorHelper, {type DMMF, type EnvValue} from '@prisma/generator-helper';
 import {mkdir, writeFile} from 'node:fs/promises';
 import {dirname, join, relative} from 'node:path';
-import {createIdTypeName} from './generator-util/id-name.js';
+import {createTaggedIdName} from './generator-util/id-name.js';
 import {extractRelations} from './generator-util/relation.js';
 import {generatorVersion} from './generator-util/version.js';
 
@@ -57,28 +57,14 @@ generatorHelper.generatorHandler({
             const lines: string[] = model.fields
                 .map((field) => {
                     if (field.kind === 'scalar') {
-                        const relation = relations[model.name]?.[field.name];
-                        const relationIdName = relation
-                            ? createIdTypeName({
-                                  modelName: relation.relationModelName,
-                                  fieldName: relation.relationModelId,
-                              })
-                            : undefined;
+                        const taggedId = createTaggedIdName(relations, model, field);
 
-                        const currentIdName =
-                            !relation && field.isId
-                                ? createIdTypeName({
-                                      modelName: model.name,
-                                      fieldName: field.name,
-                                  })
-                                : undefined;
-                        const idName = currentIdName || relationIdName;
-                        const idShapeName = idName ? `${idName}Shape` : undefined;
+                        const idShapeName = taggedId ? `${taggedId.taggedIdName}Shape` : undefined;
 
-                        if (idName && idShapeName) {
+                        if (taggedId && idShapeName) {
                             usedIdShapes[idShapeName] = {
-                                typeName: idName,
-                                modelName: relation?.relationModelName || model.name,
+                                typeName: taggedId.taggedIdName,
+                                modelName: taggedId.originalModelName,
                             };
                         }
 
