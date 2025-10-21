@@ -16,6 +16,9 @@ model UserMulti {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    /// This id is used for tracking extra stuff.
+    /// @taggedId()
+    extraId  String
     email    String
     password String
     authorOf PostMulti[] @relation("authorRelation")

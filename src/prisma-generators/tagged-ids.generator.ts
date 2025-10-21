@@ -82,7 +82,21 @@ generatorHelper.generatorHandler({
                     const fieldEntries = filterMap(
                         model.fields,
                         (field): [string, FieldInfo] | undefined => {
-                            if (field.isId) {
+                            const relation = relationFields[model.name]?.[field.name];
+                            const isCommentTagged: boolean =
+                                !!field.documentation?.includes('@taggedId()');
+
+                            if (field.isId || isCommentTagged) {
+                                if (relation) {
+                                    throw new Error(
+                                        `Cannot tag an @id() or @taggedId() field that is also a relation id: ${model.name}.${field.name}`,
+                                    );
+                                } else if (field.isId && isCommentTagged) {
+                                    throw new Error(
+                                        `Cannot tag an @id() field with @taggedId(): ${model.name}.${field.name}`,
+                                    );
+                                }
+
                                 return [
                                     field.name,
                                     {
@@ -92,8 +106,6 @@ generatorHelper.generatorHandler({
                                     },
                                 ] as const;
                             }
-
-                            const relation = relationFields[model.name]?.[field.name];
 
                             if (relation) {
                                 return [

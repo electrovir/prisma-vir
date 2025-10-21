@@ -9,7 +9,7 @@ export function createIdTypeName({fieldName, modelName}: {modelName: string; fie
     return kebabCaseToCamelCase(
         [
             camelCaseToKebabCase(modelName),
-            fieldName,
+            camelCaseToKebabCase(fieldName),
         ].join('-'),
         {
             capitalizeFirstLetter: true,
