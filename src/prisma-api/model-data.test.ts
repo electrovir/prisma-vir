@@ -210,7 +210,7 @@ describe(
                                 password: 'fake password',
                             },
                         ],
-                        // @ts-ignore: might be generated with tagged ids
+                        // @ts-ignore: might be generated with branded ids
                         Region: {
                             region1: {
                                 regionName: 'fake',
@@ -244,7 +244,7 @@ describe(
                             password: 'fake password',
                         },
                     ],
-                    // @ts-ignore: might be generated with tagged ids
+                    // @ts-ignore: might be generated with branded ids
                     Region: {
                         region1: {
                             regionName: 'fake',
@@ -285,7 +285,7 @@ describe(
                     ],
                     Region: [
                         {
-                            // @ts-ignore: might be generated with tagged ids
+                            // @ts-ignore: might be generated with branded ids
                             regionName: 'fake',
                         },
                     ],

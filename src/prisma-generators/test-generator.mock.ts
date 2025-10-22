@@ -1,5 +1,5 @@
 import {assert, check} from '@augment-vir/assert';
-import {filterMap} from '@augment-vir/common';
+import {filterMap, getObjectTypedEntries, indent, wrapString} from '@augment-vir/common';
 import {type DirContents, readAllDirContents, readFileIfExists} from '@augment-vir/node';
 import {it} from '@augment-vir/test';
 import {createPatch} from 'diff';
@@ -12,11 +12,31 @@ import {createTempSchema} from '../prisma-schema/temp-schema.js';
 
 const filesToExclude = ['class.ts'];
 
-export function createGeneratorTest(importMeta: ImportMeta, schemaPath = simplePrismaSchemaPath) {
+export function createGeneratorTest(
+    importMeta: ImportMeta,
+    schemaPath = simplePrismaSchemaPath,
+    generatorInputs: Record<string, string> = {},
+) {
     return it('generates', async () => {
         const generatorName = basename(importMeta.filename).replace('.generator.test.ts', '');
 
         await clearTestDatabaseOutputs();
+
+        const generatorInputStrings = getObjectTypedEntries(generatorInputs)
+            .map(
+                ([
+                    key,
+                    value,
+                ]) => {
+                    return indent(
+                        [
+                            key,
+                            wrapString({value, wrapper: '"'}),
+                        ].join(' = '),
+                    );
+                },
+            )
+            .join('\n');
 
         const {tempSchemaPath} = await createTempSchema({
             originalSchemaPath: schemaPath,
@@ -29,6 +49,7 @@ export function createGeneratorTest(importMeta: ImportMeta, schemaPath = simpleP
 generator TEST {
     provider = "tsx ../src/prisma-generators/${generatorName}.generator.ts"
     output = "./generated"
+${generatorInputStrings}
 }`
                 );
             },

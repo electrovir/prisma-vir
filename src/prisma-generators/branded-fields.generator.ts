@@ -2,7 +2,7 @@
 
 import {assert, check, waitUntil} from '@augment-vir/assert';
 import {
-    type ArrayElement,
+    addSuffix,
     arrayToObject,
     awaitedForEach,
     escapeStringForRegExp,
@@ -12,6 +12,7 @@ import {
     removeSuffix,
     safeMatch,
     typedObjectFromEntries,
+    type ArrayElement,
 } from '@augment-vir/common';
 import {readFileIfExists} from '@augment-vir/node';
 import generatorHelper from '@prisma/generator-helper';
@@ -19,12 +20,12 @@ import {runFsm} from 'fsm-vir';
 import {existsSync} from 'node:fs';
 import {readdir, writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
-import {resolveGeneratorOutput} from './generator-util/generator-output.js';
 import {
-    createIdTypeName,
-    createTaggedIdParams,
-    type TaggedIdField,
-} from './generator-util/id-name.js';
+    createBrandedFieldParams,
+    createBrandedTypeName,
+    type BrandedField,
+} from './generator-util/branded-field.js';
+import {resolveGeneratorOutput} from './generator-util/generator-output.js';
 import {extractRelations} from './generator-util/relation.js';
 import {generatorVersion} from './generator-util/version.js';
 
@@ -37,13 +38,17 @@ generatorHelper.generatorHandler({
         return {
             version: generatorVersion,
             defaultOutput: '../src/generated',
-            prettyName: 'Tagged IDs',
+            prettyName: 'Branded Fields',
             requiresGenerators: [
                 'prisma-client',
             ],
         };
     },
     async onGenerate(options) {
+        const brandPrefix: string = options.generator.config.prefix
+            ? addSuffix({value: options.generator.config.prefix, suffix: '-'})
+            : '';
+
         const outputDir = resolveGeneratorOutput(options.generator.output);
         const modelsDir = join(outputDir, 'models');
 
@@ -74,14 +79,14 @@ generatorHelper.generatorHandler({
         const relationFields = extractRelations(options.dmmf);
 
         const idFieldsByModel: {
-            [FileModelName in string]: {[FieldName in string]: TaggedIdField};
+            [FileModelName in string]: {[FieldName in string]: BrandedField};
         } = arrayToObject(
             options.dmmf.datamodel.models,
             (model) => {
                 const fieldEntries = filterMap(
                     model.fields,
                     (field) => {
-                        return createTaggedIdParams(relationFields, model, field);
+                        return createBrandedFieldParams(relationFields, model, field);
                     },
                     check.isTruthy,
                 );
@@ -122,10 +127,10 @@ generatorHelper.generatorHandler({
                         fieldInfo,
                     ]) => {
                         const {
-                            taggedIdName: newIdTypeName,
+                            brandedFieldName: newIdTypeName,
                             originalFieldName: idFieldName,
                             originalModelName: modelNameForId,
-                        } = createIdTypeName(fieldInfo);
+                        } = createBrandedTypeName(fieldInfo);
 
                         const modelIdRegExp = new RegExp(
                             `^(\\s*['"]?${escapeStringForRegExp(fieldName)}['"]?\\??:)(.+)\\bstring\\b(.*)$`,
@@ -210,13 +215,13 @@ generatorHelper.generatorHandler({
                         });
 
                         tsIdTypeStrings.add(
-                            `export type ${newIdTypeName} = Tagged<string, 'model-${modelNameForId}-field-${idFieldName}', {model: '${modelNameForId}', field: '${idFieldName}'}>;`,
+                            `export type ${newIdTypeName} = Branded<string, '${brandPrefix}model-${modelNameForId}-field-${idFieldName}'>;`,
                         );
                     },
                 );
 
                 const newFileContents = [
-                    "import {type Tagged} from 'type-fest';",
+                    "import {type Branded} from '@augment-vir/common';",
                     '',
                     ...Array.from(tsIdTypeStrings),
                     '',

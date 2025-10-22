@@ -10,7 +10,7 @@ import {getObjectTypedEntries, indent, log} from '@augment-vir/common';
 import generatorHelper, {type DMMF, type EnvValue} from '@prisma/generator-helper';
 import {mkdir, writeFile} from 'node:fs/promises';
 import {dirname, join, relative} from 'node:path';
-import {createTaggedIdName} from './generator-util/id-name.js';
+import {createBrandedTypeNameFromField} from './generator-util/branded-field.js';
 import {extractRelations} from './generator-util/relation.js';
 import {generatorVersion} from './generator-util/version.js';
 
@@ -57,14 +57,20 @@ generatorHelper.generatorHandler({
             const lines: string[] = model.fields
                 .map((field) => {
                     if (field.kind === 'scalar') {
-                        const taggedId = createTaggedIdName(relations, model, field);
+                        const brandedField = createBrandedTypeNameFromField(
+                            relations,
+                            model,
+                            field,
+                        );
 
-                        const idShapeName = taggedId ? `${taggedId.taggedIdName}Shape` : undefined;
+                        const idShapeName = brandedField
+                            ? `${brandedField.brandedFieldName}Shape`
+                            : undefined;
 
-                        if (taggedId && idShapeName) {
+                        if (brandedField && idShapeName) {
                             usedIdShapes[idShapeName] = {
-                                typeName: taggedId.taggedIdName,
-                                modelName: taggedId.originalModelName,
+                                typeName: brandedField.brandedFieldName,
+                                modelName: brandedField.originalModelName,
                             };
                         }
 

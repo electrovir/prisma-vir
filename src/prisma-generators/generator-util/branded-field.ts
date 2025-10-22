@@ -7,12 +7,16 @@ import {type FieldRelation, type FieldRelations} from './relation.js';
  *
  * @category Internal
  */
-export function createIdTypeName({fieldName, fileModelName, relation}: Readonly<TaggedIdField>) {
+export function createBrandedTypeName({
+    fieldName,
+    fileModelName,
+    relation,
+}: Readonly<BrandedField>) {
     const modelForIdName: string = relation?.relationModelName || fileModelName;
     const idNameInModel = relation?.relationModelId || fieldName;
 
     return {
-        taggedIdName: kebabCaseToCamelCase(
+        brandedFieldName: kebabCaseToCamelCase(
             [
                 camelCaseToKebabCase(modelForIdName),
                 camelCaseToKebabCase(idNameInModel),
@@ -26,45 +30,45 @@ export function createIdTypeName({fieldName, fileModelName, relation}: Readonly<
     };
 }
 
-export type TaggedIdField = {
+export type BrandedField = {
     fileModelName: string;
     fieldName: string;
     relation?: FieldRelation | undefined;
 };
 
-export function createTaggedIdName(
+export function createBrandedTypeNameFromField(
     relationFields: Readonly<FieldRelations>,
     model: Readonly<Model>,
     field: Readonly<Field>,
 ) {
     const [
         ,
-        taggedId,
-    ] = createTaggedIdParams(relationFields, model, field) || [];
+        brandedName,
+    ] = createBrandedFieldParams(relationFields, model, field) || [];
 
-    if (!taggedId) {
+    if (!brandedName) {
         return undefined;
     }
 
-    return createIdTypeName(taggedId);
+    return createBrandedTypeName(brandedName);
 }
 
-export function createTaggedIdParams(
+export function createBrandedFieldParams(
     relationFields: Readonly<FieldRelations>,
     model: Readonly<Model>,
     field: Readonly<Field>,
-): [string, TaggedIdField] | undefined {
+): [string, BrandedField] | undefined {
     const relation = relationFields[model.name]?.[field.name];
-    const isCommentTagged: boolean = !!field.documentation?.includes('@taggedId()');
+    const isCommentBranded: boolean = !!field.documentation?.includes('@branded()');
 
-    if (field.isId || isCommentTagged) {
+    if (field.isId || isCommentBranded) {
         if (relation) {
             throw new Error(
-                `Cannot tag an @id() or @taggedId() field that is also a relation id: ${model.name}.${field.name}`,
+                `Cannot brand an @id() or @branded() field that is also a relation id: ${model.name}.${field.name}`,
             );
-        } else if (field.isId && isCommentTagged) {
+        } else if (field.isId && isCommentBranded) {
             throw new Error(
-                `Cannot tag an @id() field with @taggedId(): ${model.name}.${field.name}`,
+                `Cannot brand an @id() field with @branded(): ${model.name}.${field.name}`,
             );
         }
 

@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "1.3.1",
+    "version": "2.0.0",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
@@ -29,9 +29,9 @@
     "module": "src/index.ts",
     "types": "src/index.ts",
     "bin": {
+        "prisma-branded-fields": "./dist/prisma-generators/branded-fields.generator.js",
         "prisma-shapes": "./dist/prisma-generators/shapes.generator.js",
-        "prisma-string-dates": "./dist/prisma-generators/string-dates.generator.js",
-        "prisma-tagged-ids": "./dist/prisma-generators/tagged-ids.generator.js"
+        "prisma-string-dates": "./dist/prisma-generators/string-dates.generator.js"
     },
     "scripts": {
         "compile": "npm run init && virmator compile",
@@ -51,30 +51,29 @@
         "test:update": "virmator test node update --test-concurrency=1"
     },
     "dependencies": {
-        "@augment-vir/assert": "^31.42.0",
-        "@augment-vir/common": "^31.42.0",
-        "@augment-vir/node": "^31.42.0",
+        "@augment-vir/assert": "^31.43.0",
+        "@augment-vir/common": "^31.43.0",
+        "@augment-vir/node": "^31.43.0",
         "fsm-vir": "^3.0.0",
         "terminate": "^2.8.0",
-        "type-fest": "^5.1.0",
         "url-vir": "^2.1.6"
     },
     "devDependencies": {
-        "@augment-vir/test": "^31.42.0",
+        "@augment-vir/test": "^31.43.0",
         "@eslint/eslintrc": "^3.3.1",
         "@eslint/js": "^9.38.0",
-        "@prisma/adapter-better-sqlite3": "^6.17.1",
-        "@prisma/adapter-pg": "^6.17.1",
-        "@prisma/client": "^6.17.1",
-        "@prisma/dmmf": "^6.17.1",
-        "@prisma/generator-helper": "^6.17.1",
+        "@prisma/adapter-better-sqlite3": "^6.18.0",
+        "@prisma/adapter-pg": "^6.18.0",
+        "@prisma/client": "^6.18.0",
+        "@prisma/dmmf": "^6.18.0",
+        "@prisma/generator-helper": "^6.18.0",
         "@stylistic/eslint-plugin": "^5.5.0",
         "@stylistic/eslint-plugin-ts": "^4.4.1",
         "@types/better-sqlite3": "^7.6.13",
         "@types/node": "^24.9.1",
         "@typescript-eslint/eslint-plugin": "^8.46.2",
         "c8": "^10.1.3",
-        "cspell": "^9.2.1",
+        "cspell": "^9.2.2",
         "date-vir": "^8.0.0",
         "dependency-cruiser": "^17.1.0",
         "diff": "^8.0.2",
@@ -100,9 +99,10 @@
         "prettier-plugin-packagejson": "^2.5.19",
         "prettier-plugin-sort-json": "^4.1.1",
         "prettier-plugin-toml": "^2.0.6",
-        "prisma": "^6.17.1",
+        "prisma": "^6.18.0",
         "prisma-map": "^3.0.1",
         "prisma-pglite": "^2.0.1",
+        "type-fest": "^5.1.0",
         "typedoc": "^0.28.14",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.46.2",

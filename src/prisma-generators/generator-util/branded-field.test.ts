@@ -1,8 +1,8 @@
 import {describe, itCases} from '@augment-vir/test';
-import {createIdTypeName} from './id-name.js';
+import {createBrandedTypeName} from './branded-field.js';
 
-describe(createIdTypeName.name, () => {
-    itCases(createIdTypeName, [
+describe(createBrandedTypeName.name, () => {
+    itCases(createBrandedTypeName, [
         {
             it: 'handles camel case inputs',
             input: {
@@ -12,7 +12,7 @@ describe(createIdTypeName.name, () => {
             expect: {
                 originalFieldName: 'id',
                 originalModelName: 'UserPost',
-                taggedIdName: 'UserPostId',
+                brandedFieldName: 'UserPostId',
             },
         },
     ]);

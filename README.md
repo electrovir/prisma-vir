@@ -24,4 +24,4 @@ This package exposes the following generators:
 
 -   `prisma-shapes`: generates [`object-shape-tester`](https://www.npmjs.com/package/object-shape-tester) `Shape` instances for each model.
 -   `prisma-string-dates`: converts all `Date` or `string` types for date fields into `UtcIsoString` from [`date-vir`](https://www.npmjs.com/package/date-vir).
--   `prisma-tagged-ids`: converts all `id` fields into tagged string types so that id types do not clash with each other. Add a `/// @taggedId()` comment above a field to also tag it as an id.
+-   `prisma-branded-fields`: converts all `id` fields into branded string types so that id types do not clash with each other and allows you to add a `/// @branded()` comment above any other field to also brand it. This generator also accepts an optional brand key `prefix` (as a generator input in your Prisma schema).
