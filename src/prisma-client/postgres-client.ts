@@ -109,6 +109,7 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
     });
 
     return {
+        adapter,
         basePrismaClient,
         wasJustInitialized: 'wasJustInitialized' in adapter && adapter.wasJustInitialized,
         /* node:coverage disable next 1: we cannot create a real Postgres server in tests.  */

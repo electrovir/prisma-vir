@@ -86,6 +86,7 @@ export async function createSqlitePrismaClient<PrismaClient extends BasePrismaCl
     }
 
     return {
+        adapter,
         basePrismaClient,
         wasJustInitialized,
         databasePath,

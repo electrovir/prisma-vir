@@ -133,7 +133,7 @@ generatorHelper.generatorHandler({
                         } = createBrandedTypeName(fieldInfo);
 
                         const modelIdRegExp = new RegExp(
-                            `^(\\s*['"]?${escapeStringForRegExp(fieldName)}['"]?\\??:)(.+)\\bstring\\b(.*)$`,
+                            String.raw`^(\s*['"]?${escapeStringForRegExp(fieldName)}['"]?\??:)(.+)\bstring\b(.*)$`,
                         );
 
                         runFsm<number, string>({
@@ -244,8 +244,8 @@ const inputTypesToFix = [
 ].map((typeName) => {
     return {
         typeName,
-        definitionRegExp: new RegExp(`^export type ${typeName}\\b`),
-        usageRegExp: new RegExp(`^(.+:.+\\bPrisma.${typeName}\\b)(.*)$`),
+        definitionRegExp: new RegExp(String.raw`^export type ${typeName}\b`),
+        usageRegExp: new RegExp(String.raw`^(.+:.+\bPrisma.${typeName}\b)(.*)$`),
     };
 });
 

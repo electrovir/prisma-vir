@@ -5,9 +5,32 @@ import {
 } from '@augment-vir/common';
 import {type UniversalTestContext} from '@augment-vir/test';
 import {type DynamicClientExtensionThis} from '@prisma/client/runtime/client.js';
+import {type PrismaConfig} from '@prisma/config';
 import {type RequireExactlyOne} from 'type-fest';
 import {type PostgresConnectionParams} from './postgres-client.js';
 import {type SqliteConnectionParams} from './sqlite-client.js';
+
+/* node:coverage disable next 12 */
+/**
+ * Used purely for constructing the type {@link SqlMigrationAwareDriverAdapterFactory}.
+ *
+ * @category Internal
+ */
+export const fakePrismaConfig: PrismaConfig = {
+    engine: 'js',
+    adapter() {
+        return {} as any;
+    },
+};
+
+/**
+ * We have to reconstruct this type because Prisma doesn't export it.
+ *
+ * @category Internal
+ */
+export type SqlMigrationAwareDriverAdapterFactory = Awaited<
+    ReturnType<(typeof fakePrismaConfig)['adapter']>
+>;
 
 /**
  * Internal outputs of each Prisma client engine constructor.
@@ -15,6 +38,7 @@ import {type SqliteConnectionParams} from './sqlite-client.js';
  * @category Internal
  */
 export type EngineClientOutput<PrismaClient extends BasePrismaClient> = {
+    adapter: SqlMigrationAwareDriverAdapterFactory;
     databasePath: string | undefined;
     basePrismaClient: PrismaClient;
     wasJustInitialized: boolean;
@@ -104,6 +128,7 @@ export type CreatePrismaClientParams<
  * @category Internal
  */
 export type CreatePrismaClientOutput<PrismaClient extends BasePrismaClient> = {
+    adapter: SqlMigrationAwareDriverAdapterFactory;
     prismaClient: PrismaClient;
     databasePath: string | undefined;
 };

@@ -23,7 +23,7 @@ export async function createPrismaClient<
     prismaClientConstructor: Constructor<PrismaClient>,
     {seedScript, extendScript, ...params}: Readonly<CreatePrismaClientParams<Engine, PrismaClient>>,
 ): Promise<CreatePrismaClientOutput<PrismaClient>> {
-    const {databasePath, basePrismaClient, wasJustInitialized} =
+    const {databasePath, basePrismaClient, wasJustInitialized, adapter} =
         engine === PrismaDatabaseEngine.Postgres
             ? await createPostgresPrismaClient<PrismaClient>(
                   prismaClientConstructor,
@@ -49,6 +49,7 @@ export async function createPrismaClient<
     }
 
     return {
+        adapter,
         prismaClient,
         databasePath,
     };
