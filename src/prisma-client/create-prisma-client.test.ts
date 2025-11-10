@@ -4,10 +4,11 @@
 import {assert} from '@augment-vir/assert';
 import {selectFrom} from '@augment-vir/common';
 import {describe, it} from '@augment-vir/test';
-import {createPrismaMapExtension, type PrismaValueMapper} from 'prisma-map';
 import {testPrismaSchemaPostgresPath} from '../file-paths.mock.js';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from '../prisma-api/prisma-database.mock.js';
+import {type PrismaValueMapper} from '../prisma-extensions/prisma-map/map-values.js';
+import {createPrismaMapExtension} from '../prisma-extensions/prisma-map/prisma-map-extension.js';
 import {createPrismaClient} from './create-prisma-client.js';
 import {PrismaDatabaseEngine} from './prisma-client-types.js';
 
@@ -103,7 +104,7 @@ describe(createPrismaClient.name, () => {
                         },
                     ];
 
-                    return prismaClient.$extends(createPrismaMapExtension(mappers));
+                    return prismaClient.$extends(createPrismaMapExtension('test', mappers));
                 },
             },
         );
