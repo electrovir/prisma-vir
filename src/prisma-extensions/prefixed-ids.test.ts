@@ -1,4 +1,6 @@
-import {assert} from '@augment-vir/assert';
+/* eslint-disable sonarjs/no-hardcoded-passwords */
+import {assert, assertWrap} from '@augment-vir/assert';
+import {selectFrom} from '@augment-vir/common';
 import {describe, it} from '@augment-vir/test';
 import {createMockPrismaClient} from '../prisma-client.mock.js';
 import {createPrefixedIdExtension} from './prefixed-ids.js';
@@ -11,7 +13,6 @@ describe(createPrefixedIdExtension.name, () => {
             const newUser = await prismaClient.user.create({
                 data: {
                     email: 'fake@example.com',
-                    // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                     password: 'fake password',
                 },
                 select: {
@@ -46,7 +47,6 @@ describe(createPrefixedIdExtension.name, () => {
             const newUser = await prismaClient.user.create({
                 data: {
                     email: 'fake@example.com',
-                    // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                     password: 'fake password',
                 },
                 select: {
@@ -58,6 +58,62 @@ describe(createPrefixedIdExtension.name, () => {
             assert.isDefined(newUser);
             assert.strictEquals(newUser.email, 'fake@example.com');
             assert.strictEquals(newUser.id, 'TEST_my-id');
+        } finally {
+            await prismaClient.$disconnect();
+        }
+    });
+    it('uses custom options ids with create many', async () => {
+        const prismaClient = (await createMockPrismaClient()).$extends(
+            createPrefixedIdExtension({
+                createPrefix() {
+                    return 'TEST_';
+                },
+                getIdColumnName() {
+                    return 'id';
+                },
+            }),
+        );
+
+        try {
+            const data = [
+                {
+                    email: 'fake@example.com',
+                    password: 'fake password',
+                },
+                {
+                    email: 'fake2@example.com',
+                    password: 'fake password',
+                },
+                {
+                    email: 'fake3@example.com',
+                    password: 'fake password',
+                },
+            ];
+
+            await prismaClient.user.createMany({
+                data,
+            });
+
+            const newUsers = await prismaClient.user.findMany({
+                select: {
+                    id: true,
+                    email: true,
+                    password: true,
+                },
+            });
+
+            assert.isLengthExactly(newUsers, data.length);
+            assert.isLengthExactly(data, 3);
+            newUsers.forEach((newUser: any, index) => {
+                assert.deepEquals(
+                    selectFrom(newUser, {
+                        email: true,
+                        password: true,
+                    }),
+                    assertWrap.isDefined(data[index]),
+                );
+                assert.startsWith(newUser.id, 'TEST_');
+            });
         } finally {
             await prismaClient.$disconnect();
         }

@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
@@ -40,8 +40,8 @@
         "init": "npm run install --prefix node_modules/better-sqlite3",
         "lint": "virmator lint fix",
         "publish": "virmator publish npm run test:all",
-        "test": "npm run compile && virmator test node --test-concurrency=1",
-        "test:all": "npm run test && runstorm --names tests,spelling,format,docs,deps,lint \"npm run test:coverage\" \"npm run test:spelling\" \"npm run test:format\" \"npm run test:docs\" \"npm run test:deps\" \"npm run test:lint\"",
+        "test": "npm run init && virmator test node --test-concurrency=1",
+        "test:all": "npm run compile && virmator test node --test-concurrency=1 && runstorm --names tests,spelling,format,docs,deps,lint \"npm run test:coverage\" \"npm run test:spelling\" \"npm run test:format\" \"npm run test:docs\" \"npm run test:deps\" \"npm run test:lint\"",
         "test:coverage": "virmator test node coverage --test-concurrency=1",
         "test:deps": "virmator deps check",
         "test:docs": "virmator docs check",

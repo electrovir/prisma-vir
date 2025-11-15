@@ -1,5 +1,6 @@
 import {
     type AnyObject,
+    awaitedForEach,
     camelCaseToKebabCase,
     type MaybePromise,
     type PartialWithUndefined,
@@ -60,13 +61,13 @@ export function createDefaultIdPrefix<const ModelName extends string = string>({
  * @category Extensions
  */
 export function createPrefixedIdExtension<ModelName extends string>(
-    options: PartialWithUndefined<PrefixedIdOptions<ModelName>> = {},
+    options: Readonly<PartialWithUndefined<PrefixedIdOptions<ModelName>>> = {},
 ) {
     return {
         name: 'prefixed-id',
         query: {
             $allModels: {
-                /** Hook into all model creations. */
+                /** Handle model creation. */
                 async create({
                     query,
                     args,
@@ -75,28 +76,31 @@ export function createPrefixedIdExtension<ModelName extends string>(
                     query: (args: unknown) => Promise<unknown>;
                     model: string;
                     args: {
-                        data: any;
+                        data?: any;
                     };
                 }): Promise<unknown> {
-                    const optionParams: PrefixedIdOptionCallbackParams<ModelName> = {
-                        modelName: modelName as ModelName,
+                    if (args.data) {
+                        await insertId({data: args.data, modelName, options});
+                    }
+
+                    return query(args);
+                },
+                /** Handle model creations. */
+                async createMany({
+                    query,
+                    args,
+                    model: modelName,
+                }: {
+                    query: (args: unknown) => Promise<unknown>;
+                    model: string;
+                    args: {
+                        data?: any;
                     };
-
-                    const idColumnName: string =
-                        (await options.getIdColumnName?.(optionParams)) || 'id';
-
-                    if (!(idColumnName in args.data)) {
-                        const baseId: string =
-                            (await options.createBaseId?.(optionParams)) || createCuid2();
-
-                        const prefix: string =
-                            (await options.createPrefix?.(optionParams)) ||
-                            createDefaultIdPrefix(optionParams);
-
-                        (args.data as AnyObject)[idColumnName] = [
-                            prefix,
-                            baseId,
-                        ].join('');
+                }): Promise<unknown> {
+                    if (args.data) {
+                        await awaitedForEach(args.data as any[], async (dataEntry: AnyObject) => {
+                            await insertId({data: dataEntry, modelName, options});
+                        });
                     }
 
                     return query(args);
@@ -104,4 +108,32 @@ export function createPrefixedIdExtension<ModelName extends string>(
             },
         },
     };
+}
+
+async function insertId({
+    data,
+    modelName,
+    options,
+}: {
+    modelName: string;
+    options: Readonly<PartialWithUndefined<PrefixedIdOptions>>;
+    data: AnyObject;
+}) {
+    const optionParams: PrefixedIdOptionCallbackParams = {
+        modelName,
+    };
+
+    const idColumnName: string = (await options.getIdColumnName?.(optionParams)) || 'id';
+
+    if (!(idColumnName in data)) {
+        const baseId: string = (await options.createBaseId?.(optionParams)) || createCuid2();
+
+        const prefix: string =
+            (await options.createPrefix?.(optionParams)) || createDefaultIdPrefix(optionParams);
+
+        data[idColumnName] = [
+            prefix,
+            baseId,
+        ].join('');
+    }
 }

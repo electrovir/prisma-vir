@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+// @ts-ignore: this might not be generated yet
 import {testPrismaSchemaPostgresPath} from './file-paths.mock.js';
 import {prismaApi} from './prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from './prisma-api/prisma-database.mock.js';
