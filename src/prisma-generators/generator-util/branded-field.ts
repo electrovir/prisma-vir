@@ -1,4 +1,4 @@
-import {camelCaseToKebabCase, kebabCaseToCamelCase} from '@augment-vir/common';
+import {camelCaseToKebabCase, kebabCaseToCamelCase, StringCase} from '@augment-vir/common';
 import {type Field, type Model} from '@prisma/dmmf';
 import {type FieldRelation, type FieldRelations} from './relation.js';
 
@@ -22,7 +22,7 @@ export function createBrandedTypeName({
                 camelCaseToKebabCase(idNameInModel),
             ].join('-'),
             {
-                capitalizeFirstLetter: true,
+                firstLetterCase: StringCase.Upper,
             },
         ),
         originalModelName: modelForIdName,
