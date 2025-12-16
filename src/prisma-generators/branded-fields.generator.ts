@@ -101,139 +101,126 @@ generatorHelper.generatorHandler({
             },
         );
 
-        await awaitedForEach(
-            getObjectTypedEntries(idFieldsByModel),
-            async ([
-                modelName,
-                fields,
+        await awaitedForEach(getObjectTypedEntries(idFieldsByModel), async ([
+            modelName,
+            fields,
+        ]) => {
+            const modelFilePath = modelFiles[modelName]?.path;
+
+            assert.isDefined(modelFilePath, `No model file found for model: '${modelName}'`);
+
+            const modelFileContents = (await readFileIfExists(modelFilePath)) || '';
+            const modelFileLines = modelFileContents.trim().split('\n');
+            assert.isLengthAtLeast(modelFileLines, 1, `No model file found at: '${modelFilePath}'`);
+
+            const tsIdTypeStrings = new Set<string>();
+
+            getObjectTypedEntries(fields).forEach(([
+                fieldName,
+                fieldInfo,
             ]) => {
-                const modelFilePath = modelFiles[modelName]?.path;
+                const {
+                    brandedFieldName: newIdTypeName,
+                    originalFieldName: idFieldName,
+                    originalModelName: modelNameForId,
+                } = createBrandedTypeName(fieldInfo);
 
-                assert.isDefined(modelFilePath, `No model file found for model: '${modelName}'`);
-
-                const modelFileContents = (await readFileIfExists(modelFilePath)) || '';
-                const modelFileLines = modelFileContents.trim().split('\n');
-                assert.isLengthAtLeast(
-                    modelFileLines,
-                    1,
-                    `No model file found at: '${modelFilePath}'`,
+                const modelIdRegExp = new RegExp(
+                    String.raw`^(\s*['"]?${escapeStringForRegExp(fieldName)}['"]?\??:)(.+)\bstring\b(.*)$`,
                 );
 
-                const tsIdTypeStrings = new Set<string>();
+                runFsm<number, string>({
+                    /** Type object depth. */
+                    initState: 0,
+                    inputs: modelFileLines,
+                    nextState({input, state}) {
+                        if (state === 0 && input.trim().startsWith('export type')) {
+                            return {
+                                nextState: 1,
+                            };
+                        } else if (state > 0) {
+                            if (input.includes('}')) {
+                                return {
+                                    nextState: state - 1,
+                                };
+                            } else if (input.includes('{')) {
+                                return {
+                                    nextState: state + 1,
+                                };
+                            }
+                        }
 
-                getObjectTypedEntries(fields).forEach(
-                    ([
-                        fieldName,
-                        fieldInfo,
-                    ]) => {
-                        const {
-                            brandedFieldName: newIdTypeName,
-                            originalFieldName: idFieldName,
-                            originalModelName: modelNameForId,
-                        } = createBrandedTypeName(fieldInfo);
+                        return undefined;
+                    },
+                    actions: {
+                        preNextState({input, state, index}) {
+                            if (state > 0) {
+                                const modelIdMatches = safeMatch(input, modelIdRegExp);
 
-                        const modelIdRegExp = new RegExp(
-                            String.raw`^(\s*['"]?${escapeStringForRegExp(fieldName)}['"]?\??:)(.+)\bstring\b(.*)$`,
-                        );
+                                if (check.isLengthExactly(modelIdMatches, 4)) {
+                                    const values: string[] = [
+                                        modelIdMatches[1],
+                                        modelIdMatches[2],
+                                        newIdTypeName,
+                                        modelIdMatches[3],
+                                    ];
 
-                        runFsm<number, string>({
-                            /** Type object depth. */
-                            initState: 0,
-                            inputs: modelFileLines,
-                            nextState({input, state}) {
-                                if (state === 0 && input.trim().startsWith('export type')) {
-                                    return {
-                                        nextState: 1,
-                                    };
-                                } else if (state > 0) {
-                                    if (input.includes('}')) {
-                                        return {
-                                            nextState: state - 1,
-                                        };
-                                    } else if (input.includes('{')) {
-                                        return {
-                                            nextState: state + 1,
-                                        };
+                                    const latestLine = values.join('');
+
+                                    modelFileLines[index] = latestLine;
+
+                                    const inputTypeMatches = inputTypesToFix.map(({
+                                        usageRegExp,
+                                    }) => {
+                                        return safeMatch(latestLine, usageRegExp);
+                                    });
+
+                                    const commonTypeMatches = inputTypeMatches.find((matches) => {
+                                        return check.isLengthExactly(matches, 3);
+                                    });
+
+                                    if (commonTypeMatches) {
+                                        const insertion = commonTypeMatches[2].startsWith('<')
+                                            ? commonTypeMatches[2].replace(
+                                                  '> ',
+                                                  `, ${newIdTypeName}> `,
+                                              )
+                                            : [
+                                                  `<${newIdTypeName}>`,
+                                                  commonTypeMatches[2],
+                                              ].join('');
+
+                                        const values: string[] = [
+                                            commonTypeMatches[1],
+                                            insertion,
+                                        ];
+
+                                        modelFileLines[index] = values.join('');
                                     }
                                 }
-
-                                return undefined;
-                            },
-                            actions: {
-                                preNextState({input, state, index}) {
-                                    if (state > 0) {
-                                        const modelIdMatches = safeMatch(input, modelIdRegExp);
-
-                                        if (check.isLengthExactly(modelIdMatches, 4)) {
-                                            const values: string[] = [
-                                                modelIdMatches[1],
-                                                modelIdMatches[2],
-                                                newIdTypeName,
-                                                modelIdMatches[3],
-                                            ];
-
-                                            const latestLine = values.join('');
-
-                                            modelFileLines[index] = latestLine;
-
-                                            const inputTypeMatches = inputTypesToFix.map(
-                                                ({usageRegExp}) => {
-                                                    return safeMatch(latestLine, usageRegExp);
-                                                },
-                                            );
-
-                                            const commonTypeMatches = inputTypeMatches.find(
-                                                (matches) => {
-                                                    return check.isLengthExactly(matches, 3);
-                                                },
-                                            );
-
-                                            if (commonTypeMatches) {
-                                                const insertion = commonTypeMatches[2].startsWith(
-                                                    '<',
-                                                )
-                                                    ? commonTypeMatches[2].replace(
-                                                          '> ',
-                                                          `, ${newIdTypeName}> `,
-                                                      )
-                                                    : [
-                                                          `<${newIdTypeName}>`,
-                                                          commonTypeMatches[2],
-                                                      ].join('');
-
-                                                const values: string[] = [
-                                                    commonTypeMatches[1],
-                                                    insertion,
-                                                ];
-
-                                                modelFileLines[index] = values.join('');
-                                            }
-                                        }
-                                    }
-                                },
-                            },
-                        });
-
-                        tsIdTypeStrings.add(
-                            `export type ${newIdTypeName} = Branded<string, '${brandPrefix}model-${modelNameForId}-field-${idFieldName}'>;`,
-                        );
+                            }
+                        },
                     },
+                });
+
+                tsIdTypeStrings.add(
+                    `export type ${newIdTypeName} = Branded<string, '${brandPrefix}model-${modelNameForId}-field-${idFieldName}'>;`,
                 );
+            });
 
-                const newFileContents = [
-                    "import {type Branded} from '@augment-vir/common';",
-                    '',
-                    ...Array.from(tsIdTypeStrings),
-                    '',
-                    ...modelFileLines,
-                    '',
-                ]
-                    .join('\n')
-                    .replaceAll(stringFieldUpdateOperationsInputString, '');
+            const newFileContents = [
+                "import {type Branded} from '@augment-vir/common';",
+                '',
+                ...Array.from(tsIdTypeStrings),
+                '',
+                ...modelFileLines,
+                '',
+            ]
+                .join('\n')
+                .replaceAll(stringFieldUpdateOperationsInputString, '');
 
-                await writeFile(modelFilePath, newFileContents);
-            },
-        );
+            await writeFile(modelFilePath, newFileContents);
+        });
     },
 });
 

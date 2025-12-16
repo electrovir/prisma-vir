@@ -3,7 +3,7 @@ import {
     type MaybePromise,
     type PartialWithUndefined,
     randomString,
-    sanitizeFilePath,
+    sanitizeFileName,
 } from '@augment-vir/common';
 import {readFile, writeFile} from 'node:fs/promises';
 import {dirname, join} from 'node:path';
@@ -33,7 +33,7 @@ export async function createTempSchema({
         key ||
         [
             Date.now(),
-            sanitizeFilePath(randomString(4)),
+            sanitizeFileName(randomString(4)),
         ].join('-');
 
     const tempSchemaName = `temp-schema-${tempKey}.prisma`;

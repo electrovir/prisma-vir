@@ -23,19 +23,17 @@ export function createGeneratorTest(
         await clearTestDatabaseOutputs();
 
         const generatorInputStrings = getObjectTypedEntries(generatorInputs)
-            .map(
-                ([
-                    key,
-                    value,
-                ]) => {
-                    return indent(
-                        [
-                            key,
-                            wrapString({value, wrapper: '"'}),
-                        ].join(' = '),
-                    );
-                },
-            )
+            .map(([
+                key,
+                value,
+            ]) => {
+                return indent(
+                    [
+                        key,
+                        wrapString({value, wrapper: '"'}),
+                    ].join(' = '),
+                );
+            })
             .join('\n');
 
         const {tempSchemaPath} = await createTempSchema({

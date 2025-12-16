@@ -40,8 +40,7 @@ export async function runPrismaCommand({
 
     /** Disable Prisma's in-CLI ads. */
     const noHintsArg = prismaCommandsThatSupportNoHints.some((commandName) =>
-        command.startsWith(commandName),
-    )
+        command.startsWith(commandName))
         ? '--no-hints'
         : '';
 

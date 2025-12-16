@@ -99,52 +99,49 @@ async function addModelDataObject(
     data: Record<string, AnyObject>,
 ) {
     /** Add the mock data to the mock prisma client. */
-    await awaitedForEach(
-        getObjectTypedEntries(data),
-        async ([
-            modelName,
-            mockData,
-        ]) => {
-            /**
-             * This type is dumbed down to just `AnyObject[]` because the union of all possible
-             * model data is just way too big (and not helpful as the inputs to this function are
-             * already type guarded).
-             */
-            const mockModelInstances: AnyObject[] = Array.isArray(mockData)
-                ? mockData
-                : getObjectTypedValues(mockData);
+    await awaitedForEach(getObjectTypedEntries(data), async ([
+        modelName,
+        mockData,
+    ]) => {
+        /**
+         * This type is dumbed down to just `AnyObject[]` because the union of all possible
+         * model data is just way too big (and not helpful as the inputs to this function are
+         * already type guarded).
+         */
+        const mockModelInstances: AnyObject[] = Array.isArray(mockData)
+            ? mockData
+            : getObjectTypedValues(mockData);
 
-            const modelApi: AnyObject | undefined =
-                prismaClient[setFirstLetterCasing(modelName, StringCase.Lower)];
+        const modelApi: AnyObject | undefined =
+            prismaClient[setFirstLetterCasing(modelName, StringCase.Lower)];
 
-            assert.isDefined(modelApi, `No PrismaClient API found for model '${modelName}'`);
+        assert.isDefined(modelApi, `No PrismaClient API found for model '${modelName}'`);
 
-            try {
-                const allData = filterMap(
-                    mockModelInstances,
-                    (entry) => {
-                        return entry;
-                    },
-                    (mapped, modelEntry) => !modelEntry[prismaModelCreateExclude],
-                );
+        try {
+            const allData = filterMap(
+                mockModelInstances,
+                (entry) => {
+                    return entry;
+                },
+                (mapped, modelEntry) => !modelEntry[prismaModelCreateExclude],
+            );
 
-                await awaitedForEach(allData, async (modelEntry) => {
-                    if (modelEntry[prismaModelCreateOmitId]) {
-                        modelEntry = omitObjectKeys<AnyObject, PropertyKey>(modelEntry, ['id']);
-                    }
+            await awaitedForEach(allData, async (modelEntry) => {
+                if (modelEntry[prismaModelCreateOmitId]) {
+                    modelEntry = omitObjectKeys<AnyObject, PropertyKey>(modelEntry, ['id']);
+                }
 
-                    await modelApi.create({
-                        data: modelEntry,
-                    });
+                await modelApi.create({
+                    data: modelEntry,
                 });
-            } catch (error) {
-                throw ensureErrorAndPrependMessage(
-                    error,
-                    `Failed to create many '${modelName}' entries.\n\n${JSON.stringify(mockModelInstances, null, 4)}\n\n`,
-                );
-            }
-        },
-    );
+            });
+        } catch (error) {
+            throw ensureErrorAndPrependMessage(
+                error,
+                `Failed to create many '${modelName}' entries.\n\n${JSON.stringify(mockModelInstances, null, 4)}\n\n`,
+            );
+        }
+    });
 }
 
 /** These are not the real model names, they are the names on the PrismaClient (which are lowercase). */

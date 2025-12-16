@@ -1,7 +1,7 @@
 import {assert, assertWrap, check} from '@augment-vir/assert';
 import {
     addSuffix,
-    sanitizeFilePath,
+    sanitizeFileName,
     type BasePrismaClient,
     type PartialWithUndefined,
     type SelectFrom,
@@ -114,7 +114,7 @@ export function createSqliteDatabaseUrl({
 }> = {}) {
     const databaseDirName = test
         ? check.isString(test)
-            ? sanitizeFilePath(test)
+            ? sanitizeFileName(test)
             : extractTestNameAsDir(test)
         : 'dev';
 
