@@ -18,7 +18,7 @@ export const prismaCommandsThatSupportNoHints = ['generate'];
 export async function runPrismaCommand({
     command,
     ignoreExitCode = false,
-    hideLogs = false,
+    showLogs,
     schemaPath,
     env = {},
 }: {
@@ -29,7 +29,7 @@ export async function runPrismaCommand({
     /** If `true`, prevents errors from being thrown if this command exits with a non-0 status. */
     env: Record<string, string> | undefined;
     ignoreExitCode: boolean;
-    hideLogs: boolean;
+    showLogs: boolean;
 }>) {
     const schemaFileArgs = schemaPath
         ? [
@@ -51,14 +51,16 @@ export async function runPrismaCommand({
         noHintsArg,
     ].join(' ');
 
-    log.faint(`> ${fullCommand}`);
+    if (showLogs) {
+        log.faint(`> ${fullCommand}`);
+    }
 
     const result = await runShellCommand(interpolationSafeWindowsPath(fullCommand), {
         env: {
             ...process.env,
             ...env,
         },
-        hookUpToConsole: !hideLogs,
+        hookUpToConsole: !!showLogs,
         cwd: schemaPath ? dirname(schemaPath) : process.cwd(),
     });
 

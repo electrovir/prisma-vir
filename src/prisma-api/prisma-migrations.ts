@@ -1,5 +1,5 @@
 import {check} from '@augment-vir/assert';
-import {log, safeMatch, toEnsuredNumber} from '@augment-vir/common';
+import {log, type PartialWithUndefined, safeMatch, toEnsuredNumber} from '@augment-vir/common';
 import {runShellCommand} from '@augment-vir/node';
 import terminate from 'terminate';
 import {PrismaMigrationNeededError, PrismaResetNeededError} from './prisma-errors.js';
@@ -33,10 +33,15 @@ enum DbChangeRequired {
 export async function applyPrismaMigrationsToDev({
     schemaPath,
     env,
-}: {
-    schemaPath: string;
-    env?: Record<string, string> | undefined;
-}) {
+    showLogs,
+}: Readonly<
+    {
+        schemaPath: string;
+    } & PartialWithUndefined<{
+        env: Record<string, string>;
+        showLogs: boolean;
+    }>
+>) {
     const command = [
         'prisma',
         'migrate',
@@ -44,7 +49,9 @@ export async function applyPrismaMigrationsToDev({
         `--schema='${schemaPath}'`,
     ].join(' ');
 
-    log.faint(`> ${command}`);
+    if (showLogs) {
+        log.faint(`> ${command}`);
+    }
 
     let dbRequirement = undefined as DbChangeRequired | undefined;
 
