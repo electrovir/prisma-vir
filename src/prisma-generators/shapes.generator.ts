@@ -102,18 +102,22 @@ generatorHelper.generatorHandler({
             return `export const ${model.name}Shape = defineShape({\n${lines.join('\n')}\n});`;
         });
 
-        const idImports: string[] = getObjectTypedEntries(usedIdShapes).map(([
-            ,
-            {typeName, modelName},
-        ]) => {
-            return `import {type ${typeName}} from './models/${modelName}.js';`;
-        });
-        const idShapes: string[] = getObjectTypedEntries(usedIdShapes).map(([
-            shapeName,
-            {typeName},
-        ]) => {
-            return `export const ${shapeName} = typedStringShape<${typeName}>();`;
-        });
+        const idImports: string[] = getObjectTypedEntries(usedIdShapes).map(
+            ([
+                ,
+                {typeName, modelName},
+            ]) => {
+                return `import {type ${typeName}} from './models/${modelName}.js';`;
+            },
+        );
+        const idShapes: string[] = getObjectTypedEntries(usedIdShapes).map(
+            ([
+                shapeName,
+                {typeName},
+            ]) => {
+                return `export const ${shapeName} = typedStringShape<${typeName}>();`;
+            },
+        );
 
         const importParts: string[] = [
             '/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */',

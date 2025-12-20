@@ -49,6 +49,7 @@ export async function applyPrismaMigrationsToDev({
         `--schema='${schemaPath}'`,
     ].join(' ');
 
+    /* node:coverage ignore next 3 */
     if (showLogs) {
         log.faint(`> ${command}`);
     }

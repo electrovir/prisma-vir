@@ -47,7 +47,8 @@ export async function mapPrismaValues(
                 mapPrismaValues(innerValue, mappers, {
                     childKey: index,
                     parentValue: value,
-                })),
+                }),
+            ),
         );
     } else if (check.isPlainObject(value)) {
         await Promise.all(
