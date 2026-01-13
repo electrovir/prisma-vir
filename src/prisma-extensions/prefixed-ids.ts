@@ -107,7 +107,11 @@ export function createPrefixedIdExtension<ModelName extends string>(
                 },
             },
         },
-    };
+        /**
+         * Unfortunately, Prisma's extension types are such a mess that we gotta just cast this to
+         * `any` entirely.
+         */
+    } as any;
 }
 
 async function insertId({

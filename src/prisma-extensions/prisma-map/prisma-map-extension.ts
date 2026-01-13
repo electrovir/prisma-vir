@@ -71,5 +71,9 @@ export function createPrismaMapExtension(
                 return runPrismaMapExtension(mappers, {args, query});
             },
         },
-    };
+        /**
+         * Unfortunately, Prisma's extension types are such a mess that we gotta just cast this to
+         * `any` entirely.
+         */
+    } as any;
 }
