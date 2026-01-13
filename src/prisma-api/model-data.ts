@@ -229,8 +229,11 @@ export async function dumpData<const TypeMap extends BaseTypeMap>({
                 const errorMessage = extractErrorMessage(error).toLowerCase().trim();
                 /* node:coverage disable */
                 if (
-                    errorMessage.startsWith('relation') &&
-                    errorMessage.includes('does not exist')
+                    (errorMessage.startsWith('relation') &&
+                        errorMessage.includes('does not exist')) ||
+                    (errorMessage.includes('argument') &&
+                        errorMessage.includes('orderBy') &&
+                        errorMessage.includes('missing.'))
                 ) {
                     /**
                      * Ignore these failures, they might just be views or other issues that need to
