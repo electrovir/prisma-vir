@@ -6,7 +6,7 @@ import {selectFrom} from '@augment-vir/common';
 import {describe, it} from '@augment-vir/test';
 import {join, relative} from 'node:path';
 import {repoDirPath} from '../file-paths.js';
-import {testPrismaSchemaPostgresPath} from '../file-paths.mock.js';
+import {testPrismaMigrationsDirPath, testPrismaSchemaPostgresPath} from '../file-paths.mock.js';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from '../prisma-api/prisma-database.mock.js';
 import {createPrismaClient} from './create-prisma-client.js';
@@ -39,6 +39,7 @@ describe(createPostgresDatabaseUrl.name, () => {
                     },
                 },
                 schemaPath: testPrismaSchemaPostgresPath,
+                migrationsDirPath: testPrismaMigrationsDirPath,
             },
         );
 

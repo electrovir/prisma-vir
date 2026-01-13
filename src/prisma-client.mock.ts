@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 // @ts-ignore: this might not be generated yet
-import {testPrismaSchemaPostgresPath} from './file-paths.mock.js';
+import {testPrismaMigrationsDirPath, testPrismaSchemaPostgresPath} from './file-paths.mock.js';
 import {prismaApi} from './prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from './prisma-api/prisma-database.mock.js';
 import {createPrismaClient} from './prisma-client/create-prisma-client.js';
@@ -24,6 +24,7 @@ export async function createMockPrismaClient() {
 
     const {prismaClient} = await createPrismaClient(PrismaDatabaseEngine.Postgres, PrismaClient, {
         schemaPath: testPrismaSchemaPostgresPath,
+        migrationsDirPath: testPrismaMigrationsDirPath,
         connection: {
             dev: {
                 resetDatabase: true,

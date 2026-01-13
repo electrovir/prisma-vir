@@ -4,7 +4,7 @@
 import {assert} from '@augment-vir/assert';
 import {selectFrom} from '@augment-vir/common';
 import {describe, it} from '@augment-vir/test';
-import {testPrismaSchemaPostgresPath} from '../file-paths.mock.js';
+import {testPrismaMigrationsDirPath, testPrismaSchemaPostgresPath} from '../file-paths.mock.js';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from '../prisma-api/prisma-database.mock.js';
 import {type PrismaValueMapper} from '../prisma-extensions/prisma-map/map-values.js';
@@ -43,6 +43,7 @@ describe(createPrismaClient.name, () => {
                     },
                 },
                 schemaPath: testPrismaSchemaPostgresPath,
+                migrationsDirPath: testPrismaMigrationsDirPath,
                 async seedScript({prismaClient}) {
                     await prismaClient.user.create({
                         data: mockUser,
@@ -91,6 +92,7 @@ describe(createPrismaClient.name, () => {
                     },
                 },
                 schemaPath: testPrismaSchemaPostgresPath,
+                migrationsDirPath: testPrismaMigrationsDirPath,
                 extendScript({prismaClient}) {
                     const mappers: ReadonlyArray<PrismaValueMapper> = [
                         (value) => {

@@ -75,6 +75,7 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
         connection,
         schemaPath,
         databaseDir,
+        migrationsDirPath,
     }: Readonly<
         SelectFrom<
             CreatePrismaClientParams<PrismaDatabaseEngine.Postgres, PrismaClient>,
@@ -82,6 +83,7 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
                 connection: true;
                 schemaPath: true;
                 databaseDir: true;
+                migrationsDirPath: true;
             }
         >
     >,
@@ -94,6 +96,7 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
             ? await createPgliteAdapter({
                   schemaFilePath: schemaPath,
                   databaseName: connection.dev.databaseName,
+                  migrationsDirPath,
                   dbDirName: connection.dev.test,
                   resetDatabase: shouldResetDatabase,
                   dbParentDirPath: databaseDir || getDefaultTopLevelDatabaseDirPath(),

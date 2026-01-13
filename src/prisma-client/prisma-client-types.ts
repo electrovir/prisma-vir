@@ -92,6 +92,7 @@ export type CreatePrismaClientParams<
     PrismaClient extends BasePrismaClient = BasePrismaClient,
 > = {
     schemaPath: string;
+    migrationsDirPath: string;
     connection: RequireExactlyOne<{
         /** For databases in dev or in tests. */
         dev: DevDatabaseConnection;

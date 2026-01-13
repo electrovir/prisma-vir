@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "2.3.1",
+    "version": "2.3.2",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
@@ -41,7 +41,7 @@
         "lint": "virmator lint fix",
         "publish": "virmator publish npm run test:all",
         "test": "npm run init && virmator test node --test-concurrency=1",
-        "test:all": "npm run compile && virmator test node --test-concurrency=1 && runstorm --names tests,spelling,format,docs,deps,lint \"npm run test:coverage\" \"npm run test:spelling\" \"npm run test:format\" \"npm run test:docs\" \"npm run test:deps\" \"npm run test:lint\"",
+        "test:all": "npm run compile && npm run test:coverage && runstorm --names spelling,format,docs,deps,lint \"npm run test:spelling\" \"npm run test:format\" \"npm run test:docs\" \"npm run test:deps\" \"npm run test:lint\"",
         "test:coverage": "virmator test node coverage --test-concurrency=1",
         "test:deps": "virmator deps check",
         "test:docs": "virmator docs check",
@@ -102,7 +102,7 @@
         "prettier-plugin-sort-json": "^4.1.1",
         "prettier-plugin-toml": "^2.0.6",
         "prisma": "^6.19.0",
-        "prisma-pglite": "^2.0.1",
+        "prisma-pglite": "^2.0.2",
         "type-fest": "^5.3.1",
         "typedoc": "^0.28.15",
         "typescript": "^5.9.3",
