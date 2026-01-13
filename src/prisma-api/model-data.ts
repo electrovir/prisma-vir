@@ -6,6 +6,7 @@ import {
     type BasePrismaClient,
     type BaseTypeMap,
     ensureErrorAndPrependMessage,
+    extractErrorMessage,
     filterMap,
     type FirstLetterLowercase,
     getObjectTypedEntries,
@@ -106,9 +107,9 @@ async function addModelDataObject(
             mockData,
         ]) => {
             /**
-             * This type is dumbed down to just `AnyObject[]` because the union of all possible model
-             * data is just way too big (and not helpful as the inputs to this function are already type
-             * guarded).
+             * This type is dumbed down to just `AnyObject[]` because the union of all possible
+             * model data is just way too big (and not helpful as the inputs to this function are
+             * already type guarded).
              */
             const mockModelInstances: AnyObject[] = Array.isArray(mockData)
                 ? mockData
@@ -225,6 +226,20 @@ export async function dumpData<const TypeMap extends BaseTypeMap>({
                     value: filteredEntries,
                 };
             } catch (error) {
+                const errorMessage = extractErrorMessage(error).toLowerCase().trim();
+                /* node:coverage disable */
+                if (
+                    errorMessage.startsWith('relation') &&
+                    errorMessage.includes('does not exist')
+                ) {
+                    /**
+                     * Ignore these failures, they might just be views or other issues that need to
+                     * be fixed elsewhere.
+                     */
+                    return;
+                }
+                /* node:coverage enable */
+
                 throw ensureErrorAndPrependMessage(
                     error,
                     `Failed to read data for model '${modelName}'`,
