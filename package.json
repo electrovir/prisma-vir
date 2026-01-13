@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "2.3.2",
+    "version": "2.3.3",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
