@@ -22,6 +22,11 @@ import {
     type PrismaDatabaseEngine,
 } from './prisma-client-types.js';
 
+/** Prisma requires forward slashes in `file:` URLs, even on Windows. */
+function toFileUrl(filePath: string) {
+    return `file:${filePath.replaceAll('\\', '/')}`;
+}
+
 /**
  * All connection parameters for connecting to a SQLite database.
  *
@@ -57,7 +62,7 @@ export async function createSqlitePrismaClient<PrismaClient extends BasePrismaCl
         'dev' in connection
             ? await createDevSqliteAdapter(connection.dev, databaseDir)
             : new PrismaBetterSQLite3({
-                  url: `file:${connection.liveConnection.filePath}`,
+                  url: toFileUrl(connection.liveConnection.filePath),
               });
     const databasePath: string =
         ('databasePath' in adapter && adapter.databasePath) ||
@@ -74,7 +79,7 @@ export async function createSqlitePrismaClient<PrismaClient extends BasePrismaCl
     if (!alreadyExisted) {
         const {tempSchemaPath} = await createTempSchemaWithReplacedDatasourceUrl({
             originalSchemaPath: schemaPath,
-            datasourceReplacement: `"file:${databasePath}"`,
+            datasourceReplacement: `"${toFileUrl(databasePath)}"`,
         });
 
         await prismaApi.database.resetDev({
@@ -130,7 +135,7 @@ export function createSqliteDatabaseUrl({
 
     return {
         path: databasePath,
-        url: `file:${databasePath}`,
+        url: toFileUrl(databasePath),
     };
 }
 
