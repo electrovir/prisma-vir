@@ -82,7 +82,7 @@ describe(createPostgresDatabaseUrl.name, () => {
             await closePgliteAdapter(adapter);
         }
     });
-    it('adds default options', () => {
+    it('builds URL without search params by default', () => {
         assert.strictEquals(
             createPostgresDatabaseUrl({
                 dbname: 'dbname',
@@ -90,24 +90,27 @@ describe(createPostgresDatabaseUrl.name, () => {
                 password: 'password',
                 port: 5,
                 username: 'username',
-            }),
-            'postgresql://username:password@host:5/dbname?sslmode=no-verify&connection_limit=5&pool_timeout=30',
-        );
-    });
-    it('removes default options', () => {
-        assert.strictEquals(
-            createPostgresDatabaseUrl({
-                dbname: 'dbname',
-                host: 'host',
-                password: 'password',
-                port: 5,
-                username: 'username',
-                options: {},
             }),
             'postgresql://username:password@host:5/dbname',
         );
     });
-    it('works with empty options', () => {
+    it('includes search params in URL', () => {
+        assert.strictEquals(
+            createPostgresDatabaseUrl({
+                dbname: 'dbname',
+                host: 'host',
+                password: 'password',
+                port: 5,
+                username: 'username',
+                searchParams: {
+                    sslmode: 'require',
+                    statement_timeout: 5000,
+                },
+            }),
+            'postgresql://username:password@host:5/dbname?sslmode=require&statement_timeout=5000',
+        );
+    });
+    it('works with empty search params', () => {
         assert.strictEquals(
             createPostgresDatabaseUrl({
                 dbname: '',
@@ -115,7 +118,7 @@ describe(createPostgresDatabaseUrl.name, () => {
                 password: '',
                 port: 0,
                 username: '',
-                options: {},
+                searchParams: {},
             }),
             'postgresql://host:0/',
         );
@@ -129,7 +132,6 @@ describe(createPostgresDatabaseUrl.name, () => {
                     password: '',
                     port: 5,
                     username: '',
-                    options: {},
                 }),
             {
                 matchMessage: 'without a host',

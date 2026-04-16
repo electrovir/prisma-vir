@@ -1,5 +1,10 @@
-import {type BasePrismaClient, type SelectFrom} from '@augment-vir/common';
+import {
+    type BasePrismaClient,
+    type PartialWithUndefined,
+    type SelectFrom,
+} from '@augment-vir/common';
 import {PrismaPg} from '@prisma/adapter-pg';
+import {type PoolConfig} from 'pg';
 import {createPgliteAdapter, type PrismaPgliteAdapter} from 'prisma-pglite';
 import {type Constructor} from 'type-fest';
 import {buildUrl} from 'url-vir';
@@ -21,20 +26,31 @@ export type PostgresConnectionParams = {
     username: string;
     password: string;
     port: number;
+} & PartialWithUndefined<{
     /**
-     * These options are applied to the database URL's search / query parameters. If omitted or set
-     * to `undefined`, the default is used. Set to an empty object to ignore the default.
+     * Set `PoolConfig` options for the `pg` package. Omit this or set it to `undefined` to use this
+     * package's defaults ({@link defaultPoolConfig}). Setting this to an object will overwrite all
+     * the defaults, so make sure to merge {@link defaultPoolConfig} into your config if you want to
+     * keep any defaults that you don't want to overwrite.
      *
-     * @default
-     * ```ts
-     * {
-     *     sslmode: 'no-verify',
-     *     connection_limit: 5,
-     *     pool_timeout: 30,
-     * }
-     *  ```
+     * @default defaultPoolConfig
      */
-    options?: Readonly<Record<string, string | number>> | undefined;
+    poolConfig: Omit<PoolConfig, 'connectionString'>;
+    /** These are applied to the database URL's search / query parameters. */
+    searchParams: Readonly<Record<string, string | number>>;
+}>;
+
+/**
+ * Default pool config options.
+ *
+ * @category Internal
+ */
+export const defaultPoolConfig: Readonly<Omit<PoolConfig, 'connectionString'>> = {
+    ssl: {
+        rejectUnauthorized: false,
+    },
+    connectionTimeoutMillis: 30_000,
+    max: 5,
 };
 
 /**
@@ -56,11 +72,7 @@ export function createPostgresDatabaseUrl(
         paths: [connectionParams.dbname],
         username: connectionParams.username,
         password: connectionParams.password,
-        search: connectionParams.options || {
-            sslmode: 'no-verify',
-            connection_limit: 5,
-            pool_timeout: 30,
-        },
+        search: connectionParams.searchParams,
     }).href;
 }
 
@@ -109,6 +121,7 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
                   dbParentDirPath: databaseDir || getDefaultTopLevelDatabaseDirPath(),
               })
             : new PrismaPg({
+                  ...(connection.liveConnection.poolConfig || defaultPoolConfig),
                   connectionString: createPostgresDatabaseUrl(connection.liveConnection),
               });
 
