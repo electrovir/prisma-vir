@@ -58,7 +58,10 @@ describe(
         ) {
             const prismaClient = await setupPrismaClient(testContext);
             try {
-                await prismaApi.client.addData({prismaClient, data});
+                await prismaApi.client.addData({
+                    prismaClient,
+                    data,
+                });
 
                 const dumpedData = await prismaApi.client.dumpData({
                     prismaClient,
@@ -84,7 +87,6 @@ describe(
                     user: [
                         {
                             email: 'fake@example.com',
-                            // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                             password: 'fake password',
                         },
                     ],
@@ -96,17 +98,24 @@ describe(
                 },
             });
 
-            assert.hasKeys((await prismaApi.client.dumpData({prismaClient})).user?.[0], [
-                'createdAt',
-                'email',
-                'firstName',
-                'id',
-                'lastName',
-                'password',
-                'phoneNumber',
-                'role',
-                'updatedAt',
-            ]);
+            assert.hasKeys(
+                (
+                    await prismaApi.client.dumpData({
+                        prismaClient,
+                    })
+                ).user?.[0],
+                [
+                    'createdAt',
+                    'email',
+                    'firstName',
+                    'id',
+                    'lastName',
+                    'password',
+                    'phoneNumber',
+                    'role',
+                    'updatedAt',
+                ],
+            );
             await prismaClient.$disconnect();
         });
 
@@ -115,9 +124,14 @@ describe(
 
             (prismaClient as AnyObject).invalidMode = {};
 
-            await assert.throws(prismaApi.client.dumpData({prismaClient}), {
-                matchMessage: 'Failed to read data for model',
-            });
+            await assert.throws(
+                prismaApi.client.dumpData({
+                    prismaClient,
+                }),
+                {
+                    matchMessage: 'Failed to read data for model',
+                },
+            );
 
             await prismaClient.$disconnect();
         });
@@ -143,7 +157,6 @@ describe(
                     user: [
                         {
                             email: 'fake@example.com',
-                            // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                             password: 'fake password',
                             id: 'fake-id',
                         },
@@ -170,7 +183,6 @@ describe(
                     user: [
                         {
                             email: 'fake2@example.com',
-                            // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                             password: 'fake password 2',
                             id: 'fake-id-2',
                             [prismaModelCreateOmitId]: true,
@@ -207,7 +219,6 @@ describe(
                         User: [
                             {
                                 email: 'fake@example.com',
-                                // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                                 password: 'fake password',
                             },
                         ],
@@ -220,11 +231,14 @@ describe(
                     },
                 ],
                 expect: {
-                    region: [{regionName: 'fake'}],
+                    region: [
+                        {
+                            regionName: 'fake',
+                        },
+                    ],
                     user: [
                         {
                             email: 'fake@example.com',
-                            // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                             password: 'fake password',
                             firstName: null,
                             lastName: null,
@@ -241,7 +255,6 @@ describe(
                     User: [
                         {
                             email: 'fake@example.com',
-                            // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                             password: 'fake password',
                         },
                     ],
@@ -253,11 +266,14 @@ describe(
                     },
                 },
                 expect: {
-                    region: [{regionName: 'fake'}],
+                    region: [
+                        {
+                            regionName: 'fake',
+                        },
+                    ],
                     user: [
                         {
                             email: 'fake@example.com',
-                            // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                             password: 'fake password',
                             firstName: null,
                             lastName: null,
@@ -274,13 +290,11 @@ describe(
                     User: [
                         {
                             email: 'fake@example.com',
-                            // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                             password: 'fake password',
                             [prismaModelCreateExclude]: true,
                         },
                         {
                             email: 'fake2@example.com',
-                            // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                             password: 'fake password 2',
                         },
                     ],
@@ -300,7 +314,6 @@ describe(
                     user: [
                         {
                             email: 'fake2@example.com',
-                            // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                             password: 'fake password 2',
                             firstName: null,
                             lastName: null,

@@ -1,6 +1,6 @@
 import {assert, check} from '@augment-vir/assert';
 import {describe, it} from '@augment-vir/test';
-import {createMockPrismaClient} from '../../prisma-client.mock.js';
+import {closePgliteAdapter, createMockPrismaClient} from '../../prisma-client.mock.js';
 import {type MappedPrismaValue} from './map-values.js';
 import {createPrismaMapExtension} from './prisma-map-extension.js';
 
@@ -9,12 +9,15 @@ export function mapDates(value: unknown): MappedPrismaValue {
         return undefined;
     }
 
-    return {replacement: value.toISOString()};
+    return {
+        replacement: value.toISOString(),
+    };
 }
 
 describe(createPrismaMapExtension.name, () => {
     it('overwrites a Date object', async () => {
-        const prismaClient = (await createMockPrismaClient()).$extends(
+        const {prismaClient: basePrismaClient, adapter} = await createMockPrismaClient();
+        const prismaClient = basePrismaClient.$extends(
             createPrismaMapExtension('test', [
                 mapDates,
             ]),
@@ -24,7 +27,6 @@ describe(createPrismaMapExtension.name, () => {
             const newUser = await prismaClient.user.create({
                 data: {
                     email: 'fake@example.com',
-                    // eslint-disable-next-line sonarjs/no-hardcoded-passwords
                     password: 'fake password',
                 },
                 select: {
@@ -37,6 +39,7 @@ describe(createPrismaMapExtension.name, () => {
             assert.isString(newUser.createdAt);
         } finally {
             await prismaClient.$disconnect();
+            await closePgliteAdapter(adapter);
         }
     });
 });

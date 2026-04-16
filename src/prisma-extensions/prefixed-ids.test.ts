@@ -1,13 +1,13 @@
-/* eslint-disable sonarjs/no-hardcoded-passwords */
 import {assert, assertWrap} from '@augment-vir/assert';
 import {selectFrom} from '@augment-vir/common';
 import {describe, it} from '@augment-vir/test';
-import {createMockPrismaClient} from '../prisma-client.mock.js';
+import {closePgliteAdapter, createMockPrismaClient} from '../prisma-client.mock.js';
 import {createPrefixedIdExtension} from './prefixed-ids.js';
 
 describe(createPrefixedIdExtension.name, () => {
     it('maps ids', async () => {
-        const prismaClient = (await createMockPrismaClient()).$extends(createPrefixedIdExtension());
+        const {prismaClient: basePrismaClient, adapter} = await createMockPrismaClient();
+        const prismaClient = basePrismaClient.$extends(createPrefixedIdExtension());
 
         try {
             const newUser = await prismaClient.user.create({
@@ -26,10 +26,12 @@ describe(createPrefixedIdExtension.name, () => {
             assert.startsWith(newUser.id, 'u_');
         } finally {
             await prismaClient.$disconnect();
+            await closePgliteAdapter(adapter);
         }
     });
     it('uses custom options ids', async () => {
-        const prismaClient = (await createMockPrismaClient()).$extends(
+        const {prismaClient: basePrismaClient, adapter} = await createMockPrismaClient();
+        const prismaClient = basePrismaClient.$extends(
             createPrefixedIdExtension({
                 createBaseId() {
                     return 'my-id';
@@ -60,10 +62,12 @@ describe(createPrefixedIdExtension.name, () => {
             assert.strictEquals(newUser.id, 'TEST_my-id');
         } finally {
             await prismaClient.$disconnect();
+            await closePgliteAdapter(adapter);
         }
     });
     it('uses custom options ids with create many', async () => {
-        const prismaClient = (await createMockPrismaClient()).$extends(
+        const {prismaClient: basePrismaClient, adapter} = await createMockPrismaClient();
+        const prismaClient = basePrismaClient.$extends(
             createPrefixedIdExtension({
                 createPrefix() {
                     return 'TEST_';
@@ -116,6 +120,7 @@ describe(createPrefixedIdExtension.name, () => {
             });
         } finally {
             await prismaClient.$disconnect();
+            await closePgliteAdapter(adapter);
         }
     });
 });

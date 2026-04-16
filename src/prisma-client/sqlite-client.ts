@@ -57,7 +57,7 @@ export async function createSqlitePrismaClient<PrismaClient extends BasePrismaCl
             }
         >
     >,
-): Promise<EngineClientOutput<PrismaClient>> {
+): Promise<EngineClientOutput<PrismaDatabaseEngine.Sqlite, PrismaClient>> {
     const adapter: PrismaBetterSQLite3 & Partial<ExtraAdapterProperties> =
         'dev' in connection
             ? await createDevSqliteAdapter(connection.dev, databaseDir)
@@ -87,7 +87,9 @@ export async function createSqlitePrismaClient<PrismaClient extends BasePrismaCl
             withMigrations: false,
         });
 
-        await rm(tempSchemaPath, {force: true});
+        await rm(tempSchemaPath, {
+            force: true,
+        });
     }
 
     return {
@@ -125,7 +127,10 @@ export function createSqliteDatabaseUrl({
 
     assert.isTruthy(databaseDirName);
 
-    const databaseFileName = addSuffix({value: databaseName || 'db', suffix: '.db'});
+    const databaseFileName = addSuffix({
+        value: databaseName || 'db',
+        suffix: '.db',
+    });
 
     const databasePath = join(
         databaseDir || getDefaultTopLevelDatabaseDirPath(),
@@ -148,11 +153,15 @@ async function createDevSqliteAdapter(
         test: devParams.test,
         databaseName: devParams.databaseName,
     });
-    await mkdir(dirname(path), {recursive: true});
+    await mkdir(dirname(path), {
+        recursive: true,
+    });
     const didDatabaseExistAlready = existsSync(path);
 
     if (devParams.resetDatabase) {
-        await rm(path, {force: true});
+        await rm(path, {
+            force: true,
+        });
     }
 
     const adapter = new PrismaBetterSQLite3({

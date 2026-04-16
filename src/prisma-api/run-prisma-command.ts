@@ -34,7 +34,10 @@ export async function runPrismaCommand({
     const schemaFileArgs = schemaPath
         ? [
               '--schema',
-              wrapString({value: schemaPath, wrapper: "'"}),
+              wrapString({
+                  value: schemaPath,
+                  wrapper: "'",
+              }),
           ]
         : [];
 

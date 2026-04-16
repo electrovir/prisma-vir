@@ -1,6 +1,6 @@
 import {type BasePrismaClient, type SelectFrom} from '@augment-vir/common';
 import {PrismaPg} from '@prisma/adapter-pg';
-import {createPgliteAdapter} from 'prisma-pglite';
+import {createPgliteAdapter, type PrismaPgliteAdapter} from 'prisma-pglite';
 import {type Constructor} from 'type-fest';
 import {buildUrl} from 'url-vir';
 import {getDefaultTopLevelDatabaseDirPath} from './default-path.js';
@@ -65,6 +65,13 @@ export function createPostgresDatabaseUrl(
 }
 
 /**
+ * The adapter returned by the postgres prisma client creation.
+ *
+ * @category Internal
+ */
+export type PostgresAdapter = PrismaPgliteAdapter | PrismaPg;
+
+/**
  * Creates a Postgres Prisma client.
  *
  * @category Internal
@@ -87,7 +94,7 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
             }
         >
     >,
-): Promise<EngineClientOutput<PrismaClient>> {
+): Promise<EngineClientOutput<PrismaDatabaseEngine.Postgres, PrismaClient>> {
     const shouldResetDatabase: boolean = !!connection.dev && connection.dev.resetDatabase;
 
     /* node:coverage disable: we cannot create a real Postgres server in tests. */

@@ -46,7 +46,10 @@ generatorHelper.generatorHandler({
     },
     async onGenerate(options) {
         const brandPrefix: string = options.generator.config.prefix
-            ? addSuffix({value: options.generator.config.prefix, suffix: '-'})
+            ? addSuffix({
+                  value: options.generator.config.prefix,
+                  suffix: '-',
+              })
             : '';
 
         const outputDir = resolveGeneratorOutput(options.generator.output);
@@ -62,7 +65,10 @@ generatorHelper.generatorHandler({
                 const modelFileNames = await readdir(modelsDir);
 
                 return modelFileNames.map((modelFileName) => {
-                    const modelName = removeSuffix({value: modelFileName, suffix: '.ts'});
+                    const modelName = removeSuffix({
+                        value: modelFileName,
+                        suffix: '.ts',
+                    });
 
                     return [
                         modelName,
@@ -340,7 +346,10 @@ async function fixCommonInputTypes(outputDirPath: string) {
                         `Failed to extract match for '${state.match.definitionRegExp}' from '${input}'`,
                     );
 
-                    const afterMatch = removePrefix({value: input, prefix: matchString});
+                    const afterMatch = removePrefix({
+                        value: input,
+                        prefix: matchString,
+                    });
 
                     if (afterMatch.startsWith('<')) {
                         fileLines[index] = input.replace(

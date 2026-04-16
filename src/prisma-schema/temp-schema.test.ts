@@ -11,7 +11,9 @@ describe(createTempSchema.name, () => {
             originalSchemaPath: testPrismaSchemaPath,
         });
         assert.isTrue(existsSync(tempSchemaPath));
-        await rm(tempSchemaPath, {force: true});
+        await rm(tempSchemaPath, {
+            force: true,
+        });
         assert.isFalse(existsSync(tempSchemaPath));
     });
 });

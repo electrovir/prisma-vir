@@ -80,9 +80,7 @@ export function createBrandedFieldParams(
                 relation: undefined,
             },
         ] as const;
-    }
-
-    if (relation) {
+    } else if (relation) {
         return [
             field.name,
             {

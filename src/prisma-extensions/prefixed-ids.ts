@@ -80,7 +80,11 @@ export function createPrefixedIdExtension<ModelName extends string>(
                     };
                 }): Promise<unknown> {
                     if (args.data) {
-                        await insertId({data: args.data, modelName, options});
+                        await insertId({
+                            data: args.data,
+                            modelName,
+                            options,
+                        });
                     }
 
                     return query(args);
@@ -99,7 +103,11 @@ export function createPrefixedIdExtension<ModelName extends string>(
                 }): Promise<unknown> {
                     if (args.data) {
                         await awaitedForEach(args.data as any[], async (dataEntry: AnyObject) => {
-                            await insertId({data: dataEntry, modelName, options});
+                            await insertId({
+                                data: dataEntry,
+                                modelName,
+                                options,
+                            });
                         });
                     }
 

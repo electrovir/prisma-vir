@@ -14,7 +14,11 @@ export async function getPrismaDiff({
         `--to-schema-datasource='${schemaPath}'`,
     ].join(' ');
 
-    const results = await runPrismaCommand({command, env, schemaPath: undefined});
+    const results = await runPrismaCommand({
+        command,
+        env,
+        schemaPath: undefined,
+    });
 
     if (results.stdout.trim() === 'No difference detected.') {
         return '';

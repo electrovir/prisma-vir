@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-hardcoded-passwords */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import {assert} from '@augment-vir/assert';
@@ -7,6 +6,7 @@ import {describe, it} from '@augment-vir/test';
 import {testPrismaMigrationsDirPath, testPrismaSchemaPostgresPath} from '../file-paths.mock.js';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from '../prisma-api/prisma-database.mock.js';
+import {closePgliteAdapter} from '../prisma-client.mock.js';
 import {type PrismaValueMapper} from '../prisma-extensions/prisma-map/map-values.js';
 import {createPrismaMapExtension} from '../prisma-extensions/prisma-map/prisma-map-extension.js';
 import {createPrismaClient} from './create-prisma-client.js';
@@ -32,7 +32,7 @@ describe(createPrismaClient.name, () => {
             password: 'test password',
         };
 
-        const {prismaClient} = await createPrismaClient(
+        const {prismaClient, adapter} = await createPrismaClient(
             PrismaDatabaseEngine.Postgres,
             PrismaClient,
             {
@@ -54,17 +54,29 @@ describe(createPrismaClient.name, () => {
                 },
             },
         );
-        const newUser = await prismaClient.user.findFirst({
-            select: {
-                email: true,
-                password: true,
-                createdAt: true,
-            },
-        });
 
-        assert.isDefined(newUser);
-        assert.instanceOf(newUser.createdAt, Date);
-        assert.deepEquals(selectFrom(newUser, {email: true, password: true}), mockUser);
+        try {
+            const newUser = await prismaClient.user.findFirst({
+                select: {
+                    email: true,
+                    password: true,
+                    createdAt: true,
+                },
+            });
+
+            assert.isDefined(newUser);
+            assert.instanceOf(newUser.createdAt, Date);
+            assert.deepEquals(
+                selectFrom(newUser, {
+                    email: true,
+                    password: true,
+                }),
+                mockUser,
+            );
+        } finally {
+            await prismaClient.$disconnect();
+            await closePgliteAdapter(adapter);
+        }
     });
     it('extends the client', async (testContext) => {
         await clearTestDatabaseOutputs();
@@ -81,7 +93,7 @@ describe(createPrismaClient.name, () => {
             password: 'test password',
         };
 
-        const {prismaClient} = await createPrismaClient(
+        const {prismaClient, adapter} = await createPrismaClient(
             PrismaDatabaseEngine.Postgres,
             PrismaClient,
             {
@@ -111,17 +123,28 @@ describe(createPrismaClient.name, () => {
             },
         );
 
-        const newUser = await prismaClient.user.create({
-            data: mockUser,
-            select: {
-                email: true,
-                password: true,
-                createdAt: true,
-            },
-        });
+        try {
+            const newUser = await prismaClient.user.create({
+                data: mockUser,
+                select: {
+                    email: true,
+                    password: true,
+                    createdAt: true,
+                },
+            });
 
-        assert.isString(newUser.createdAt);
-        assert.deepEquals(selectFrom(newUser, {email: true, password: true}), mockUser);
+            assert.isString(newUser.createdAt);
+            assert.deepEquals(
+                selectFrom(newUser, {
+                    email: true,
+                    password: true,
+                }),
+                mockUser,
+            );
+        } finally {
+            await prismaClient.$disconnect();
+            await closePgliteAdapter(adapter);
+        }
     });
     it('fails with an invalid engine', async (testContext) => {
         await clearTestDatabaseOutputs();

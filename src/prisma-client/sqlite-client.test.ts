@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-hardcoded-passwords */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import {assert} from '@augment-vir/assert';
@@ -72,7 +71,13 @@ describe(createSqlitePrismaClient.name, () => {
         });
 
         assert.isDefined(newUser.id);
-        assert.deepEquals(selectFrom(newUser, {email: true, password: true}), mockUser);
+        assert.deepEquals(
+            selectFrom(newUser, {
+                email: true,
+                password: true,
+            }),
+            mockUser,
+        );
     });
     it('creates a dev sqlite client', async () => {
         await clearTestDatabaseOutputs();
@@ -120,7 +125,13 @@ describe(createSqlitePrismaClient.name, () => {
         });
 
         assert.isDefined(newUser.id);
-        assert.deepEquals(selectFrom(newUser, {email: true, password: true}), mockUser);
+        assert.deepEquals(
+            selectFrom(newUser, {
+                email: true,
+                password: true,
+            }),
+            mockUser,
+        );
     });
     it('works with migrations', async (testContext) => {
         await clearTestDatabaseOutputs();
@@ -141,7 +152,9 @@ describe(createSqlitePrismaClient.name, () => {
         });
 
         assert.isTrue(existsSync(databasePath));
-        await rm(databasePath, {force: true});
+        await rm(databasePath, {
+            force: true,
+        });
         assert.isFalse(existsSync(databasePath));
 
         // @ts-ignore: this might not be generated yet
@@ -185,7 +198,13 @@ describe(createSqlitePrismaClient.name, () => {
         });
 
         assert.isDefined(newUser.id);
-        assert.deepEquals(selectFrom(newUser, {email: true, password: true}), mockUser);
+        assert.deepEquals(
+            selectFrom(newUser, {
+                email: true,
+                password: true,
+            }),
+            mockUser,
+        );
     });
     it('works with a test string', async () => {
         await clearTestDatabaseOutputs();
@@ -234,7 +253,13 @@ describe(createSqlitePrismaClient.name, () => {
         });
 
         assert.isDefined(newUser.id);
-        assert.deepEquals(selectFrom(newUser, {email: true, password: true}), mockUser);
+        assert.deepEquals(
+            selectFrom(newUser, {
+                email: true,
+                password: true,
+            }),
+            mockUser,
+        );
     });
     it('creates a prod sqlite client', async () => {
         await clearTestDatabaseOutputs();
@@ -281,6 +306,12 @@ describe(createSqlitePrismaClient.name, () => {
         });
 
         assert.isDefined(newUser.id);
-        assert.deepEquals(selectFrom(newUser, {email: true, password: true}), mockUser);
+        assert.deepEquals(
+            selectFrom(newUser, {
+                email: true,
+                password: true,
+            }),
+            mockUser,
+        );
     });
 });

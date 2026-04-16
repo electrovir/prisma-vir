@@ -15,7 +15,9 @@ describe(prismaApi.client.generate.name, () => {
 
         assert.isFalse(existsSync(generatedPrismaClientDirPath));
 
-        await prismaApi.client.generate({schemaPath: testPrismaSchemaPath});
+        await prismaApi.client.generate({
+            schemaPath: testPrismaSchemaPath,
+        });
 
         assert.isTrue(existsSync(generatedPrismaClientDirPath));
     });
@@ -25,7 +27,9 @@ describe(prismaApi.client.generate.name, () => {
         assert.isFalse(existsSync(generatedPrismaClientDirPath));
 
         await assert.throws(() =>
-            prismaApi.client.generate({schemaPath: testInvalidPrismaSchemaPath}),
+            prismaApi.client.generate({
+                schemaPath: testInvalidPrismaSchemaPath,
+            }),
         );
 
         assert.isFalse(existsSync(generatedPrismaClientDirPath));

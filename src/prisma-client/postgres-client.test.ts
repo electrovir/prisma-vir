@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable sonarjs/no-hardcoded-passwords */
 
 import {assert} from '@augment-vir/assert';
 import {selectFrom} from '@augment-vir/common';
@@ -9,6 +8,7 @@ import {repoDirPath} from '../file-paths.js';
 import {testPrismaMigrationsDirPath, testPrismaSchemaPostgresPath} from '../file-paths.mock.js';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from '../prisma-api/prisma-database.mock.js';
+import {closePgliteAdapter} from '../prisma-client.mock.js';
 import {createPrismaClient} from './create-prisma-client.js';
 import {createPostgresDatabaseUrl} from './postgres-client.js';
 import {PrismaDatabaseEngine} from './prisma-client-types.js';
@@ -28,7 +28,7 @@ describe(createPostgresDatabaseUrl.name, () => {
         // @ts-ignore: this might not be generated yet
         const {PrismaClient} = await importFresh('../../test-files/generated/client.js');
 
-        const {databasePath, prismaClient} = await createPrismaClient(
+        const {databasePath, prismaClient, adapter} = await createPrismaClient(
             PrismaDatabaseEngine.Postgres,
             PrismaClient,
             {
@@ -43,29 +43,44 @@ describe(createPostgresDatabaseUrl.name, () => {
             },
         );
 
-        assert.isString(databasePath);
+        try {
+            assert.isString(databasePath);
 
-        assert.strictEquals(
-            relative(repoDirPath, databasePath),
-            join('.not-committed', 'db', 'create_postgres_database_url_creates_a_pglite_client'),
-        );
+            assert.strictEquals(
+                relative(repoDirPath, databasePath),
+                join(
+                    '.not-committed',
+                    'db',
+                    'create_postgres_database_url_creates_a_pglite_client',
+                ),
+            );
 
-        const mockUser = {
-            email: 'derp@example.com',
-            password: 'test password',
-        };
+            const mockUser = {
+                email: 'derp@example.com',
+                password: 'test password',
+            };
 
-        const newUser = await prismaClient.user.create({
-            data: mockUser,
-            select: {
-                id: true,
-                email: true,
-                password: true,
-            },
-        });
+            const newUser = await prismaClient.user.create({
+                data: mockUser,
+                select: {
+                    id: true,
+                    email: true,
+                    password: true,
+                },
+            });
 
-        assert.isDefined(newUser.id);
-        assert.deepEquals(selectFrom(newUser, {email: true, password: true}), mockUser);
+            assert.isDefined(newUser.id);
+            assert.deepEquals(
+                selectFrom(newUser, {
+                    email: true,
+                    password: true,
+                }),
+                mockUser,
+            );
+        } finally {
+            await prismaClient.$disconnect();
+            await closePgliteAdapter(adapter);
+        }
     });
     it('adds default options', () => {
         assert.strictEquals(

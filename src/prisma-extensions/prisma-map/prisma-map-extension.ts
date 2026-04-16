@@ -68,7 +68,10 @@ export function createPrismaMapExtension(
                 query: (args: unknown) => Promise<unknown>;
                 args: unknown;
             }) {
-                return runPrismaMapExtension(mappers, {args, query});
+                return runPrismaMapExtension(mappers, {
+                    args,
+                    query,
+                });
             },
         },
         /**

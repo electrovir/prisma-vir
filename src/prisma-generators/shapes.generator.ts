@@ -142,7 +142,9 @@ generatorHelper.generatorHandler({
 
         const outputDir = resolveOutput(options.generator.output);
         const shapesFilePath = join(outputDir, 'shapes.gen.ts');
-        await mkdir(dirname(shapesFilePath), {recursive: true});
+        await mkdir(dirname(shapesFilePath), {
+            recursive: true,
+        });
         await writeFile(shapesFilePath, contents);
 
         log.faint(`Shapes written to ${relative(process.cwd(), shapesFilePath)}`);

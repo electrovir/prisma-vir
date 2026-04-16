@@ -31,7 +31,10 @@ export function createGeneratorTest(
                     return indent(
                         [
                             key,
-                            wrapString({value, wrapper: '"'}),
+                            wrapString({
+                                value,
+                                wrapper: '"',
+                            }),
                         ].join(' = '),
                     );
                 },
@@ -84,7 +87,9 @@ ${generatorInputStrings}
 
             assert.strictEquals(patch, snapshotContents);
         } finally {
-            await rm(tempSchemaPath, {force: true});
+            await rm(tempSchemaPath, {
+                force: true,
+            });
         }
     });
 }

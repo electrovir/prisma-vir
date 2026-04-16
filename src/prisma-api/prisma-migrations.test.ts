@@ -458,7 +458,10 @@ describe(prismaApi.migration.applyProd.name, () => {
                 unappliedMigrations: [],
             },
         );
-        await rm(testPrismaMigrationsDirPath, {force: true, recursive: true});
+        await rm(testPrismaMigrationsDirPath, {
+            force: true,
+            recursive: true,
+        });
 
         await prismaApi.migration.applyProd({
             schemaPath: testPrismaSchema2Path,

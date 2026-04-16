@@ -155,5 +155,9 @@ export async function createPrismaMigration({
         .filter(check.isTruthy)
         .join(' ');
 
-    await runPrismaCommand({command, schemaPath, env});
+    await runPrismaCommand({
+        command,
+        schemaPath,
+        env,
+    });
 }

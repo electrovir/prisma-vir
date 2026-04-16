@@ -50,7 +50,9 @@ export async function createTempSchema({
 
     await writeFile(tempSchemaPath, transformedSchema);
 
-    return {tempSchemaPath};
+    return {
+        tempSchemaPath,
+    };
 }
 
 /**

@@ -22,7 +22,7 @@ export async function createPrismaClient<
     engine: Engine,
     prismaClientConstructor: Constructor<PrismaClient>,
     {seedScript, extendScript, ...params}: Readonly<CreatePrismaClientParams<Engine, PrismaClient>>,
-): Promise<CreatePrismaClientOutput<PrismaClient>> {
+): Promise<CreatePrismaClientOutput<PrismaDatabaseEngine, PrismaClient>> {
     const {databasePath, basePrismaClient, wasJustInitialized, adapter} =
         engine === PrismaDatabaseEngine.Postgres
             ? await createPostgresPrismaClient<PrismaClient>(
@@ -41,11 +41,16 @@ export async function createPrismaClient<
               : assert.never(`Unexpected prisma database engine: '${String(engine)}'`);
 
     const prismaClient: PrismaClient = extendScript
-        ? extendScript({prismaClient: basePrismaClient})
+        ? extendScript({
+              prismaClient: basePrismaClient,
+          })
         : basePrismaClient;
 
     if (wasJustInitialized && seedScript) {
-        await seedScript({test: params.connection.dev?.test, prismaClient});
+        await seedScript({
+            test: params.connection.dev?.test,
+            prismaClient,
+        });
     }
 
     return {
