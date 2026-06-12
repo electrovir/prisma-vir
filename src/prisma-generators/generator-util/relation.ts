@@ -34,7 +34,14 @@ export function extractRelations(dmmf: DMMF.Document): FieldRelations {
         (model) => {
             const relationEntries = filterMap(
                 model.fields,
-                (field): undefined | [string, FieldRelation] => {
+                (
+                    field,
+                ):
+                    | undefined
+                    | [
+                          string,
+                          FieldRelation,
+                      ] => {
                     if (
                         !field.relationToFields ||
                         !check.isLengthAtLeast(field.relationToFields, 1)

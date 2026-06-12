@@ -57,7 +57,12 @@ export function createBrandedFieldParams(
     relationFields: Readonly<FieldRelations>,
     model: Readonly<Model>,
     field: Readonly<Field>,
-): [string, BrandedField] | undefined {
+):
+    | [
+          string,
+          BrandedField,
+      ]
+    | undefined {
     const relation = relationFields[model.name]?.[field.name];
     const isCommentBranded: boolean = !!field.documentation?.includes('@branded()');
 

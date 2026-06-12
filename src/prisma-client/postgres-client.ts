@@ -62,7 +62,7 @@ export function createPostgresDatabaseUrl(
     connectionParams: Readonly<PostgresConnectionParams>,
 ): string {
     if (!connectionParams.host) {
-        throw new Error(`Cannot connect to database without a host.`);
+        throw new Error('Cannot connect to database without a host.');
     }
 
     return buildUrl({
