@@ -5,7 +5,7 @@ import {selectFrom} from '@augment-vir/common';
 import {describe, it} from '@augment-vir/test';
 import {join, relative} from 'node:path';
 import {repoDirPath} from '../file-paths.js';
-import {testPrismaMigrationsDirPath, testPrismaSchemaPostgresPath} from '../file-paths.mock.js';
+import {testPrismaConfigPostgresPath, testPrismaMigrationsDirPath} from '../file-paths.mock.js';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from '../prisma-api/prisma-database.mock.js';
 import {closePgliteAdapter} from '../prisma-client.mock.js';
@@ -22,7 +22,7 @@ describe(createPostgresDatabaseUrl.name, () => {
         await clearTestDatabaseOutputs();
 
         await prismaApi.client.generate({
-            schemaPath: testPrismaSchemaPostgresPath,
+            configPath: testPrismaConfigPostgresPath,
         });
 
         // @ts-ignore: this might not be generated yet
@@ -38,7 +38,7 @@ describe(createPostgresDatabaseUrl.name, () => {
                         test: testContext,
                     },
                 },
-                schemaPath: testPrismaSchemaPostgresPath,
+                configPath: testPrismaConfigPostgresPath,
                 migrationsDirPath: testPrismaMigrationsDirPath,
             },
         );

@@ -1,6 +1,7 @@
 import {check} from '@augment-vir/assert';
 import {log, type PartialWithUndefined, safeMatch, toEnsuredNumber} from '@augment-vir/common';
 import {runShellCommand} from '@augment-vir/node';
+import {dirname} from 'node:path';
 import terminate from 'terminate';
 import {PrismaMigrationNeededError, PrismaResetNeededError} from './prisma-errors.js';
 import {runPrismaCommand, verifyOutput} from './run-prisma-command.js';
@@ -16,7 +17,7 @@ export type PrismaMigrationStatus = {
 };
 
 export async function applyPrismaMigrationsToProd(params: {
-    schemaPath: string;
+    configPath: string;
     env?: Record<string, string> | undefined;
 }) {
     await runPrismaCommand({
@@ -31,12 +32,12 @@ enum DbChangeRequired {
 }
 
 export async function applyPrismaMigrationsToDev({
-    schemaPath,
+    configPath,
     env,
     showLogs,
 }: Readonly<
     {
-        schemaPath: string;
+        configPath: string;
     } & PartialWithUndefined<{
         env: Record<string, string>;
         showLogs: boolean;
@@ -46,7 +47,7 @@ export async function applyPrismaMigrationsToDev({
         'prisma',
         'migrate',
         'dev',
-        `--schema='${schemaPath}'`,
+        `--config='${configPath}'`,
     ].join(' ');
 
     /* node:coverage ignore next 3 */
@@ -61,6 +62,7 @@ export async function applyPrismaMigrationsToDev({
             ...process.env,
             ...env,
         },
+        cwd: dirname(configPath),
         stdoutCallback(stdout, childProcess) {
             if (stdout.includes('Enter a name for the new migration')) {
                 if (childProcess.pid) {
@@ -77,15 +79,15 @@ export async function applyPrismaMigrationsToDev({
     });
 
     if (dbRequirement === DbChangeRequired.MigrationNeeded) {
-        throw new PrismaMigrationNeededError(schemaPath);
+        throw new PrismaMigrationNeededError(configPath);
     } else if (dbRequirement === DbChangeRequired.ResetNeeded) {
-        throw new PrismaResetNeededError(schemaPath);
+        throw new PrismaResetNeededError(configPath);
     }
-    verifyOutput(schemaPath, result, false);
+    verifyOutput(configPath, result, false);
 }
 
 export async function getMigrationStatus(params: {
-    schemaPath: string;
+    configPath: string;
     env?: Record<string, string> | undefined;
 }): Promise<PrismaMigrationStatus> {
     const output = await runPrismaCommand({
@@ -133,11 +135,11 @@ export async function getMigrationStatus(params: {
 export async function createPrismaMigration({
     migrationName,
     createOnly = false,
-    schemaPath,
+    configPath,
     env = {},
 }: {
     migrationName: string;
-    schemaPath: string;
+    configPath: string;
     /**
      * Set this to `true` to create a new migration without applying it to the database.
      *
@@ -157,7 +159,7 @@ export async function createPrismaMigration({
 
     await runPrismaCommand({
         command,
-        schemaPath,
+        configPath,
         env,
     });
 }

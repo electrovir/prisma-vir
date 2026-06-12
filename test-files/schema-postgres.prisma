@@ -8,7 +8,6 @@ generator jsClient3 {
 
 datasource db3 {
     provider = "postgres"
-    url      = env("DATABASE_URL")
 }
 
 model User {

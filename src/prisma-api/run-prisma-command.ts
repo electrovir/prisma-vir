@@ -11,7 +11,8 @@ import {PrismaSchemaError} from './prisma-errors.js';
 export const prismaCommandsThatSupportNoHints = ['generate'];
 
 /**
- * Directly run a Prisma command.
+ * Directly run a Prisma command. Prisma v7 takes the schema location and datasource connection from
+ * a Prisma config file, so the caller's `configPath` is passed through via `--config`.
  *
  * @category Internal
  */
@@ -19,27 +20,24 @@ export async function runPrismaCommand({
     command,
     ignoreExitCode = false,
     showLogs,
-    schemaPath,
+    configPath,
     env = {},
 }: {
     command: string;
-    /** Set to `undefined` to omit the `--schema` flag. */
-    schemaPath: string | undefined;
+    configPath: string;
 } & PartialWithUndefined<{
     /** If `true`, prevents errors from being thrown if this command exits with a non-0 status. */
     env: Record<string, string> | undefined;
     ignoreExitCode: boolean;
     showLogs: boolean;
 }>) {
-    const schemaFileArgs = schemaPath
-        ? [
-              '--schema',
-              wrapString({
-                  value: schemaPath,
-                  wrapper: "'",
-              }),
-          ]
-        : [];
+    const configArgs = [
+        '--config',
+        wrapString({
+            value: configPath,
+            wrapper: "'",
+        }),
+    ];
 
     /** Disable Prisma's in-CLI ads. */
     const noHintsArg = prismaCommandsThatSupportNoHints.some((commandName) =>
@@ -51,7 +49,7 @@ export async function runPrismaCommand({
     const fullCommand = [
         'prisma',
         command,
-        ...schemaFileArgs,
+        ...configArgs,
         noHintsArg,
     ].join(' ');
 
@@ -66,10 +64,10 @@ export async function runPrismaCommand({
             ...env,
         },
         hookUpToConsole: !!showLogs,
-        cwd: schemaPath ? dirname(schemaPath) : process.cwd(),
+        cwd: dirname(configPath),
     });
 
-    return verifyOutput(schemaPath || '', result, ignoreExitCode);
+    return verifyOutput(configPath, result, ignoreExitCode);
 }
 
 /**
@@ -78,13 +76,13 @@ export async function runPrismaCommand({
  * @category Internal
  */
 export function verifyOutput(
-    schemaFilePath: string,
+    configFilePath: string,
     shellOutput: Readonly<ShellOutput>,
     ignoreExitCode: boolean,
 ) {
     if (shellOutput.stderr.includes('Validation Error Count')) {
         throw new PrismaSchemaError(
-            `Invalid schema file at '${schemaFilePath}':\n\n${shellOutput.stderr}`,
+            `Invalid schema file referenced by config '${configFilePath}':\n\n${shellOutput.stderr}`,
         );
     } else if (shellOutput.stderr.includes('does not exist')) {
         throw new PrismaSchemaError(`Database does not exist: ${shellOutput.stderr}`);

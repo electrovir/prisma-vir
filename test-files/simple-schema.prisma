@@ -8,7 +8,6 @@ generator jsClientSimple {
 
 datasource dbSimple {
     provider = "sqlite"
-    url      = env("DATABASE_URL")
 }
 
 model UserSimple {

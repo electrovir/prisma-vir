@@ -4,10 +4,10 @@ import {existsSync} from 'node:fs';
 import {readdir, rename, rm} from 'node:fs/promises';
 import {join} from 'node:path';
 import {
-    testInvalidPrismaSchemaPath,
+    testInvalidPrismaConfigPath,
+    testPrismaConfig2Path,
+    testPrismaConfigPath,
     testPrismaMigrationsDirPath,
-    testPrismaSchema2Path,
-    testPrismaSchemaPath,
 } from '../file-paths.mock.js';
 import {createSqliteDatabaseUrl} from '../prisma-client/sqlite-client.js';
 import {testWithNonCiEnv} from './disable-ci-env.mock.js';
@@ -30,7 +30,7 @@ describe(prismaApi.migration.status.name, () => {
 
         await assert.throws(
             prismaApi.migration.status({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
             }),
             {
@@ -47,18 +47,18 @@ describe(prismaApi.migration.status.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             withMigrations: true,
         });
         await prismaApi.migration.create({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             migrationName: 'init',
         });
 
         const status = await prismaApi.migration.status({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
         });
         assert.strictEquals(status.totalMigrations, 1);
@@ -75,13 +75,13 @@ describe(prismaApi.migration.create.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             withMigrations: true,
         });
         assert.deepEquals(
             await prismaApi.migration.status({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
             }),
             {
@@ -91,7 +91,7 @@ describe(prismaApi.migration.create.name, () => {
         );
 
         await prismaApi.migration.create({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             migrationName: 'init',
             createOnly: true,
@@ -100,7 +100,7 @@ describe(prismaApi.migration.create.name, () => {
         assert.isTrue(existsSync(testPrismaMigrationsDirPath));
         assert.isLengthExactly(await readdir(testPrismaMigrationsDirPath), 2);
         const status = await prismaApi.migration.status({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
         });
         assert.strictEquals(status.totalMigrations, 1);
@@ -116,13 +116,13 @@ describe(prismaApi.migration.create.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             withMigrations: true,
         });
         assert.deepEquals(
             await prismaApi.migration.status({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
             }),
             {
@@ -132,7 +132,7 @@ describe(prismaApi.migration.create.name, () => {
         );
 
         await prismaApi.migration.create({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             migrationName: 'init',
         });
@@ -140,7 +140,7 @@ describe(prismaApi.migration.create.name, () => {
         assert.isTrue(existsSync(testPrismaMigrationsDirPath));
         assert.isLengthExactly(await readdir(testPrismaMigrationsDirPath), 2);
         const status = await prismaApi.migration.status({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
         });
         assert.strictEquals(status.totalMigrations, 1);
@@ -154,13 +154,13 @@ describe(prismaApi.migration.create.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             withMigrations: true,
         });
         await assert.throws(
             prismaApi.migration.create({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
                 migrationName: "in' --boggle='it",
             }),
@@ -177,13 +177,13 @@ describe(prismaApi.migration.applyDev.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             withMigrations: true,
         });
 
         await prismaApi.migration.create({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             migrationName: 'init',
             createOnly: true,
@@ -192,7 +192,7 @@ describe(prismaApi.migration.applyDev.name, () => {
         assert.isTrue(existsSync(testPrismaMigrationsDirPath));
         assert.isLengthExactly(await readdir(testPrismaMigrationsDirPath), 2);
         const status = await prismaApi.migration.status({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
         });
         assert.strictEquals(status.totalMigrations, 1);
@@ -200,12 +200,12 @@ describe(prismaApi.migration.applyDev.name, () => {
         assert.endsWith(status.unappliedMigrations[0], '_init');
 
         await prismaApi.migration.applyDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
         });
         assert.deepEquals(
             await prismaApi.migration.status({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
             }),
             {
@@ -222,13 +222,13 @@ describe(prismaApi.migration.applyDev.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             withMigrations: true,
         });
 
         await prismaApi.migration.create({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             migrationName: 'init',
             createOnly: true,
@@ -237,7 +237,7 @@ describe(prismaApi.migration.applyDev.name, () => {
         assert.isTrue(existsSync(testPrismaMigrationsDirPath));
         assert.isLengthExactly(await readdir(testPrismaMigrationsDirPath), 2);
         const status = await prismaApi.migration.status({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
         });
         assert.strictEquals(status.totalMigrations, 1);
@@ -246,7 +246,7 @@ describe(prismaApi.migration.applyDev.name, () => {
 
         await assert.throws(
             prismaApi.migration.applyDev({
-                schemaPath: testInvalidPrismaSchemaPath,
+                configPath: testInvalidPrismaConfigPath,
                 env,
             }),
             {
@@ -265,19 +265,19 @@ describe(prismaApi.migration.applyDev.name, () => {
             };
             await clearTestDatabaseOutputs();
             await prismaApi.database.resetDev({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
                 withMigrations: true,
             });
 
             await prismaApi.migration.create({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
                 migrationName: 'init',
             });
             assert.deepEquals(
                 await prismaApi.migration.status({
-                    schemaPath: testPrismaSchemaPath,
+                    configPath: testPrismaConfigPath,
                     env,
                 }),
                 {
@@ -288,7 +288,7 @@ describe(prismaApi.migration.applyDev.name, () => {
 
             await assert.throws(
                 prismaApi.migration.applyDev({
-                    schemaPath: testPrismaSchema2Path,
+                    configPath: testPrismaConfig2Path,
                     env,
                 }),
                 {
@@ -306,19 +306,19 @@ describe(prismaApi.migration.applyDev.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             withMigrations: true,
         });
 
         await prismaApi.migration.create({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             migrationName: 'init',
         });
         assert.deepEquals(
             await prismaApi.migration.status({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
             }),
             {
@@ -339,7 +339,7 @@ describe(prismaApi.migration.applyDev.name, () => {
 
         await assert.throws(
             prismaApi.migration.applyDev({
-                schemaPath: testPrismaSchema2Path,
+                configPath: testPrismaConfig2Path,
                 env,
             }),
             {
@@ -359,13 +359,13 @@ describe(prismaApi.migration.applyProd.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             withMigrations: true,
         });
 
         await prismaApi.migration.create({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             migrationName: 'init',
             createOnly: true,
@@ -374,7 +374,7 @@ describe(prismaApi.migration.applyProd.name, () => {
         assert.isTrue(existsSync(testPrismaMigrationsDirPath));
         assert.isLengthExactly(await readdir(testPrismaMigrationsDirPath), 2);
         const status = await prismaApi.migration.status({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
         });
         assert.strictEquals(status.totalMigrations, 1);
@@ -382,12 +382,12 @@ describe(prismaApi.migration.applyProd.name, () => {
         assert.endsWith(status.unappliedMigrations[0], '_init');
 
         await prismaApi.migration.applyProd({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
         });
         assert.deepEquals(
             await prismaApi.migration.status({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
             }),
             {
@@ -404,19 +404,19 @@ describe(prismaApi.migration.applyProd.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             withMigrations: true,
         });
 
         await prismaApi.migration.create({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             migrationName: 'init',
         });
         assert.deepEquals(
             await prismaApi.migration.status({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
             }),
             {
@@ -426,7 +426,7 @@ describe(prismaApi.migration.applyProd.name, () => {
         );
 
         await prismaApi.migration.applyProd({
-            schemaPath: testPrismaSchema2Path,
+            configPath: testPrismaConfig2Path,
             env,
         });
     });
@@ -438,19 +438,19 @@ describe(prismaApi.migration.applyProd.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             withMigrations: true,
         });
 
         await prismaApi.migration.create({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
             migrationName: 'init',
         });
         assert.deepEquals(
             await prismaApi.migration.status({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
             }),
             {
@@ -464,7 +464,7 @@ describe(prismaApi.migration.applyProd.name, () => {
         });
 
         await prismaApi.migration.applyProd({
-            schemaPath: testPrismaSchema2Path,
+            configPath: testPrismaConfig2Path,
             env,
         });
     });

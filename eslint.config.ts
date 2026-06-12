@@ -8,7 +8,8 @@ export default [
     ...defineEslintConfig(__dirname),
     {
         ignores: [
-            /** Add file globs that should be ignored. */
+            /** Prisma config + schema test fixtures; not part of the linted source. */
+            'test-files/**',
         ],
     },
     {

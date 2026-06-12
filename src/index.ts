@@ -11,4 +11,5 @@ export * from './prisma-extensions/prisma-map/map-values.js';
 export * from './prisma-extensions/prisma-map/prisma-map-extension.js';
 export * from './prisma-generators/generator-util/generator-output.js';
 export * from './prisma-generators/generator-util/relation.js';
+export * from './prisma-schema/prisma-config.js';
 export * from './prisma-schema/temp-schema.js';

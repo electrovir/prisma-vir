@@ -1,6 +1,6 @@
 import {assert} from '@augment-vir/assert';
 import {describe, it} from '@augment-vir/test';
-import {testPrismaSchema2Path, testPrismaSchemaPath} from '../file-paths.mock.js';
+import {testPrismaConfig2Path, testPrismaConfigPath} from '../file-paths.mock.js';
 import {createSqliteDatabaseUrl} from '../prisma-client/sqlite-client.js';
 import {prismaApi} from './prisma-api.js';
 import {clearTestDatabaseOutputs} from './prisma-database.mock.js';
@@ -14,14 +14,14 @@ describe(prismaApi.database.hasDiff.name, () => {
         };
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             withMigrations: true,
             env,
         });
 
         assert.isTrue(
             await prismaApi.database.hasDiff({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
             }),
         );
@@ -35,19 +35,19 @@ describe(prismaApi.database.hasDiff.name, () => {
 
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             withMigrations: true,
             env,
         });
         await prismaApi.migration.create({
             migrationName: 'init',
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
         });
 
         assert.isFalse(
             await prismaApi.database.hasDiff({
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 env,
             }),
         );
@@ -55,7 +55,7 @@ describe(prismaApi.database.hasDiff.name, () => {
     it('resets a database', async (testContext) => {
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             withMigrations: false,
             env: {
                 DATABASE_URL: createSqliteDatabaseUrl({
@@ -73,19 +73,19 @@ describe(prismaApi.database.hasDiff.name, () => {
 
         await clearTestDatabaseOutputs();
         await prismaApi.database.resetDev({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             withMigrations: true,
             env,
         });
         await prismaApi.migration.create({
             migrationName: 'init',
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env,
         });
 
         assert.isTrue(
             await prismaApi.database.hasDiff({
-                schemaPath: testPrismaSchema2Path,
+                configPath: testPrismaConfig2Path,
                 env,
             }),
         );

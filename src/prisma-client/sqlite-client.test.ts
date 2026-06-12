@@ -7,7 +7,7 @@ import {existsSync} from 'node:fs';
 import {rm} from 'node:fs/promises';
 import {join, relative} from 'node:path';
 import {repoDirPath} from '../file-paths.js';
-import {dbDirPath, testPrismaMigrationsDirPath, testPrismaSchemaPath} from '../file-paths.mock.js';
+import {dbDirPath, testPrismaConfigPath, testPrismaMigrationsDirPath} from '../file-paths.mock.js';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from '../prisma-api/prisma-database.mock.js';
 import {createPrismaClient} from './create-prisma-client.js';
@@ -23,7 +23,7 @@ describe(createSqlitePrismaClient.name, () => {
         await clearTestDatabaseOutputs();
 
         await prismaApi.client.generate({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
         });
 
         // @ts-ignore: this might not be generated yet
@@ -39,7 +39,7 @@ describe(createSqlitePrismaClient.name, () => {
                         test: testContext,
                     },
                 },
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 migrationsDirPath: testPrismaMigrationsDirPath,
             },
         );
@@ -83,7 +83,7 @@ describe(createSqlitePrismaClient.name, () => {
         await clearTestDatabaseOutputs();
 
         await prismaApi.client.generate({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
         });
 
         // @ts-ignore: this might not be generated yet
@@ -98,7 +98,7 @@ describe(createSqlitePrismaClient.name, () => {
                         resetDatabase: false,
                     },
                 },
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 migrationsDirPath: testPrismaMigrationsDirPath,
             },
         );
@@ -141,11 +141,11 @@ describe(createSqlitePrismaClient.name, () => {
         });
 
         await prismaApi.client.generate({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
         });
         await prismaApi.migration.create({
             migrationName: 'init',
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             env: {
                 DATABASE_URL: databaseUrl,
             },
@@ -167,7 +167,7 @@ describe(createSqlitePrismaClient.name, () => {
                     test: testContext,
                 },
             },
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
             migrationsDirPath: testPrismaMigrationsDirPath,
         });
 
@@ -210,7 +210,7 @@ describe(createSqlitePrismaClient.name, () => {
         await clearTestDatabaseOutputs();
 
         await prismaApi.client.generate({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
         });
 
         // @ts-ignore: this might not be generated yet
@@ -226,7 +226,7 @@ describe(createSqlitePrismaClient.name, () => {
                         test: 'hello there',
                     },
                 },
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 migrationsDirPath: testPrismaMigrationsDirPath,
             },
         );
@@ -265,7 +265,7 @@ describe(createSqlitePrismaClient.name, () => {
         await clearTestDatabaseOutputs();
 
         await prismaApi.client.generate({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
         });
 
         // @ts-ignore: this might not be generated yet
@@ -282,7 +282,7 @@ describe(createSqlitePrismaClient.name, () => {
                         filePath: dbPath,
                     },
                 },
-                schemaPath: testPrismaSchemaPath,
+                configPath: testPrismaConfigPath,
                 migrationsDirPath: testPrismaMigrationsDirPath,
             },
         );

@@ -3,7 +3,7 @@
 import {assert} from '@augment-vir/assert';
 import {selectFrom} from '@augment-vir/common';
 import {describe, it} from '@augment-vir/test';
-import {testPrismaMigrationsDirPath, testPrismaSchemaPostgresPath} from '../file-paths.mock.js';
+import {testPrismaConfigPostgresPath, testPrismaMigrationsDirPath} from '../file-paths.mock.js';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from '../prisma-api/prisma-database.mock.js';
 import {closePgliteAdapter} from '../prisma-client.mock.js';
@@ -21,7 +21,7 @@ describe(createPrismaClient.name, () => {
         await clearTestDatabaseOutputs();
 
         await prismaApi.client.generate({
-            schemaPath: testPrismaSchemaPostgresPath,
+            configPath: testPrismaConfigPostgresPath,
         });
 
         // @ts-ignore: this might not be generated yet
@@ -42,7 +42,7 @@ describe(createPrismaClient.name, () => {
                         test: testContext,
                     },
                 },
-                schemaPath: testPrismaSchemaPostgresPath,
+                configPath: testPrismaConfigPostgresPath,
                 migrationsDirPath: testPrismaMigrationsDirPath,
                 async seedScript({prismaClient}) {
                     await prismaClient.user.create({
@@ -82,7 +82,7 @@ describe(createPrismaClient.name, () => {
         await clearTestDatabaseOutputs();
 
         await prismaApi.client.generate({
-            schemaPath: testPrismaSchemaPostgresPath,
+            configPath: testPrismaConfigPostgresPath,
         });
 
         // @ts-ignore: this might not be generated yet
@@ -103,7 +103,7 @@ describe(createPrismaClient.name, () => {
                         test: testContext,
                     },
                 },
-                schemaPath: testPrismaSchemaPostgresPath,
+                configPath: testPrismaConfigPostgresPath,
                 migrationsDirPath: testPrismaMigrationsDirPath,
                 extendScript({prismaClient}) {
                     const mappers: ReadonlyArray<PrismaValueMapper> = [
@@ -150,7 +150,7 @@ describe(createPrismaClient.name, () => {
         await clearTestDatabaseOutputs();
 
         await prismaApi.client.generate({
-            schemaPath: testPrismaSchemaPostgresPath,
+            configPath: testPrismaConfigPostgresPath,
         });
 
         // @ts-ignore: this might not be generated yet
@@ -169,7 +169,7 @@ describe(createPrismaClient.name, () => {
                                 test: testContext,
                             },
                         },
-                        schemaPath: testPrismaSchemaPostgresPath,
+                        configPath: testPrismaConfigPostgresPath,
                     },
                 ),
             {

@@ -7,13 +7,12 @@ import {
     type SelectFrom,
 } from '@augment-vir/common';
 import {extractTestNameAsDir, type UniversalTestContext} from '@augment-vir/test';
-import {PrismaBetterSQLite3} from '@prisma/adapter-better-sqlite3';
+import {PrismaBetterSqlite3} from '@prisma/adapter-better-sqlite3';
 import {existsSync} from 'node:fs';
 import {mkdir, rm} from 'node:fs/promises';
 import {dirname, join} from 'node:path';
 import {type Constructor} from 'type-fest';
 import {prismaApi} from '../prisma-api/prisma-api.js';
-import {createTempSchemaWithReplacedDatasourceUrl} from '../prisma-schema/temp-schema.js';
 import {getDefaultTopLevelDatabaseDirPath} from './default-path.js';
 import {
     type CreatePrismaClientParams,
@@ -46,22 +45,22 @@ export async function createSqlitePrismaClient<PrismaClient extends BasePrismaCl
     {
         connection,
         databaseDir,
-        schemaPath,
+        configPath,
     }: Readonly<
         SelectFrom<
             CreatePrismaClientParams<PrismaDatabaseEngine.Sqlite, PrismaClient>,
             {
                 connection: true;
                 databaseDir: true;
-                schemaPath: true;
+                configPath: true;
             }
         >
     >,
 ): Promise<EngineClientOutput<PrismaDatabaseEngine.Sqlite, PrismaClient>> {
-    const adapter: PrismaBetterSQLite3 & Partial<ExtraAdapterProperties> =
+    const adapter: PrismaBetterSqlite3 & Partial<ExtraAdapterProperties> =
         'dev' in connection
             ? await createDevSqliteAdapter(connection.dev, databaseDir)
-            : new PrismaBetterSQLite3({
+            : new PrismaBetterSqlite3({
                   url: toFileUrl(connection.liveConnection.filePath),
               });
     const databasePath: string =
@@ -77,18 +76,12 @@ export async function createSqlitePrismaClient<PrismaClient extends BasePrismaCl
     const wasJustInitialized = 'wasJustInitialized' in adapter && adapter.wasJustInitialized;
 
     if (!alreadyExisted) {
-        const {tempSchemaPath} = await createTempSchemaWithReplacedDatasourceUrl({
-            originalSchemaPath: schemaPath,
-            datasourceReplacement: `"${toFileUrl(databasePath)}"`,
-        });
-
         await prismaApi.database.resetDev({
-            schemaPath: tempSchemaPath,
+            configPath,
             withMigrations: false,
-        });
-
-        await rm(tempSchemaPath, {
-            force: true,
+            env: {
+                DATABASE_URL: toFileUrl(databasePath),
+            },
         });
     }
 
@@ -147,7 +140,7 @@ export function createSqliteDatabaseUrl({
 async function createDevSqliteAdapter(
     devParams: DevDatabaseConnection,
     databaseDir: string | undefined,
-): Promise<PrismaBetterSQLite3 & ExtraAdapterProperties> {
+): Promise<PrismaBetterSqlite3 & ExtraAdapterProperties> {
     const {path, url} = createSqliteDatabaseUrl({
         databaseDir,
         test: devParams.test,
@@ -164,7 +157,7 @@ async function createDevSqliteAdapter(
         });
     }
 
-    const adapter = new PrismaBetterSQLite3({
+    const adapter = new PrismaBetterSqlite3({
         url,
     });
 
@@ -173,5 +166,5 @@ async function createDevSqliteAdapter(
         databasePath: path,
     } satisfies ExtraAdapterProperties);
 
-    return adapter as PrismaBetterSQLite3 & ExtraAdapterProperties;
+    return adapter as PrismaBetterSqlite3 & ExtraAdapterProperties;
 }

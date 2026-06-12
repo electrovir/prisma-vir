@@ -8,7 +8,6 @@ generator jsClient2 {
 
 datasource db2 {
     provider = "sqlite"
-    url      = env("DATABASE_URL")
 }
 
 model User {

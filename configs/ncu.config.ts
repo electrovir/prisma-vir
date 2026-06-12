@@ -6,8 +6,6 @@ export const ncuConfig: RunOptions = {
     // exclude these
     reject: [
         ...baseNcuConfig.reject,
-        'prisma',
-        '@prisma/*',
     ],
     // include only these
     filter: [],

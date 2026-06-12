@@ -1,4 +1,3 @@
-import {assertWrap} from '@augment-vir/assert';
 import {
     type MaybePromise,
     type PartialWithUndefined,
@@ -53,56 +52,4 @@ export async function createTempSchema({
     return {
         tempSchemaPath,
     };
-}
-
-/**
- * Creates a Prisma schema copied from the `originalSchemaPath` with the supplied
- * `datasourceReplacement` instead of the original schema's datasource.
- *
- * @category Internal
- */
-export async function createTempSchemaWithReplacedDatasourceUrl({
-    datasourceReplacement,
-    originalSchemaPath,
-    key,
-}: Readonly<{
-    originalSchemaPath: string;
-    datasourceReplacement: string;
-    key?: string | undefined;
-}>) {
-    return await createTempSchema({
-        originalSchemaPath,
-        key,
-        transform({originalSchemaContents}) {
-            enum DatasourceStatus {
-                NotFound = 'not-found',
-                Started = 'started',
-                Ended = 'ended',
-            }
-
-            let datasourceStatus = DatasourceStatus.NotFound;
-
-            return originalSchemaContents
-                .split('\n')
-                .map((line) => {
-                    if (datasourceStatus === DatasourceStatus.NotFound) {
-                        if (line.trim().startsWith('datasource ')) {
-                            datasourceStatus = DatasourceStatus.Started;
-                        }
-                    } else if (datasourceStatus === DatasourceStatus.Started) {
-                        if (line.trim().startsWith('url ')) {
-                            return [
-                                assertWrap.isString(line.split('=', 1)[0]),
-                                datasourceReplacement,
-                            ].join('= ');
-                        } else {
-                            return line;
-                        }
-                    }
-
-                    return line;
-                })
-                .join('\n');
-        },
-    });
 }

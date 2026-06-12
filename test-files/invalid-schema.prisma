@@ -8,7 +8,6 @@ generator jsClientInvalid {
 
 datasource dbInvalid {
     provider = "sqlite"
-    url      = env("DATABASE_URL")
 }
 
 model User {

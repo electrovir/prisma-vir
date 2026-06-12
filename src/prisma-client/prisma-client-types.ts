@@ -4,34 +4,11 @@ import {
     type PartialWithUndefined,
 } from '@augment-vir/common';
 import {type UniversalTestContext} from '@augment-vir/test';
-import {type PrismaBetterSQLite3} from '@prisma/adapter-better-sqlite3';
+import {type PrismaBetterSqlite3} from '@prisma/adapter-better-sqlite3';
 import {type DynamicClientExtensionThis} from '@prisma/client/runtime/client.js';
-import {type PrismaConfig} from '@prisma/config';
 import {type RequireExactlyOne} from 'type-fest';
 import {type PostgresAdapter, type PostgresConnectionParams} from './postgres-client.js';
 import {type SqliteConnectionParams} from './sqlite-client.js';
-
-/* node:coverage disable next 12 */
-/**
- * Used purely for constructing the type {@link SqlMigrationAwareDriverAdapterFactory}.
- *
- * @category Internal
- */
-export const fakePrismaConfig: PrismaConfig = {
-    engine: 'js',
-    adapter() {
-        return {} as any;
-    },
-};
-
-/**
- * We have to reconstruct this type because Prisma doesn't export it.
- *
- * @category Internal
- */
-export type SqlMigrationAwareDriverAdapterFactory = Awaited<
-    ReturnType<(typeof fakePrismaConfig)['adapter']>
->;
 
 /**
  * The adapter type for each engine type.
@@ -40,7 +17,7 @@ export type SqlMigrationAwareDriverAdapterFactory = Awaited<
  */
 export type Adapters = {
     [PrismaDatabaseEngine.Postgres]: PostgresAdapter;
-    [PrismaDatabaseEngine.Sqlite]: PrismaBetterSQLite3;
+    [PrismaDatabaseEngine.Sqlite]: PrismaBetterSqlite3;
 };
 
 /**
@@ -105,7 +82,7 @@ export type CreatePrismaClientParams<
     Engine extends PrismaDatabaseEngine,
     PrismaClient extends BasePrismaClient = BasePrismaClient,
 > = {
-    schemaPath: string;
+    configPath: string;
     migrationsDirPath: string;
     connection: RequireExactlyOne<{
         /** For databases in dev or in tests. */

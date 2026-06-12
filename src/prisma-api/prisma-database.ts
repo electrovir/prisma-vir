@@ -1,23 +1,34 @@
+import {getSchemaPathFromConfig} from '../prisma-schema/prisma-config.js';
 import {runPrismaCommand} from './run-prisma-command.js';
 
 export async function getPrismaDiff({
-    schemaPath,
+    configPath,
     env,
 }: {
-    schemaPath: string;
+    configPath: string;
     env?: Record<string, string> | undefined;
 }): Promise<string> {
+    /**
+     * `migrate diff` has no flag to pull its `--from` datamodel out of the config, so the schema
+     * path is read from the config and passed explicitly. The `--to` side uses the config's
+     * datasource (the live database).
+     */
+    const schemaPath = await getSchemaPathFromConfig({
+        configPath,
+        env,
+    });
+
     const command = [
         'migrate',
         'diff',
-        `--from-schema-datamodel='${schemaPath}'`,
-        `--to-schema-datasource='${schemaPath}'`,
+        `--from-schema='${schemaPath}'`,
+        '--to-config-datasource',
     ].join(' ');
 
     const results = await runPrismaCommand({
         command,
         env,
-        schemaPath: undefined,
+        configPath,
     });
 
     if (results.stdout.trim() === 'No difference detected.') {
@@ -28,18 +39,18 @@ export async function getPrismaDiff({
 }
 
 export async function doesPrismaDiffExist(params: {
-    schemaPath: string;
+    configPath: string;
     env?: Record<string, string> | undefined;
 }): Promise<boolean> {
     return !!(await getPrismaDiff(params));
 }
 
 export async function resetDevPrismaDatabase({
-    schemaPath,
+    configPath,
     withMigrations,
     env = {},
 }: {
-    schemaPath: string;
+    configPath: string;
     /**
      * If you already have migrations created, set this to `true`. If you don't, set it to `false`.
      * If you don't know which one to use, try both, see which one creates a valid database for you
@@ -51,14 +62,14 @@ export async function resetDevPrismaDatabase({
 }) {
     if (withMigrations) {
         await runPrismaCommand({
-            schemaPath,
-            command: 'migrate reset --force --skip-generate --skip-seed',
+            configPath,
+            command: 'migrate reset --force',
             env,
         });
     } else {
         await runPrismaCommand({
-            schemaPath,
-            command: 'db push --accept-data-loss --skip-generate',
+            configPath,
+            command: 'db push --accept-data-loss',
             env,
         });
     }

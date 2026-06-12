@@ -8,7 +8,6 @@ generator jsClientMulti {
 
 datasource dbMulti {
     provider = "sqlite"
-    url      = env("DATABASE_URL")
 }
 
 model UserMulti {

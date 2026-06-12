@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 // @ts-ignore: this might not be generated yet
-import {type PrismaBetterSQLite3} from '@prisma/adapter-better-sqlite3';
+import {type PrismaBetterSqlite3} from '@prisma/adapter-better-sqlite3';
 import {PrismaPgliteAdapter} from 'prisma-pglite';
-import {testPrismaMigrationsDirPath, testPrismaSchemaPostgresPath} from './file-paths.mock.js';
+import {testPrismaConfigPostgresPath, testPrismaMigrationsDirPath} from './file-paths.mock.js';
 import {prismaApi} from './prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from './prisma-api/prisma-database.mock.js';
 import {createPrismaClient} from './prisma-client/create-prisma-client.js';
@@ -19,7 +19,7 @@ export async function createMockPrismaClient() {
     await clearTestDatabaseOutputs();
 
     await prismaApi.client.generate({
-        schemaPath: testPrismaSchemaPostgresPath,
+        configPath: testPrismaConfigPostgresPath,
     });
 
     // @ts-ignore: this might not be generated yet
@@ -29,7 +29,7 @@ export async function createMockPrismaClient() {
         PrismaDatabaseEngine.Postgres,
         PrismaClient,
         {
-            schemaPath: testPrismaSchemaPostgresPath,
+            configPath: testPrismaConfigPostgresPath,
             migrationsDirPath: testPrismaMigrationsDirPath,
             connection: {
                 dev: {
@@ -46,7 +46,7 @@ export async function createMockPrismaClient() {
 }
 
 /** Close the PGlite instance inside a Prisma adapter to prevent open handle leaks. */
-export async function closePgliteAdapter(adapter: PostgresAdapter | PrismaBetterSQLite3) {
+export async function closePgliteAdapter(adapter: PostgresAdapter | PrismaBetterSqlite3) {
     if (adapter instanceof PrismaPgliteAdapter) {
         await adapter.pgliteClient.close();
     }

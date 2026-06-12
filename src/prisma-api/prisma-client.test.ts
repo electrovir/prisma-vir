@@ -3,8 +3,8 @@ import {describe, it} from '@augment-vir/test';
 import {existsSync} from 'node:fs';
 import {
     generatedPrismaClientDirPath,
-    testInvalidPrismaSchemaPath,
-    testPrismaSchemaPath,
+    testInvalidPrismaConfigPath,
+    testPrismaConfigPath,
 } from '../file-paths.mock.js';
 import {prismaApi} from './prisma-api.js';
 import {clearTestDatabaseOutputs} from './prisma-database.mock.js';
@@ -16,7 +16,7 @@ describe(prismaApi.client.generate.name, () => {
         assert.isFalse(existsSync(generatedPrismaClientDirPath));
 
         await prismaApi.client.generate({
-            schemaPath: testPrismaSchemaPath,
+            configPath: testPrismaConfigPath,
         });
 
         assert.isTrue(existsSync(generatedPrismaClientDirPath));
@@ -28,7 +28,7 @@ describe(prismaApi.client.generate.name, () => {
 
         await assert.throws(() =>
             prismaApi.client.generate({
-                schemaPath: testInvalidPrismaSchemaPath,
+                configPath: testInvalidPrismaConfigPath,
             }),
         );
 

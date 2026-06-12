@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "3.0.0",
+    "version": "3.0.0-beta.0",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
@@ -18,7 +18,7 @@
         "type": "git",
         "url": "git+https://github.com/electrovir/prisma-vir.git"
     },
-    "license": "(MIT or CC0 1.0)",
+    "license": "(MIT OR CC0-1.0)",
     "author": {
         "name": "electrovir",
         "url": "https://github.com/electrovir"
@@ -41,7 +41,7 @@
         "lint": "virmator lint fix",
         "publish": "virmator publish npm run test:all",
         "test": "npm run init && virmator test node --test-concurrency=1",
-        "test:all": "npm run compile && npm run test:coverage && runstorm --names spelling,format,docs,deps,lint \"npm run test:spelling\" \"npm run test:format\" \"npm run test:docs\" \"npm run test:deps\" \"npm run test:lint\"",
+        "test:all": "npm run compile && runstorm --names spelling,format,docs,deps,lint \"npm run test:spelling\" \"npm run test:format\" \"npm run test:docs\" \"npm run test:deps\" \"npm run test:lint\"",
         "test:coverage": "virmator test node coverage --test-concurrency=1",
         "test:deps": "virmator deps check",
         "test:docs": "virmator docs check",
@@ -64,12 +64,12 @@
     "devDependencies": {
         "@eslint/eslintrc": "^3.3.5",
         "@eslint/js": "^10.0.1",
-        "@prisma/adapter-better-sqlite3": "^6.19.0",
-        "@prisma/adapter-pg": "^6.19.0",
-        "@prisma/client": "^6.19.0",
-        "@prisma/config": "^6.19.0",
-        "@prisma/dmmf": "^6.19.0",
-        "@prisma/generator-helper": "^6.19.0",
+        "@prisma/adapter-better-sqlite3": "^7.8.0",
+        "@prisma/adapter-pg": "^7.8.0",
+        "@prisma/client": "^7.8.0",
+        "@prisma/config": "^7.8.0",
+        "@prisma/dmmf": "^7.8.0",
+        "@prisma/generator-helper": "^7.8.0",
         "@stylistic/eslint-plugin": "^5.10.0",
         "@stylistic/eslint-plugin-ts": "^4.4.1",
         "@types/better-sqlite3": "^7.6.13",
@@ -102,7 +102,7 @@
         "prettier-plugin-packagejson": "^3.0.2",
         "prettier-plugin-sort-json": "^4.2.0",
         "prettier-plugin-toml": "^2.0.6",
-        "prisma": "^6.19.0",
+        "prisma": "^7.8.0",
         "prisma-pglite": "^2.1.0",
         "type-fest": "^5.7.0",
         "typedoc": "^0.28.19",
@@ -111,14 +111,14 @@
         "virmator": "^14.21.3"
     },
     "peerDependencies": {
-        "@prisma/adapter-better-sqlite3": "<7",
-        "@prisma/adapter-pg": "<7",
-        "@prisma/client": "<7",
-        "@prisma/config": "<7",
-        "@prisma/generator-helper": "<7",
+        "@prisma/adapter-better-sqlite3": ">=7",
+        "@prisma/adapter-pg": ">=7",
+        "@prisma/client": ">=7",
+        "@prisma/config": ">=7",
+        "@prisma/generator-helper": ">=7",
         "date-vir": "*",
         "object-shape-tester": ">=6.7",
-        "prisma": "<7",
+        "prisma": ">=7",
         "prisma-pglite": ">=2"
     },
     "engines": {
