@@ -8,7 +8,6 @@ import {type PoolConfig} from 'pg';
 import {createPgliteAdapter, type PrismaPgliteAdapter} from 'prisma-pglite';
 import {type Constructor} from 'type-fest';
 import {buildUrl} from 'url-vir';
-import {getSchemaPathFromConfig} from '../prisma-schema/prisma-config.js';
 import {getDefaultTopLevelDatabaseDirPath} from './default-path.js';
 import {
     type CreatePrismaClientParams,
@@ -95,7 +94,6 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
         connection,
         configPath,
         databaseDir,
-        migrationsDirPath,
     }: Readonly<
         SelectFrom<
             CreatePrismaClientParams<PrismaDatabaseEngine.Postgres, PrismaClient>,
@@ -103,7 +101,6 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
                 connection: true;
                 configPath: true;
                 databaseDir: true;
-                migrationsDirPath: true;
             }
         >
     >,
@@ -114,11 +111,8 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
     const adapter =
         'dev' in connection
             ? await createPgliteAdapter({
-                  schemaFilePath: await getSchemaPathFromConfig({
-                      configPath,
-                  }),
+                  prismaConfigPath: configPath,
                   databaseName: connection.dev.databaseName,
-                  migrationsDirPath,
                   dbDirName: connection.dev.test,
                   resetDatabase: shouldResetDatabase,
                   dbParentDirPath: databaseDir || getDefaultTopLevelDatabaseDirPath(),

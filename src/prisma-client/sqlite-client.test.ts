@@ -7,7 +7,7 @@ import {existsSync} from 'node:fs';
 import {rm} from 'node:fs/promises';
 import {join, relative} from 'node:path';
 import {repoDirPath} from '../file-paths.js';
-import {dbDirPath, testPrismaConfigPath, testPrismaMigrationsDirPath} from '../file-paths.mock.js';
+import {dbDirPath, testPrismaConfigPath} from '../file-paths.mock.js';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from '../prisma-api/prisma-database.mock.js';
 import {createPrismaClient} from './create-prisma-client.js';
@@ -40,7 +40,6 @@ describe(createSqlitePrismaClient.name, () => {
                     },
                 },
                 configPath: testPrismaConfigPath,
-                migrationsDirPath: testPrismaMigrationsDirPath,
             },
         );
 
@@ -99,7 +98,6 @@ describe(createSqlitePrismaClient.name, () => {
                     },
                 },
                 configPath: testPrismaConfigPath,
-                migrationsDirPath: testPrismaMigrationsDirPath,
             },
         );
 
@@ -168,7 +166,6 @@ describe(createSqlitePrismaClient.name, () => {
                 },
             },
             configPath: testPrismaConfigPath,
-            migrationsDirPath: testPrismaMigrationsDirPath,
         });
 
         assert.isString(databasePath);
@@ -227,7 +224,6 @@ describe(createSqlitePrismaClient.name, () => {
                     },
                 },
                 configPath: testPrismaConfigPath,
-                migrationsDirPath: testPrismaMigrationsDirPath,
             },
         );
 
@@ -283,7 +279,6 @@ describe(createSqlitePrismaClient.name, () => {
                     },
                 },
                 configPath: testPrismaConfigPath,
-                migrationsDirPath: testPrismaMigrationsDirPath,
             },
         );
 

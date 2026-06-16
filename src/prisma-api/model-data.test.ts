@@ -11,7 +11,7 @@ import {
 } from '@augment-vir/common';
 import {describe, it, itCasesWithContext, type UniversalTestContext} from '@augment-vir/test';
 import {type IsAny} from 'type-fest';
-import {testPrismaConfigPath, testPrismaMigrationsDirPath} from '../file-paths.mock.js';
+import {testPrismaConfigPath} from '../file-paths.mock.js';
 import {createPrismaClient} from '../prisma-client/create-prisma-client.js';
 import {PrismaDatabaseEngine} from '../prisma-client/prisma-client-types.js';
 import {addData, dumpData, getAllPrismaModelKeys, type PrismaAddModelData} from './model-data.js';
@@ -32,7 +32,6 @@ async function setupPrismaClient(testContext: UniversalTestContext) {
     const {PrismaClient} = await importFresh('../../test-files/generated/client.js');
     const {prismaClient} = await createPrismaClient(PrismaDatabaseEngine.Sqlite, PrismaClient, {
         configPath: testPrismaConfigPath,
-        migrationsDirPath: testPrismaMigrationsDirPath,
         connection: {
             dev: {
                 resetDatabase: true,

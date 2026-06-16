@@ -3,7 +3,7 @@
 // @ts-ignore: this might not be generated yet
 import {type PrismaBetterSqlite3} from '@prisma/adapter-better-sqlite3';
 import {PrismaPgliteAdapter} from 'prisma-pglite';
-import {testPrismaConfigPostgresPath, testPrismaMigrationsDirPath} from './file-paths.mock.js';
+import {testPrismaConfigPostgresPath} from './file-paths.mock.js';
 import {prismaApi} from './prisma-api/prisma-api.js';
 import {clearTestDatabaseOutputs} from './prisma-api/prisma-database.mock.js';
 import {createPrismaClient} from './prisma-client/create-prisma-client.js';
@@ -30,7 +30,6 @@ export async function createMockPrismaClient() {
         PrismaClient,
         {
             configPath: testPrismaConfigPostgresPath,
-            migrationsDirPath: testPrismaMigrationsDirPath,
             connection: {
                 dev: {
                     resetDatabase: true,
