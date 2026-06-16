@@ -113,6 +113,32 @@ export function createPrefixedIdExtension<ModelName extends string>(
 
                     return query(args);
                 },
+                /**
+                 * Handle model upsert. When the upsert is keyed on a unique constraint other than
+                 * the id column, the `create` branch carries no id, so it must be prefixed here
+                 * just like a plain `create`.
+                 */
+                async upsert({
+                    query,
+                    args,
+                    model: modelName,
+                }: {
+                    query: (args: unknown) => Promise<unknown>;
+                    model: string;
+                    args: {
+                        create?: any;
+                    };
+                }): Promise<unknown> {
+                    if (args.create) {
+                        await insertId({
+                            data: args.create,
+                            modelName,
+                            options,
+                        });
+                    }
+
+                    return query(args);
+                },
             },
         },
         /**

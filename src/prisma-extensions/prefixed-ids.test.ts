@@ -123,4 +123,62 @@ describe(createPrefixedIdExtension.name, () => {
             await closePgliteAdapter(adapter);
         }
     });
+    it('maps ids on upsert keyed on a non-id unique constraint', async () => {
+        const {prismaClient: basePrismaClient, adapter} = await createMockPrismaClient();
+        const prismaClient = basePrismaClient.$extends(createPrefixedIdExtension());
+
+        try {
+            const newUser = await prismaClient.user.create({
+                data: {
+                    email: 'fake@example.com',
+                    password: 'fake password',
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            const createdSettings = await prismaClient.userSettings.upsert({
+                where: {
+                    userId: newUser.id,
+                },
+                create: {
+                    userId: newUser.id,
+                    receivesMarketingEmails: true,
+                },
+                update: {
+                    receivesMarketingEmails: true,
+                },
+                select: {
+                    id: true,
+                    receivesMarketingEmails: true,
+                },
+            });
+
+            assert.startsWith(createdSettings.id, 'us_');
+
+            const updatedSettings = await prismaClient.userSettings.upsert({
+                where: {
+                    userId: newUser.id,
+                },
+                create: {
+                    userId: newUser.id,
+                    receivesMarketingEmails: false,
+                },
+                update: {
+                    receivesMarketingEmails: false,
+                },
+                select: {
+                    id: true,
+                    receivesMarketingEmails: true,
+                },
+            });
+
+            assert.strictEquals(updatedSettings.id, createdSettings.id);
+            assert.isFalse(updatedSettings.receivesMarketingEmails);
+        } finally {
+            await prismaClient.$disconnect();
+            await closePgliteAdapter(adapter);
+        }
+    });
 });
