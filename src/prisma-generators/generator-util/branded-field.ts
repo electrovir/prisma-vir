@@ -75,16 +75,16 @@ export function createBrandedFieldParams(
             throw new Error(
                 `Cannot brand an @id() field with @branded(): ${model.name}.${field.name}`,
             );
+        } else {
+            return [
+                field.name,
+                {
+                    fileModelName: model.name,
+                    fieldName: field.name,
+                    relation: undefined,
+                },
+            ] as const;
         }
-
-        return [
-            field.name,
-            {
-                fileModelName: model.name,
-                fieldName: field.name,
-                relation: undefined,
-            },
-        ] as const;
     } else if (relation) {
         return [
             field.name,
@@ -94,7 +94,7 @@ export function createBrandedFieldParams(
                 relation,
             },
         ] as const;
+    } else {
+        return undefined;
     }
-
-    return undefined;
 }

@@ -1,12 +1,12 @@
 import {
     type BasePrismaClient,
+    type Constructor,
     type PartialWithUndefined,
     type SelectFrom,
 } from '@augment-vir/common';
 import {PrismaPg} from '@prisma/adapter-pg';
 import {type PoolConfig} from 'pg';
 import {createPgliteAdapter, type PrismaPgliteAdapter} from 'prisma-pglite';
-import {type Constructor} from 'type-fest';
 import {buildUrl} from 'url-vir';
 import {getDefaultTopLevelDatabaseDirPath} from './default-path.js';
 import {

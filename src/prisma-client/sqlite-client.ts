@@ -3,6 +3,7 @@ import {
     addSuffix,
     sanitizeFileName,
     type BasePrismaClient,
+    type Constructor,
     type PartialWithUndefined,
     type SelectFrom,
 } from '@augment-vir/common';
@@ -11,7 +12,6 @@ import {PrismaBetterSqlite3} from '@prisma/adapter-better-sqlite3';
 import {existsSync} from 'node:fs';
 import {mkdir, rm} from 'node:fs/promises';
 import {dirname, join} from 'node:path';
-import {type Constructor} from 'type-fest';
 import {prismaApi} from '../prisma-api/prisma-api.js';
 import {getDefaultTopLevelDatabaseDirPath} from './default-path.js';
 import {

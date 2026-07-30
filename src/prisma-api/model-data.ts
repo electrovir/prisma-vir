@@ -11,6 +11,7 @@ import {
     type FirstLetterLowercase,
     getObjectTypedEntries,
     getObjectTypedValues,
+    type IsAny,
     mergeDefinedProperties,
     omitObjectKeys,
     type PartialWithUndefined,
@@ -22,7 +23,6 @@ import {
     setFirstLetterCasing,
     StringCase,
 } from '@augment-vir/common';
-import {type IsAny} from 'type-fest';
 
 /**
  * Params for `prisma.client.addData()`. This is similar to `PrismaAllModelsCreate` but allows an

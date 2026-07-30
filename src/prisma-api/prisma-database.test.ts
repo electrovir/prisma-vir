@@ -54,15 +54,17 @@ describe(prismaApi.database.hasDiff.name, () => {
     });
     it('resets a database', async (testContext) => {
         await clearTestDatabaseOutputs();
-        await prismaApi.database.resetDev({
-            configPath: testPrismaConfigPath,
-            withMigrations: false,
-            env: {
-                DATABASE_URL: createSqliteDatabaseUrl({
-                    test: testContext,
-                }).url,
-            },
-        });
+        await assert.doesNotThrow(
+            prismaApi.database.resetDev({
+                configPath: testPrismaConfigPath,
+                withMigrations: false,
+                env: {
+                    DATABASE_URL: createSqliteDatabaseUrl({
+                        test: testContext,
+                    }).url,
+                },
+            }),
+        );
     });
     it('has diff from other schema file', async (testContext) => {
         const env = {

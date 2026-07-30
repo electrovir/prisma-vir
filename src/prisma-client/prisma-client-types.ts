@@ -2,11 +2,11 @@ import {
     type BasePrismaClient,
     type MaybePromise,
     type PartialWithUndefined,
+    type RequireExactlyOne,
 } from '@augment-vir/common';
 import {type UniversalTestContext} from '@augment-vir/test';
 import {type PrismaBetterSqlite3} from '@prisma/adapter-better-sqlite3';
 import {type DynamicClientExtensionThis} from '@prisma/client/runtime/client.js';
-import {type RequireExactlyOne} from 'type-fest';
 import {type PostgresAdapter, type PostgresConnectionParams} from './postgres-client.js';
 import {type SqliteConnectionParams} from './sqlite-client.js';
 

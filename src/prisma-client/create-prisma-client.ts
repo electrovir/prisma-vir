@@ -1,6 +1,5 @@
 import {assert} from '@augment-vir/assert';
-import {type BasePrismaClient} from '@augment-vir/common';
-import {type Constructor} from 'type-fest';
+import {type BasePrismaClient, type Constructor} from '@augment-vir/common';
 import {createPostgresPrismaClient} from './postgres-client.js';
 import {
     PrismaDatabaseEngine,

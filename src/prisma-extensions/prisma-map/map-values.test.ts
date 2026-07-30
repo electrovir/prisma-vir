@@ -1,3 +1,5 @@
+/* eslint-disable @virmator/no-raw-date */
+
 import {assert, check} from '@augment-vir/assert';
 import {copyThroughJson} from '@augment-vir/common';
 import {describe, it, itCases} from '@augment-vir/test';

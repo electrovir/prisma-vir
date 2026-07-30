@@ -255,7 +255,7 @@ const inputTypesToFix = [
     };
 });
 
-// eslint-disable-next-line sonarjs/slow-regex
+// eslint-disable-next-line sonarjs/super-linear-regex
 const fieldTypeRegExp = /^(.+:)(.+)\bstring\b(.*)$/;
 const fieldTypeName = 'FieldType';
 
