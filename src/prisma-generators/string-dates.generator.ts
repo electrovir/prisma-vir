@@ -2,11 +2,10 @@
 
 /** This generator replaces all model `Date` types with `UtcIsoString` types. */
 
-import {addRegExpFlags, awaitedForEach, log} from '@augment-vir/common';
+import {addRegExpFlags, awaitedForEach} from '@augment-vir/common';
 import {joinFilesToDir, readDirRecursive} from '@augment-vir/node';
 import generatorHelper from '@prisma/generator-helper';
 import {readFile, writeFile} from 'node:fs/promises';
-import {relative} from 'node:path';
 import {resolveGeneratorOutput} from './generator-util/generator-output.js';
 import {generatorVersion} from './generator-util/version.js';
 
@@ -96,8 +95,6 @@ generatorHelper.generatorHandler({
                 return;
             }
             const conditionallyReplaced = applyReplacements(definitelyReplaced, replaceIfChanged);
-
-            log.faint(`Using date strings in ${relative(process.cwd(), filePath)}`);
 
             const fixedContent = [
                 ...insertAtTop,
