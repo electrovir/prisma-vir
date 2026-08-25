@@ -30,6 +30,7 @@
     "types": "src/index.ts",
     "bin": {
         "prisma-branded-fields": "./dist/prisma-generators/branded-fields.generator.js",
+        "prisma-format": "./dist/prisma-schema/prisma-format.script.js",
         "prisma-shapes": "./dist/prisma-generators/shapes.generator.js",
         "prisma-string-dates": "./dist/prisma-generators/string-dates.generator.js"
     },
@@ -60,7 +61,9 @@
         "@augment-vir/node": "^32.2.1",
         "@augment-vir/test": "^32.2.1",
         "@paralleldrive/cuid2": "^3.3.0",
+        "@prisma/prisma-schema-wasm": "7.9.0-1.e922089b7d7502aff4249d5da3420f6fa55fc6ad",
         "@types/pg": "^8.20.0",
+        "cli-vir": "^1.0.4",
         "fsm-vir": "^3.0.0",
         "terminate": "^2.8.0",
         "url-vir": "^2.1.10"
