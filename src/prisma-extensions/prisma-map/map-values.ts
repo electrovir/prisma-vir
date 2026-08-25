@@ -43,12 +43,12 @@ export async function mapPrismaValues(
 
     if (check.isArray(value)) {
         await Promise.all(
-            value.map(async (innerValue, index) =>
-                mapPrismaValues(innerValue, mappers, {
+            value.map(async (innerValue, index) => {
+                return mapPrismaValues(innerValue, mappers, {
                     childKey: index,
                     parentValue: value,
-                }),
-            ),
+                });
+            }),
         );
     } else if (check.isPlainObject(value)) {
         await Promise.all(
@@ -56,11 +56,12 @@ export async function mapPrismaValues(
                 async ([
                     childKey,
                     innerValue,
-                ]) =>
-                    await mapPrismaValues(innerValue, mappers, {
+                ]) => {
+                    return await mapPrismaValues(innerValue, mappers, {
                         parentValue: value,
                         childKey,
-                    }),
+                    });
+                },
             ),
         );
     } else if (parent) {

@@ -155,8 +155,8 @@ describe(createPrismaClient.name, () => {
         const {PrismaClient} = await importFresh('../../test-files/generated/client.js');
 
         await assert.throws(
-            () =>
-                createPrismaClient(
+            () => {
+                return createPrismaClient(
                     // @ts-expect-error: intentionally incorrect database engine
                     'INVALID',
                     PrismaClient,
@@ -169,7 +169,8 @@ describe(createPrismaClient.name, () => {
                         },
                         configPath: testPrismaConfigPostgresPath,
                     },
-                ),
+                );
+            },
             {
                 matchMessage: "Unexpected prisma database engine: 'INVALID'",
             },

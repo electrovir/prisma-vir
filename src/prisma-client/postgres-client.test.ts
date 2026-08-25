@@ -124,14 +124,15 @@ describe(createPostgresDatabaseUrl.name, () => {
     });
     it('fails with an empty host', () => {
         assert.throws(
-            () =>
-                createPostgresDatabaseUrl({
+            () => {
+                return createPostgresDatabaseUrl({
                     dbname: '',
                     host: '',
                     password: '',
                     port: 5,
                     username: '',
-                }),
+                });
+            },
             {
                 matchMessage: 'without a host',
             },

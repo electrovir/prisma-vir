@@ -26,11 +26,11 @@ describe(prismaApi.client.generate.name, () => {
 
         assert.isFalse(existsSync(generatedPrismaClientDirPath));
 
-        await assert.throws(() =>
-            prismaApi.client.generate({
+        await assert.throws(() => {
+            return prismaApi.client.generate({
                 configPath: testInvalidPrismaConfigPath,
-            }),
-        );
+            });
+        });
 
         assert.isFalse(existsSync(generatedPrismaClientDirPath));
     });

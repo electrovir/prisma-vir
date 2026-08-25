@@ -10,13 +10,12 @@ import {PrismaSchemaError} from '../prisma-api/prisma-errors.js';
  * commands.
  */
 function applyEnv(env: Readonly<Record<string, string>>): () => void {
-    const previousValues = getObjectTypedEntries(env).map(
-        ([key]) =>
-            [
-                key,
-                process.env[key],
-            ] as const,
-    );
+    const previousValues = getObjectTypedEntries(env).map(([key]) => {
+        return [
+            key,
+            process.env[key],
+        ] as const;
+    });
 
     Object.assign(process.env, env);
 
