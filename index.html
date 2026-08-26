@@ -1,5 +1,5 @@
-<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>prisma-vir - v4.0.1</title><meta name="description" content="Documentation for prisma-vir"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css?cache=1785378512162"/><link rel="stylesheet" href="assets/highlight.css?cache=1785378512162"/><script defer src="assets/main.js?cache=1785378512162"></script><script async src="assets/icons.js?cache=1785378512162" id="tsd-icons-script"></script><script async src="assets/search.js?cache=1785378512162" id="tsd-search-script"></script><script async src="assets/navigation.js?cache=1785378512162" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
-<div class="tsd-toolbar-contents container"><a href="index.html" class="title">prisma-vir - v4.0.1</a>
+<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>prisma-vir - v4.1.0</title><meta name="description" content="Documentation for prisma-vir"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css?cache=1787743525398"/><link rel="stylesheet" href="assets/highlight.css?cache=1787743525398"/><script defer src="assets/main.js?cache=1787743525398"></script><script async src="assets/icons.js?cache=1787743525398" id="tsd-icons-script"></script><script async src="assets/search.js?cache=1787743525398" id="tsd-search-script"></script><script async src="assets/navigation.js?cache=1787743525398" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="index.html" class="title">prisma-vir - v4.1.0</a>
 <div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
 <ul role="listbox" id="tsd-search-results"></ul>
 <div id="tsd-search-status" aria-live="polite" aria-atomic="true">
@@ -7,7 +7,7 @@
 <div class="container container-main">
 <div class="col-content">
 <div class="tsd-page-title">
-<h1>prisma-vir - v4.0.1</h1></div>
+<h1>prisma-vir - v4.1.0</h1></div>
 <div class="tsd-panel tsd-typography"><h1 id="prisma-vir" class="tsd-anchor-link">prisma-vir<a href="#prisma-vir" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1>
 <p>Prisma utilities for interacting with migrations, databases, schemas, and creating Prisma clients with optional testing databases (supporting only Postgres and SQLite).</p>
 <p>Reference docs: <a href="https://electrovir.github.io/prisma-vir">https://electrovir.github.io/prisma-vir</a></p>
@@ -26,6 +26,8 @@
 <li><code>prisma-string-dates</code>: converts all <code>Date</code> or <code>string</code> types for date fields into <code>UtcIsoString</code> from <a href="https://www.npmjs.com/package/date-vir"><code>date-vir</code></a>.</li>
 <li><code>prisma-branded-fields</code>: converts all <code>id</code> fields into branded string types so that id types do not clash with each other and allows you to add a <code>/// @branded()</code> comment above any other field to also brand it. This generator also accepts an optional brand key <code>prefix</code> (as a generator input in your Prisma schema).</li>
 </ul>
+<h2 id="formatting-usage" class="tsd-anchor-link">Formatting Usage<a href="#formatting-usage" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Run <code>prisma-format [check|write] [schema-path]</code> to check or write four-space Prisma schema formatting. When omitted, <code>check|write</code> defaults to <code>write</code> and <code>schema-path</code> defaults to <code>prisma/schema.prisma</code>.</p>
 <h2 id="extensions" class="tsd-anchor-link">Extensions<a href="#extensions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <ul>
 <li><code>createPrefixedIdExtension</code>: creates an extension that will insert prefixes before every model's id field. This requires ides to be string types.</li>
@@ -51,9 +53,10 @@
 <li><a href="#client-usage"><span>Client <wbr/>Usage</span></a></li>
 <li><a href="#api-usage"><span>API <wbr/>Usage</span></a></li>
 <li><a href="#generators-usage"><span>Generators <wbr/>Usage</span></a></li>
+<li><a href="#formatting-usage"><span>Formatting <wbr/>Usage</span></a></li>
 <li><a href="#extensions"><span>Extensions</span></a></li></ul></div></details></div>
 <div class="site-menu">
-<nav class="tsd-navigation"><a href="modules.html">prisma-vir - v4.0.1</a>
+<nav class="tsd-navigation"><a href="modules.html">prisma-vir - v4.1.0</a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container">
 <li>Loading...</li></ul></nav></div></div></div><footer>
 <p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
