@@ -132,7 +132,7 @@ Index: prismaNamespace.ts
   * WARNING: This is an internal file that is subject to change!
   *
   * 🛑 Under no circumstances should you import this file directly! 🛑
-@@ -200,9 +201,9 @@
+@@ -213,9 +214,9 @@
   * Is T a Record?
   */
  type IsObject<T extends any> = T extends Array<any>
@@ -143,7 +143,7 @@ Index: prismaNamespace.ts
  : T extends Uint8Array
  ? False
  : T extends BigInt
-@@ -694,17 +695,17 @@
+@@ -748,17 +749,17 @@
    ? GetLogType<T[number]>
    : never;
  

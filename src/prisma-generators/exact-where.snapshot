@@ -1,0 +1,93 @@
+Index: prismaNamespace.ts
+===================================================================
+--- prismaNamespace.ts
++++ prismaNamespace.ts
+@@ -155,13 +155,59 @@
+ /**
+  * Subset
+  * @desc From `T` pick properties that exist in `U`. Simple version of Intersection
+  */
+-export type Subset<T, U> = {
+-  [key in keyof T]: key extends keyof U ? T[key] : never;
+-};
++/**
++ * The union of every constituent's keys. Plain `keyof` on a union gives the intersection instead,
++ * which would reject `gte` on a `DateTimeFilter | Date | string | Skip` field.
++ */
++type WhereKeys<U> = U extends unknown ? keyof U : never
+ 
++type WhereValue<U, K extends PropertyKey> = U extends unknown ? (K extends keyof U ? U[K] : never) : never
++
++type WhereElement<U> = Extract<NonNullable<U>, ReadonlyArray<unknown>>[number]
++
++/** Branded ids are `string & {...}`, so they pass a bare `extends object` and must be excluded. */
++type IsPlainObject<T> = [T] extends [object]
++  ? [T] extends [string | number | boolean | bigint | symbol | ((...args: never) => unknown)]
++    ? false
++    : true
++  : false
++
+ /**
++ * Only descends into a nested value whose target is another set of `where` conditions: `AND`
++ * identifies a nested `WhereInput` (a to-one relation filter) and `some` identifies a list
++ * relation filter. Scalar filters like `DateTimeFilter` and generic field values are left alone,
++ * because descending into a value whose type is still an unresolved type parameter leaves the
++ * conditional deferred and the caller's own argument then fails to match it.
++ */
++type ExactWhereChild<T, U> = [Extract<WhereKeys<NonNullable<U>>, 'AND' | 'some'>] extends [never]
++  ? T
++  : ExactWhere<T, U>
++
++/**
++ * `[T] extends [object]` inside `IsPlainObject` blocks distribution so a `where` passed as a whole
++ * `Skip | XWhereInput` value survives; `Skip`'s own keys stay allowed for the same reason, since
++ * `WhereKeys` unions across the whole target union. A `where` built with a computed key has a
++ * string index signature and no statically known keys to check, so it passes through untouched.
++ */
++type ExactWhere<T, U> = IsPlainObject<T> extends true
++  ? string extends keyof T
++    ? T
++    : T extends ReadonlyArray<unknown>
++      ? {[index in keyof T]: ExactWhereChild<T[index], WhereElement<U>>}
++      : {[key in keyof T]: key extends WhereKeys<NonNullable<U>> ? ExactWhereChild<T[key], WhereValue<NonNullable<U>, key>> : never}
++  : T
++
++type ExactSubset<T, U> = {
++  [key in keyof T]: key extends keyof U
++    ? key extends 'where' ? ExactWhere<T[key], U[key]> : T[key]
++    : never
++}
++
++export type Subset<T, U> = ExactSubset<T, U>;
++
++/**
+  * Resolved type of the argument passed to the `PrismaClient` constructor.
+  *
+  * When called without a narrower options type (the common case), this resolves
+  * to `PrismaClientOptions` directly, which produces a clear TypeScript error
+@@ -177,11 +223,9 @@
+  * SelectSubset
+  * @desc From `T` pick properties that exist in `U`. Simple version of Intersection.
+  * Additionally, it validates, if both select and include are present. If the case, it errors.
+  */
+-export type SelectSubset<T, U> = {
+-  [key in keyof T]: key extends keyof U ? T[key] : never
+-} &
++export type SelectSubset<T, U> = ExactSubset<T, U> &
+   (T extends SelectAndInclude
+     ? 'Please either choose `select` or `include`.'
+     : T extends SelectAndOmit
+       ? 'Please either choose `select` or `omit`.'
+@@ -190,11 +234,9 @@
+ /**
+  * Subset + Intersection
+  * @desc From `T` pick properties that exist in `U` and intersect `K`
+  */
+-export type SubsetIntersection<T, U, K> = {
+-  [key in keyof T]: key extends keyof U ? T[key] : never
+-} &
++export type SubsetIntersection<T, U, K> = ExactSubset<T, U> &
+   K
+ 
+ type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
+ 
