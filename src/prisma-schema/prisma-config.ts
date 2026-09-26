@@ -1,5 +1,4 @@
 import {getObjectTypedEntries} from '@augment-vir/common';
-import {loadConfigFromFile} from '@prisma/config';
 import {dirname, isAbsolute, resolve} from 'node:path';
 import {PrismaSchemaError} from '../prisma-api/prisma-errors.js';
 
@@ -53,6 +52,11 @@ export async function getSchemaPathFromConfig({
     const restoreEnv = applyEnv(env);
 
     try {
+        /**
+         * Imported lazily because `@prisma/config` loads all of `effect`, which consumers that only
+         * create a Prisma client never need.
+         */
+        const {loadConfigFromFile} = await import('@prisma/config');
         const {config, error} = await loadConfigFromFile({
             configFile: configPath,
         });

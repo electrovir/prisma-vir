@@ -6,7 +6,7 @@ import {
 } from '@augment-vir/common';
 import {PrismaPg} from '@prisma/adapter-pg';
 import {type PoolConfig} from 'pg';
-import {createPgliteAdapter, type PrismaPgliteAdapter} from 'prisma-pglite';
+import {type PrismaPgliteAdapter} from 'prisma-pglite';
 import {buildUrl} from 'url-vir';
 import {getDefaultTopLevelDatabaseDirPath} from './default-path.js';
 import {
@@ -107,10 +107,16 @@ export async function createPostgresPrismaClient<PrismaClient extends BasePrisma
 ): Promise<EngineClientOutput<PrismaDatabaseEngine.Postgres, PrismaClient>> {
     const shouldResetDatabase: boolean = !!connection.dev && connection.dev.resetDatabase;
 
+    /**
+     * `prisma-pglite` is imported lazily because it loads `@prisma/config` (and all of `effect`),
+     * which live connections never use.
+     */
     /* node:coverage disable: we cannot create a real Postgres server in tests. */
     const adapter =
         'dev' in connection
-            ? await createPgliteAdapter({
+            ? await (
+                  await import('prisma-pglite')
+              ).createPgliteAdapter({
                   prismaConfigPath: configPath,
                   databaseName: connection.dev.databaseName,
                   dbDirName: connection.dev.test,
