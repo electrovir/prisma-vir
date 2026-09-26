@@ -23,12 +23,12 @@ const formattingActions: Record<
     PrismaFormatMode,
     (params: Readonly<FormattingActionParams>) => Promise<void>
 > = {
-    [PrismaFormatMode.Check]: ({
+    [PrismaFormatMode.Check]({
         absoluteSchemaPath,
         formattedSchemaContents,
         schemaContents,
         schemaPath,
-    }) => {
+    }) {
         if (schemaContents !== formattedSchemaContents) {
             throw new Error(
                 `Prisma schema '${absoluteSchemaPath}' is not formatted. Run 'prisma-format write ${schemaPath}'.`,
@@ -37,7 +37,7 @@ const formattingActions: Record<
 
         return Promise.resolve();
     },
-    [PrismaFormatMode.Write]: async ({absoluteSchemaPath, formattedSchemaContents}) => {
+    async [PrismaFormatMode.Write]({absoluteSchemaPath, formattedSchemaContents}) {
         await writeFile(absoluteSchemaPath, formattedSchemaContents);
     },
 };

@@ -24,7 +24,7 @@ function applyEnv(env: Readonly<Record<string, string>>): () => void {
                 key,
                 value,
             ]) => {
-                if (value === undefined) {
+                if (value == undefined) {
                     delete process.env[key];
                 } else {
                     process.env[key] = value;
