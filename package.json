@@ -1,6 +1,6 @@
 {
     "name": "prisma-vir",
-    "version": "4.2.1",
+    "version": "4.2.2",
     "description": "Helpers for Prisma.",
     "keywords": [
         "prisma",
@@ -57,12 +57,12 @@
         "esbuild": "^0.28.2"
     },
     "dependencies": {
-        "@augment-vir/assert": "^32.4.1",
-        "@augment-vir/common": "^32.4.1",
-        "@augment-vir/node": "^32.4.1",
-        "@augment-vir/test": "^32.4.1",
+        "@augment-vir/assert": "^32.5.0",
+        "@augment-vir/common": "^32.5.0",
+        "@augment-vir/node": "^32.5.0",
+        "@augment-vir/test": "^32.5.0",
         "@paralleldrive/cuid2": "^3.3.0",
-        "@prisma/prisma-schema-wasm": "8.1.0-2.59be4fda12412a79eeb9c2ae727b6aa723593323",
+        "@prisma/prisma-schema-wasm": "7.10.0-4.0edf323efd1d98336f3f0a68684b56f689b900d3",
         "@types/pg": "^8.23.1",
         "cli-vir": "^1.0.5",
         "fsm-vir": "^3.0.1",
@@ -81,11 +81,11 @@
         "@stylistic/eslint-plugin": "^5.10.0",
         "@stylistic/eslint-plugin-ts": "^4.4.1",
         "@types/better-sqlite3": "^9.6.0",
-        "@types/node": "^26.6.2",
-        "@typescript-eslint/eslint-plugin": "^8.70.0",
+        "@types/node": "^26.6.3",
+        "@typescript-eslint/eslint-plugin": "^8.70.1",
         "c8": "^12.0.0",
-        "cspell": "^10.3.3",
-        "date-vir": "^9.2.0",
+        "cspell": "^10.3.4",
+        "date-vir": "^9.2.1",
         "dependency-cruiser": "^18.4.0",
         "diff": "^9.0.0",
         "esbuild": "^0.28.2",
@@ -109,13 +109,13 @@
         "prettier-plugin-organize-imports": "^4.3.0",
         "prettier-plugin-packagejson": "^3.0.2",
         "prettier-plugin-sort-json": "^4.2.0",
-        "prettier-plugin-toml": "^2.0.6",
+        "prettier-plugin-toml": "^3.0.2",
         "prisma": "^7.10.0",
         "prisma-pglite": "^3.0.1",
         "typedoc": "^0.28.20",
         "typescript": "^6.0.3",
-        "typescript-eslint": "^8.70.0",
-        "virmator": "^14.36.3"
+        "typescript-eslint": "^8.70.1",
+        "virmator": "^14.37.1"
     },
     "peerDependencies": {
         "@prisma/adapter-better-sqlite3": "^7",
