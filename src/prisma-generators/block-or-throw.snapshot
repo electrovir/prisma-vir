@@ -1,0 +1,154 @@
+Index: prismaNamespace.ts
+===================================================================
+--- prismaNamespace.ts
++++ prismaNamespace.ts
+@@ -430,20 +430,12 @@
+         findUnique: {
+           args: Prisma.UserMultiFindUniqueArgs<ExtArgs>
+           result: runtime.Types.Utils.PayloadToResult<Prisma.$UserMultiPayload> | null
+         }
+-        findUniqueOrThrow: {
+-          args: Prisma.UserMultiFindUniqueOrThrowArgs<ExtArgs>
+-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserMultiPayload>
+-        }
+         findFirst: {
+           args: Prisma.UserMultiFindFirstArgs<ExtArgs>
+           result: runtime.Types.Utils.PayloadToResult<Prisma.$UserMultiPayload> | null
+         }
+-        findFirstOrThrow: {
+-          args: Prisma.UserMultiFindFirstOrThrowArgs<ExtArgs>
+-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserMultiPayload>
+-        }
+         findMany: {
+           args: Prisma.UserMultiFindManyArgs<ExtArgs>
+           result: runtime.Types.Utils.PayloadToResult<Prisma.$UserMultiPayload>[]
+         }
+@@ -504,20 +496,12 @@
+         findUnique: {
+           args: Prisma.PostMultiFindUniqueArgs<ExtArgs>
+           result: runtime.Types.Utils.PayloadToResult<Prisma.$PostMultiPayload> | null
+         }
+-        findUniqueOrThrow: {
+-          args: Prisma.PostMultiFindUniqueOrThrowArgs<ExtArgs>
+-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostMultiPayload>
+-        }
+         findFirst: {
+           args: Prisma.PostMultiFindFirstArgs<ExtArgs>
+           result: runtime.Types.Utils.PayloadToResult<Prisma.$PostMultiPayload> | null
+         }
+-        findFirstOrThrow: {
+-          args: Prisma.PostMultiFindFirstOrThrowArgs<ExtArgs>
+-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostMultiPayload>
+-        }
+         findMany: {
+           args: Prisma.PostMultiFindManyArgs<ExtArgs>
+           result: runtime.Types.Utils.PayloadToResult<Prisma.$PostMultiPayload>[]
+         }
+
+
+Index: PostMulti.ts
+===================================================================
+--- PostMulti.ts
++++ PostMulti.ts
+@@ -680,22 +680,8 @@
+    */
+   findUnique<T extends PostMultiFindUniqueArgs>(args: Prisma.SelectSubset<T, PostMultiFindUniqueArgs<ExtArgs>>): Prisma.Prisma__PostMultiClient<runtime.Types.Result.GetResult<Prisma.$PostMultiPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+ 
+   /**
+-   * Find one PostMulti that matches the filter or throw an error with `error.code='P2025'`
+-   * if no matches were found.
+-   * @param {PostMultiFindUniqueOrThrowArgs} args - Arguments to find a PostMulti
+-   * @example
+-   * // Get one PostMulti
+-   * const postMulti = await prisma.postMulti.findUniqueOrThrow({
+-   *   where: {
+-   *     // ... provide filter here
+-   *   }
+-   * })
+-   */
+-  findUniqueOrThrow<T extends PostMultiFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, PostMultiFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__PostMultiClient<runtime.Types.Result.GetResult<Prisma.$PostMultiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+-
+-  /**
+    * Find the first PostMulti that matches the filter.
+    * Note, that providing `undefined` is treated as the value not being there.
+    * Read more here: https://pris.ly/d/null-undefined
+    * @param {PostMultiFindFirstArgs} args - Arguments to find a PostMulti
+@@ -709,24 +695,8 @@
+    */
+   findFirst<T extends PostMultiFindFirstArgs>(args?: Prisma.SelectSubset<T, PostMultiFindFirstArgs<ExtArgs>>): Prisma.Prisma__PostMultiClient<runtime.Types.Result.GetResult<Prisma.$PostMultiPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+ 
+   /**
+-   * Find the first PostMulti that matches the filter or
+-   * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+-   * Note, that providing `undefined` is treated as the value not being there.
+-   * Read more here: https://pris.ly/d/null-undefined
+-   * @param {PostMultiFindFirstOrThrowArgs} args - Arguments to find a PostMulti
+-   * @example
+-   * // Get one PostMulti
+-   * const postMulti = await prisma.postMulti.findFirstOrThrow({
+-   *   where: {
+-   *     // ... provide filter here
+-   *   }
+-   * })
+-   */
+-  findFirstOrThrow<T extends PostMultiFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, PostMultiFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__PostMultiClient<runtime.Types.Result.GetResult<Prisma.$PostMultiPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+-
+-  /**
+    * Find zero or more PostMultis that matches the filter.
+    * Note, that providing `undefined` is treated as the value not being there.
+    * Read more here: https://pris.ly/d/null-undefined
+    * @param {PostMultiFindManyArgs} args - Arguments to filter and select certain fields only.
+
+
+Index: UserMulti.ts
+===================================================================
+--- UserMulti.ts
++++ UserMulti.ts
+@@ -625,22 +625,8 @@
+    */
+   findUnique<T extends UserMultiFindUniqueArgs>(args: Prisma.SelectSubset<T, UserMultiFindUniqueArgs<ExtArgs>>): Prisma.Prisma__UserMultiClient<runtime.Types.Result.GetResult<Prisma.$UserMultiPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+ 
+   /**
+-   * Find one UserMulti that matches the filter or throw an error with `error.code='P2025'`
+-   * if no matches were found.
+-   * @param {UserMultiFindUniqueOrThrowArgs} args - Arguments to find a UserMulti
+-   * @example
+-   * // Get one UserMulti
+-   * const userMulti = await prisma.userMulti.findUniqueOrThrow({
+-   *   where: {
+-   *     // ... provide filter here
+-   *   }
+-   * })
+-   */
+-  findUniqueOrThrow<T extends UserMultiFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, UserMultiFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__UserMultiClient<runtime.Types.Result.GetResult<Prisma.$UserMultiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+-
+-  /**
+    * Find the first UserMulti that matches the filter.
+    * Note, that providing `undefined` is treated as the value not being there.
+    * Read more here: https://pris.ly/d/null-undefined
+    * @param {UserMultiFindFirstArgs} args - Arguments to find a UserMulti
+@@ -654,24 +640,8 @@
+    */
+   findFirst<T extends UserMultiFindFirstArgs>(args?: Prisma.SelectSubset<T, UserMultiFindFirstArgs<ExtArgs>>): Prisma.Prisma__UserMultiClient<runtime.Types.Result.GetResult<Prisma.$UserMultiPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+ 
+   /**
+-   * Find the first UserMulti that matches the filter or
+-   * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+-   * Note, that providing `undefined` is treated as the value not being there.
+-   * Read more here: https://pris.ly/d/null-undefined
+-   * @param {UserMultiFindFirstOrThrowArgs} args - Arguments to find a UserMulti
+-   * @example
+-   * // Get one UserMulti
+-   * const userMulti = await prisma.userMulti.findFirstOrThrow({
+-   *   where: {
+-   *     // ... provide filter here
+-   *   }
+-   * })
+-   */
+-  findFirstOrThrow<T extends UserMultiFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, UserMultiFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__UserMultiClient<runtime.Types.Result.GetResult<Prisma.$UserMultiPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+-
+-  /**
+    * Find zero or more UserMultis that matches the filter.
+    * Note, that providing `undefined` is treated as the value not being there.
+    * Read more here: https://pris.ly/d/null-undefined
+    * @param {UserMultiFindManyArgs} args - Arguments to filter and select certain fields only.

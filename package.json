@@ -29,6 +29,7 @@
     "module": "src/index.ts",
     "types": "src/index.ts",
     "bin": {
+        "prisma-block-or-throw": "dist/prisma-generators/block-or-throw.generator.js",
         "prisma-branded-fields": "dist/prisma-generators/branded-fields.generator.js",
         "prisma-exact-where": "dist/prisma-generators/exact-where.generator.js",
         "prisma-format": "dist/prisma-schema/prisma-format.script.js",
