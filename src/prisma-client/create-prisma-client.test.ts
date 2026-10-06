@@ -158,6 +158,7 @@ describe(createPrismaClient.name, () => {
             () => {
                 return createPrismaClient(
                     // @ts-expect-error: intentionally incorrect database engine
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-assignment -- intentionally invalid for testing
                     'INVALID',
                     PrismaClient,
                     {

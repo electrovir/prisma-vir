@@ -6,6 +6,7 @@ export const ncuConfig: RunOptions = {
     // exclude these
     reject: [
         ...baseNcuConfig.reject,
+        '@prisma/prisma-schema-wasm',
     ],
     // include only these
     filter: [],
