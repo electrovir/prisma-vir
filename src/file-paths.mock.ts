@@ -19,4 +19,5 @@ export const testPrismaConfig2Path = join(testFilesDir, 'config2.ts');
 export const testPrismaConfigPostgresPath = join(testFilesDir, 'config-postgres.ts');
 export const testInvalidPrismaConfigPath = join(testFilesDir, 'config-invalid.ts');
 export const simplePrismaConfigPath = join(testFilesDir, 'config-simple.ts');
+export const stringDatesPrismaConfigPath = join(testFilesDir, 'config-string-dates.ts');
 export const testPrismaConfigMultiRelation = join(testFilesDir, 'config-multi-relation.ts');

@@ -33,7 +33,11 @@ const replacements: Replacement[] = [
         replace: 'UtcIsoString',
     },
     {
-        match: /\bDate\b/,
+        /**
+         * Skip object keys and string literals so enum members (`Date: 'Date'`) and fields named
+         * `Date` keep their runtime names.
+         */
+        match: /(?<!['"])\bDate\b(?!['"]|\s*\??:)/,
         replace: 'UtcIsoString',
     },
     {

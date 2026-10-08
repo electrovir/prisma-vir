@@ -37,9 +37,9 @@ Index: commonInputTypes.ts
 +  not?: Prisma.NestedDateTimeFilter<$PrismaModel> | UtcIsoString | runtime.Types.Skip
  }
  
- export type StringWithAggregatesFilter<$PrismaModel = never> = {
-   equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
-@@ -56,16 +57,16 @@
+ export type EnumFieldKindFilter<$PrismaModel = never> = {
+   equals?: $Enums.FieldKind | Prisma.EnumFieldKindFieldRefInput<$PrismaModel> | runtime.Types.Skip
+@@ -63,16 +64,16 @@
    _max?: Prisma.NestedStringFilter<$PrismaModel> | runtime.Types.Skip
  }
  
@@ -64,7 +64,7 @@ Index: commonInputTypes.ts
    _min?: Prisma.NestedDateTimeFilter<$PrismaModel> | runtime.Types.Skip
    _max?: Prisma.NestedDateTimeFilter<$PrismaModel> | runtime.Types.Skip
  }
-@@ -84,16 +85,16 @@
+@@ -101,16 +102,16 @@
    not?: Prisma.NestedStringFilter<$PrismaModel> | string | runtime.Types.Skip
  }
  
@@ -87,9 +87,9 @@ Index: commonInputTypes.ts
 +  not?: Prisma.NestedDateTimeFilter<$PrismaModel> | UtcIsoString | runtime.Types.Skip
  }
  
- export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
-   equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
-@@ -123,16 +124,16 @@
+ export type NestedEnumFieldKindFilter<$PrismaModel = never> = {
+   equals?: $Enums.FieldKind | Prisma.EnumFieldKindFieldRefInput<$PrismaModel> | runtime.Types.Skip
+@@ -147,16 +148,16 @@
    not?: Prisma.NestedIntFilter<$PrismaModel> | number | runtime.Types.Skip
  }
  
@@ -143,7 +143,7 @@ Index: prismaNamespace.ts
  : T extends Uint8Array
  ? False
  : T extends BigInt
-@@ -748,17 +749,17 @@
+@@ -754,17 +755,17 @@
    ? GetLogType<T[number]>
    : never;
  
@@ -165,10 +165,10 @@ Index: prismaNamespace.ts
  /* End Types for Logging */
 
 
-Index: UserSimple.ts
+Index: FieldStringDates.ts
 ===================================================================
---- UserSimple.ts
-+++ UserSimple.ts
+--- FieldStringDates.ts
++++ FieldStringDates.ts
 @@ -1,9 +1,10 @@
 +// @ts-nocheck
 +import {type UtcIsoString} from 'date-vir';
@@ -178,155 +178,147 @@ Index: UserSimple.ts
  // biome-ignore-all lint: generated file
 -// @ts-nocheck 
  /*
-  * This file exports the `UserSimple` model and its related types.
+  * This file exports the `FieldStringDates` model and its related types.
   *
   * 🟢 You can import this file directly.
-@@ -25,18 +26,18 @@
+@@ -25,17 +26,17 @@
  }
  
- export type UserSimpleMinAggregateOutputType = {
+ export type FieldStringDatesMinAggregateOutputType = {
    id: string | null
 -  createdAt: Date | null
 -  updatedAt: Date | null
 +  createdAt: UtcIsoString | null
 +  updatedAt: UtcIsoString | null
-   email: string | null
-   password: string | null
+   kind: $Enums.FieldKind | null
  }
  
- export type UserSimpleMaxAggregateOutputType = {
+ export type FieldStringDatesMaxAggregateOutputType = {
    id: string | null
 -  createdAt: Date | null
 -  updatedAt: Date | null
 +  createdAt: UtcIsoString | null
 +  updatedAt: UtcIsoString | null
-   email: string | null
-   password: string | null
+   kind: $Enums.FieldKind | null
  }
  
-@@ -148,10 +149,10 @@
+ export type FieldStringDatesCountAggregateOutputType = {
+@@ -142,10 +143,10 @@
  }
  
- export type UserSimpleGroupByOutputType = {
+ export type FieldStringDatesGroupByOutputType = {
    id: string
 -  createdAt: Date
 -  updatedAt: Date
 +  createdAt: UtcIsoString
 +  updatedAt: UtcIsoString
-   email: string
-   password: string
-   _count: UserSimpleCountAggregateOutputType | null
-   _min: UserSimpleMinAggregateOutputType | null
-@@ -177,10 +178,10 @@
-   AND?: Prisma.UserSimpleWhereInput | Prisma.UserSimpleWhereInput[] | runtime.Types.Skip
-   OR?: Prisma.UserSimpleWhereInput[] | runtime.Types.Skip
-   NOT?: Prisma.UserSimpleWhereInput | Prisma.UserSimpleWhereInput[] | runtime.Types.Skip
-   id?: Prisma.StringFilter<"UserSimple"> | string | runtime.Types.Skip
--  createdAt?: Prisma.DateTimeFilter<"UserSimple"> | Date | string | runtime.Types.Skip
--  updatedAt?: Prisma.DateTimeFilter<"UserSimple"> | Date | string | runtime.Types.Skip
-+  createdAt?: Prisma.DateTimeFilter<"UserSimple"> | UtcIsoString | runtime.Types.Skip
-+  updatedAt?: Prisma.DateTimeFilter<"UserSimple"> | UtcIsoString | runtime.Types.Skip
-   email?: Prisma.StringFilter<"UserSimple"> | string | runtime.Types.Skip
-   password?: Prisma.StringFilter<"UserSimple"> | string | runtime.Types.Skip
+   kind: $Enums.FieldKind
+   _count: FieldStringDatesCountAggregateOutputType | null
+   _min: FieldStringDatesMinAggregateOutputType | null
+   _max: FieldStringDatesMaxAggregateOutputType | null
+@@ -170,10 +171,10 @@
+   AND?: Prisma.FieldStringDatesWhereInput | Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
+   OR?: Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
+   NOT?: Prisma.FieldStringDatesWhereInput | Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
+   id?: Prisma.StringFilter<"FieldStringDates"> | string | runtime.Types.Skip
+-  createdAt?: Prisma.DateTimeFilter<"FieldStringDates"> | Date | string | runtime.Types.Skip
+-  updatedAt?: Prisma.DateTimeFilter<"FieldStringDates"> | Date | string | runtime.Types.Skip
++  createdAt?: Prisma.DateTimeFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
++  updatedAt?: Prisma.DateTimeFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
+   kind?: Prisma.EnumFieldKindFilter<"FieldStringDates"> | $Enums.FieldKind | runtime.Types.Skip
  }
  
-@@ -196,10 +197,10 @@
+ export type FieldStringDatesOrderByWithRelationInput = {
+@@ -187,10 +188,10 @@
    id?: string | runtime.Types.Skip
-   AND?: Prisma.UserSimpleWhereInput | Prisma.UserSimpleWhereInput[] | runtime.Types.Skip
-   OR?: Prisma.UserSimpleWhereInput[] | runtime.Types.Skip
-   NOT?: Prisma.UserSimpleWhereInput | Prisma.UserSimpleWhereInput[] | runtime.Types.Skip
--  createdAt?: Prisma.DateTimeFilter<"UserSimple"> | Date | string | runtime.Types.Skip
--  updatedAt?: Prisma.DateTimeFilter<"UserSimple"> | Date | string | runtime.Types.Skip
-+  createdAt?: Prisma.DateTimeFilter<"UserSimple"> | UtcIsoString | runtime.Types.Skip
-+  updatedAt?: Prisma.DateTimeFilter<"UserSimple"> | UtcIsoString | runtime.Types.Skip
-   email?: Prisma.StringFilter<"UserSimple"> | string | runtime.Types.Skip
-   password?: Prisma.StringFilter<"UserSimple"> | string | runtime.Types.Skip
+   AND?: Prisma.FieldStringDatesWhereInput | Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
+   OR?: Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
+   NOT?: Prisma.FieldStringDatesWhereInput | Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
+-  createdAt?: Prisma.DateTimeFilter<"FieldStringDates"> | Date | string | runtime.Types.Skip
+-  updatedAt?: Prisma.DateTimeFilter<"FieldStringDates"> | Date | string | runtime.Types.Skip
++  createdAt?: Prisma.DateTimeFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
++  updatedAt?: Prisma.DateTimeFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
+   kind?: Prisma.EnumFieldKindFilter<"FieldStringDates"> | $Enums.FieldKind | runtime.Types.Skip
  }, "id">
  
-@@ -218,66 +219,66 @@
-   AND?: Prisma.UserSimpleScalarWhereWithAggregatesInput | Prisma.UserSimpleScalarWhereWithAggregatesInput[] | runtime.Types.Skip
-   OR?: Prisma.UserSimpleScalarWhereWithAggregatesInput[] | runtime.Types.Skip
-   NOT?: Prisma.UserSimpleScalarWhereWithAggregatesInput | Prisma.UserSimpleScalarWhereWithAggregatesInput[] | runtime.Types.Skip
-   id?: Prisma.StringWithAggregatesFilter<"UserSimple"> | string | runtime.Types.Skip
--  createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserSimple"> | Date | string | runtime.Types.Skip
--  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserSimple"> | Date | string | runtime.Types.Skip
-+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserSimple"> | UtcIsoString | runtime.Types.Skip
-+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserSimple"> | UtcIsoString | runtime.Types.Skip
-   email?: Prisma.StringWithAggregatesFilter<"UserSimple"> | string | runtime.Types.Skip
-   password?: Prisma.StringWithAggregatesFilter<"UserSimple"> | string | runtime.Types.Skip
+ export type FieldStringDatesOrderByWithAggregationInput = {
+@@ -207,59 +208,59 @@
+   AND?: Prisma.FieldStringDatesScalarWhereWithAggregatesInput | Prisma.FieldStringDatesScalarWhereWithAggregatesInput[] | runtime.Types.Skip
+   OR?: Prisma.FieldStringDatesScalarWhereWithAggregatesInput[] | runtime.Types.Skip
+   NOT?: Prisma.FieldStringDatesScalarWhereWithAggregatesInput | Prisma.FieldStringDatesScalarWhereWithAggregatesInput[] | runtime.Types.Skip
+   id?: Prisma.StringWithAggregatesFilter<"FieldStringDates"> | string | runtime.Types.Skip
+-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"FieldStringDates"> | Date | string | runtime.Types.Skip
+-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FieldStringDates"> | Date | string | runtime.Types.Skip
++  createdAt?: Prisma.DateTimeWithAggregatesFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
++  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
+   kind?: Prisma.EnumFieldKindWithAggregatesFilter<"FieldStringDates"> | $Enums.FieldKind | runtime.Types.Skip
  }
  
- export type UserSimpleCreateInput = {
+ export type FieldStringDatesCreateInput = {
    id?: string | runtime.Types.Skip
 -  createdAt?: Date | string | runtime.Types.Skip
 -  updatedAt?: Date | string | runtime.Types.Skip
 +  createdAt?: UtcIsoString | runtime.Types.Skip
 +  updatedAt?: UtcIsoString | runtime.Types.Skip
-   email: string
-   password: string
+   kind: $Enums.FieldKind
  }
  
- export type UserSimpleUncheckedCreateInput = {
+ export type FieldStringDatesUncheckedCreateInput = {
    id?: string | runtime.Types.Skip
 -  createdAt?: Date | string | runtime.Types.Skip
 -  updatedAt?: Date | string | runtime.Types.Skip
 +  createdAt?: UtcIsoString | runtime.Types.Skip
 +  updatedAt?: UtcIsoString | runtime.Types.Skip
-   email: string
-   password: string
+   kind: $Enums.FieldKind
  }
  
- export type UserSimpleUpdateInput = {
+ export type FieldStringDatesUpdateInput = {
    id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 -  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
 -  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
 +  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
-   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
-   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   kind?: Prisma.EnumFieldKindFieldUpdateOperationsInput | $Enums.FieldKind | runtime.Types.Skip
  }
  
- export type UserSimpleUncheckedUpdateInput = {
+ export type FieldStringDatesUncheckedUpdateInput = {
    id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 -  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
 -  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
 +  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
-   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
-   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   kind?: Prisma.EnumFieldKindFieldUpdateOperationsInput | $Enums.FieldKind | runtime.Types.Skip
  }
  
- export type UserSimpleCreateManyInput = {
+ export type FieldStringDatesCreateManyInput = {
    id?: string | runtime.Types.Skip
 -  createdAt?: Date | string | runtime.Types.Skip
 -  updatedAt?: Date | string | runtime.Types.Skip
 +  createdAt?: UtcIsoString | runtime.Types.Skip
 +  updatedAt?: UtcIsoString | runtime.Types.Skip
-   email: string
-   password: string
+   kind: $Enums.FieldKind
  }
  
- export type UserSimpleUpdateManyMutationInput = {
+ export type FieldStringDatesUpdateManyMutationInput = {
    id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 -  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
 -  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
 +  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
-   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
-   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   kind?: Prisma.EnumFieldKindFieldUpdateOperationsInput | $Enums.FieldKind | runtime.Types.Skip
  }
  
- export type UserSimpleUncheckedUpdateManyInput = {
+ export type FieldStringDatesUncheckedUpdateManyInput = {
    id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 -  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
 -  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
 +  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
-   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
-   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+   kind?: Prisma.EnumFieldKindFieldUpdateOperationsInput | $Enums.FieldKind | runtime.Types.Skip
  }
  
-@@ -309,9 +310,9 @@
+ export type FieldStringDatesCountOrderByAggregateInput = {
+@@ -287,9 +288,9 @@
    set?: string | runtime.Types.Skip
  }
  
@@ -335,10 +327,10 @@ Index: UserSimple.ts
 +  set?: UtcIsoString | runtime.Types.Skip
  }
  
- 
- 
-@@ -353,10 +354,10 @@
-   name: "UserSimple"
+ export type EnumFieldKindFieldUpdateOperationsInput = {
+   set?: $Enums.FieldKind | runtime.Types.Skip
+@@ -331,10 +332,10 @@
+   name: "FieldStringDates"
    objects: {}
    scalars: runtime.Types.Extensions.GetPayloadResult<{
      id: string
@@ -346,7 +338,7 @@ Index: UserSimple.ts
 -    updatedAt: Date
 +    createdAt: UtcIsoString
 +    updatedAt: UtcIsoString
-     email: string
-     password: string
-   }, ExtArgs["result"]["userSimple"]>
+     kind: $Enums.FieldKind
+   }, ExtArgs["result"]["fieldStringDates"]>
    composites: {}
+ }
