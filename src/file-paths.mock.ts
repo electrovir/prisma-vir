@@ -20,4 +20,8 @@ export const testPrismaConfigPostgresPath = join(testFilesDir, 'config-postgres.
 export const testInvalidPrismaConfigPath = join(testFilesDir, 'config-invalid.ts');
 export const simplePrismaConfigPath = join(testFilesDir, 'config-simple.ts');
 export const stringDatesPrismaConfigPath = join(testFilesDir, 'config-string-dates.ts');
+export const stringDatesCustomDatasourcePrismaConfigPath = join(
+    testFilesDir,
+    'config-string-dates-custom-datasource.ts',
+);
 export const testPrismaConfigMultiRelation = join(testFilesDir, 'config-multi-relation.ts');

@@ -14,22 +14,22 @@ Index: commonInputTypes.ts
   * This file exports various common sort, input & filter types that are not directly linked to a particular model.
   *
   * 🟢 You can import this file directly.
-@@ -28,16 +29,16 @@
+@@ -29,16 +30,16 @@
    not?: Prisma.NestedStringFilter<$PrismaModel> | string | runtime.Types.Skip
  }
  
  export type DateTimeFilter<$PrismaModel = never> = {
 -  equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
--  in?: Date[] | string[] | runtime.Types.Skip
--  notIn?: Date[] | string[] | runtime.Types.Skip
+-  in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  notIn?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  lt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  lte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  gt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  not?: Prisma.NestedDateTimeFilter<$PrismaModel> | Date | string | runtime.Types.Skip
 +  equals?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
-+  in?: UtcIsoString[] | runtime.Types.Skip
-+  notIn?: UtcIsoString[] | runtime.Types.Skip
++  in?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  notIn?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  lt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  lte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  gt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
@@ -39,22 +39,47 @@ Index: commonInputTypes.ts
  
  export type EnumFieldKindFilter<$PrismaModel = never> = {
    equals?: $Enums.FieldKind | Prisma.EnumFieldKindFieldRefInput<$PrismaModel> | runtime.Types.Skip
-@@ -63,16 +64,16 @@
+@@ -47,16 +48,16 @@
+   not?: Prisma.NestedEnumFieldKindFilter<$PrismaModel> | $Enums.FieldKind | runtime.Types.Skip
+ }
+ 
+ export type DateTimeNullableFilter<$PrismaModel = never> = {
+-  equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  notIn?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  lt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  lte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null | runtime.Types.Skip
++  equals?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  in?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  notIn?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  lt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  lte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | UtcIsoString | null | runtime.Types.Skip
+ }
+ 
+ export type SortOrderInput = {
+   sort: Prisma.SortOrder
+@@ -81,16 +82,16 @@
    _max?: Prisma.NestedStringFilter<$PrismaModel> | runtime.Types.Skip
  }
  
  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
 -  equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
--  in?: Date[] | string[] | runtime.Types.Skip
--  notIn?: Date[] | string[] | runtime.Types.Skip
+-  in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  notIn?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  lt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  lte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  gt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  not?: Prisma.NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string | runtime.Types.Skip
 +  equals?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
-+  in?: UtcIsoString[] | runtime.Types.Skip
-+  notIn?: UtcIsoString[] | runtime.Types.Skip
++  in?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  notIn?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  lt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  lte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  gt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
@@ -64,22 +89,47 @@ Index: commonInputTypes.ts
    _min?: Prisma.NestedDateTimeFilter<$PrismaModel> | runtime.Types.Skip
    _max?: Prisma.NestedDateTimeFilter<$PrismaModel> | runtime.Types.Skip
  }
-@@ -101,16 +102,16 @@
+@@ -105,16 +106,16 @@
+   _max?: Prisma.NestedEnumFieldKindFilter<$PrismaModel> | runtime.Types.Skip
+ }
+ 
+ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+-  equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  notIn?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  lt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  lte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  not?: Prisma.NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null | runtime.Types.Skip
++  equals?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  in?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  notIn?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  lt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  lte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  not?: Prisma.NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | UtcIsoString | null | runtime.Types.Skip
+   _count?: Prisma.NestedIntNullableFilter<$PrismaModel> | runtime.Types.Skip
+   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | runtime.Types.Skip
+   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | runtime.Types.Skip
+ }
+@@ -133,16 +134,16 @@
    not?: Prisma.NestedStringFilter<$PrismaModel> | string | runtime.Types.Skip
  }
  
  export type NestedDateTimeFilter<$PrismaModel = never> = {
 -  equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
--  in?: Date[] | string[] | runtime.Types.Skip
--  notIn?: Date[] | string[] | runtime.Types.Skip
+-  in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  notIn?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  lt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  lte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  gt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  not?: Prisma.NestedDateTimeFilter<$PrismaModel> | Date | string | runtime.Types.Skip
 +  equals?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
-+  in?: UtcIsoString[] | runtime.Types.Skip
-+  notIn?: UtcIsoString[] | runtime.Types.Skip
++  in?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  notIn?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  lt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  lte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  gt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
@@ -89,22 +139,47 @@ Index: commonInputTypes.ts
  
  export type NestedEnumFieldKindFilter<$PrismaModel = never> = {
    equals?: $Enums.FieldKind | Prisma.EnumFieldKindFieldRefInput<$PrismaModel> | runtime.Types.Skip
-@@ -147,16 +148,16 @@
+@@ -151,16 +152,16 @@
+   not?: Prisma.NestedEnumFieldKindFilter<$PrismaModel> | $Enums.FieldKind | runtime.Types.Skip
+ }
+ 
+ export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+-  equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  notIn?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  lt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  lte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null | runtime.Types.Skip
++  equals?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  in?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  notIn?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  lt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  lte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | UtcIsoString | null | runtime.Types.Skip
+ }
+ 
+ export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
+   equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+@@ -190,16 +191,16 @@
    not?: Prisma.NestedIntFilter<$PrismaModel> | number | runtime.Types.Skip
  }
  
  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
 -  equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
--  in?: Date[] | string[] | runtime.Types.Skip
--  notIn?: Date[] | string[] | runtime.Types.Skip
+-  in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  notIn?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  lt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  lte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  gt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 -  not?: Prisma.NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string | runtime.Types.Skip
 +  equals?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
-+  in?: UtcIsoString[] | runtime.Types.Skip
-+  notIn?: UtcIsoString[] | runtime.Types.Skip
++  in?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  notIn?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  lt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  lte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
 +  gt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
@@ -113,6 +188,31 @@ Index: commonInputTypes.ts
    _count?: Prisma.NestedIntFilter<$PrismaModel> | runtime.Types.Skip
    _min?: Prisma.NestedDateTimeFilter<$PrismaModel> | runtime.Types.Skip
    _max?: Prisma.NestedDateTimeFilter<$PrismaModel> | runtime.Types.Skip
+ }
+@@ -214,16 +215,16 @@
+   _max?: Prisma.NestedEnumFieldKindFilter<$PrismaModel> | runtime.Types.Skip
+ }
+ 
+ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+-  equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  notIn?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+-  lt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  lte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
+-  not?: Prisma.NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null | runtime.Types.Skip
++  equals?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  in?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  notIn?: UtcIsoString[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
++  lt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  lte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gt?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  gte?: UtcIsoString | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
++  not?: Prisma.NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | UtcIsoString | null | runtime.Types.Skip
+   _count?: Prisma.NestedIntNullableFilter<$PrismaModel> | runtime.Types.Skip
+   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | runtime.Types.Skip
+   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | runtime.Types.Skip
  }
 
 
@@ -143,7 +243,7 @@ Index: prismaNamespace.ts
  : T extends Uint8Array
  ? False
  : T extends BigInt
-@@ -754,17 +755,17 @@
+@@ -811,17 +812,17 @@
    ? GetLogType<T[number]>
    : never;
  
@@ -171,7 +271,7 @@ Index: FieldStringDates.ts
 +++ FieldStringDates.ts
 @@ -1,9 +1,10 @@
 +// @ts-nocheck
-+import {type UtcIsoString} from 'date-vir';
++import {type DateOnlyUtcIsoString, type UtcIsoString} from 'date-vir';
  
  /* !!! This is code generated by Prisma. Do not edit directly. !!! */
  /* eslint-disable */
@@ -181,7 +281,7 @@ Index: FieldStringDates.ts
   * This file exports the `FieldStringDates` model and its related types.
   *
   * 🟢 You can import this file directly.
-@@ -25,17 +26,17 @@
+@@ -25,22 +26,22 @@
  }
  
  export type FieldStringDatesMinAggregateOutputType = {
@@ -191,6 +291,10 @@ Index: FieldStringDates.ts
 +  createdAt: UtcIsoString | null
 +  updatedAt: UtcIsoString | null
    kind: $Enums.FieldKind | null
+-  birthDate: Date | null
+-  endDate: Date | null
++  birthDate: DateOnlyUtcIsoString | null
++  endDate: DateOnlyUtcIsoString | null
  }
  
  export type FieldStringDatesMaxAggregateOutputType = {
@@ -200,10 +304,15 @@ Index: FieldStringDates.ts
 +  createdAt: UtcIsoString | null
 +  updatedAt: UtcIsoString | null
    kind: $Enums.FieldKind | null
+-  birthDate: Date | null
+-  endDate: Date | null
++  birthDate: DateOnlyUtcIsoString | null
++  endDate: DateOnlyUtcIsoString | null
  }
  
  export type FieldStringDatesCountAggregateOutputType = {
-@@ -142,10 +143,10 @@
+   id: number
+@@ -154,13 +155,13 @@
  }
  
  export type FieldStringDatesGroupByOutputType = {
@@ -213,10 +322,15 @@ Index: FieldStringDates.ts
 +  createdAt: UtcIsoString
 +  updatedAt: UtcIsoString
    kind: $Enums.FieldKind
+-  birthDate: Date
+-  endDate: Date | null
++  birthDate: DateOnlyUtcIsoString
++  endDate: DateOnlyUtcIsoString | null
    _count: FieldStringDatesCountAggregateOutputType | null
    _min: FieldStringDatesMinAggregateOutputType | null
    _max: FieldStringDatesMaxAggregateOutputType | null
-@@ -170,10 +171,10 @@
+ }
+@@ -184,13 +185,13 @@
    AND?: Prisma.FieldStringDatesWhereInput | Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
    OR?: Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
    NOT?: Prisma.FieldStringDatesWhereInput | Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
@@ -226,10 +340,15 @@ Index: FieldStringDates.ts
 +  createdAt?: Prisma.DateTimeFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
    kind?: Prisma.EnumFieldKindFilter<"FieldStringDates"> | $Enums.FieldKind | runtime.Types.Skip
+-  birthDate?: Prisma.DateTimeFilter<"FieldStringDates"> | Date | string | runtime.Types.Skip
+-  endDate?: Prisma.DateTimeNullableFilter<"FieldStringDates"> | Date | string | null | runtime.Types.Skip
++  birthDate?: Prisma.DateTimeFilter<"FieldStringDates"> | DateOnlyUtcIsoString | runtime.Types.Skip
++  endDate?: Prisma.DateTimeNullableFilter<"FieldStringDates"> | DateOnlyUtcIsoString | null | runtime.Types.Skip
  }
  
  export type FieldStringDatesOrderByWithRelationInput = {
-@@ -187,10 +188,10 @@
+   id?: Prisma.SortOrder | runtime.Types.Skip
+@@ -205,13 +206,13 @@
    id?: string | runtime.Types.Skip
    AND?: Prisma.FieldStringDatesWhereInput | Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
    OR?: Prisma.FieldStringDatesWhereInput[] | runtime.Types.Skip
@@ -239,10 +358,15 @@ Index: FieldStringDates.ts
 +  createdAt?: Prisma.DateTimeFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
    kind?: Prisma.EnumFieldKindFilter<"FieldStringDates"> | $Enums.FieldKind | runtime.Types.Skip
+-  birthDate?: Prisma.DateTimeFilter<"FieldStringDates"> | Date | string | runtime.Types.Skip
+-  endDate?: Prisma.DateTimeNullableFilter<"FieldStringDates"> | Date | string | null | runtime.Types.Skip
++  birthDate?: Prisma.DateTimeFilter<"FieldStringDates"> | DateOnlyUtcIsoString | runtime.Types.Skip
++  endDate?: Prisma.DateTimeNullableFilter<"FieldStringDates"> | DateOnlyUtcIsoString | null | runtime.Types.Skip
  }, "id">
  
  export type FieldStringDatesOrderByWithAggregationInput = {
-@@ -207,59 +208,59 @@
+   id?: Prisma.SortOrder | runtime.Types.Skip
+@@ -229,76 +230,76 @@
    AND?: Prisma.FieldStringDatesScalarWhereWithAggregatesInput | Prisma.FieldStringDatesScalarWhereWithAggregatesInput[] | runtime.Types.Skip
    OR?: Prisma.FieldStringDatesScalarWhereWithAggregatesInput[] | runtime.Types.Skip
    NOT?: Prisma.FieldStringDatesScalarWhereWithAggregatesInput | Prisma.FieldStringDatesScalarWhereWithAggregatesInput[] | runtime.Types.Skip
@@ -252,6 +376,10 @@ Index: FieldStringDates.ts
 +  createdAt?: Prisma.DateTimeWithAggregatesFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FieldStringDates"> | UtcIsoString | runtime.Types.Skip
    kind?: Prisma.EnumFieldKindWithAggregatesFilter<"FieldStringDates"> | $Enums.FieldKind | runtime.Types.Skip
+-  birthDate?: Prisma.DateTimeWithAggregatesFilter<"FieldStringDates"> | Date | string | runtime.Types.Skip
+-  endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"FieldStringDates"> | Date | string | null | runtime.Types.Skip
++  birthDate?: Prisma.DateTimeWithAggregatesFilter<"FieldStringDates"> | DateOnlyUtcIsoString | runtime.Types.Skip
++  endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"FieldStringDates"> | DateOnlyUtcIsoString | null | runtime.Types.Skip
  }
  
  export type FieldStringDatesCreateInput = {
@@ -261,6 +389,10 @@ Index: FieldStringDates.ts
 +  createdAt?: UtcIsoString | runtime.Types.Skip
 +  updatedAt?: UtcIsoString | runtime.Types.Skip
    kind: $Enums.FieldKind
+-  birthDate: Date | string
+-  endDate?: Date | string | null | runtime.Types.Skip
++  birthDate: DateOnlyUtcIsoString
++  endDate?: DateOnlyUtcIsoString | null | runtime.Types.Skip
  }
  
  export type FieldStringDatesUncheckedCreateInput = {
@@ -270,6 +402,10 @@ Index: FieldStringDates.ts
 +  createdAt?: UtcIsoString | runtime.Types.Skip
 +  updatedAt?: UtcIsoString | runtime.Types.Skip
    kind: $Enums.FieldKind
+-  birthDate: Date | string
+-  endDate?: Date | string | null | runtime.Types.Skip
++  birthDate: DateOnlyUtcIsoString
++  endDate?: DateOnlyUtcIsoString | null | runtime.Types.Skip
  }
  
  export type FieldStringDatesUpdateInput = {
@@ -279,6 +415,10 @@ Index: FieldStringDates.ts
 +  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
    kind?: Prisma.EnumFieldKindFieldUpdateOperationsInput | $Enums.FieldKind | runtime.Types.Skip
+-  birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
++  birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | DateOnlyUtcIsoString | runtime.Types.Skip
++  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | DateOnlyUtcIsoString | null | runtime.Types.Skip
  }
  
  export type FieldStringDatesUncheckedUpdateInput = {
@@ -288,6 +428,10 @@ Index: FieldStringDates.ts
 +  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
    kind?: Prisma.EnumFieldKindFieldUpdateOperationsInput | $Enums.FieldKind | runtime.Types.Skip
+-  birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
++  birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | DateOnlyUtcIsoString | runtime.Types.Skip
++  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | DateOnlyUtcIsoString | null | runtime.Types.Skip
  }
  
  export type FieldStringDatesCreateManyInput = {
@@ -297,6 +441,10 @@ Index: FieldStringDates.ts
 +  createdAt?: UtcIsoString | runtime.Types.Skip
 +  updatedAt?: UtcIsoString | runtime.Types.Skip
    kind: $Enums.FieldKind
+-  birthDate: Date | string
+-  endDate?: Date | string | null | runtime.Types.Skip
++  birthDate: DateOnlyUtcIsoString
++  endDate?: DateOnlyUtcIsoString | null | runtime.Types.Skip
  }
  
  export type FieldStringDatesUpdateManyMutationInput = {
@@ -306,6 +454,10 @@ Index: FieldStringDates.ts
 +  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
    kind?: Prisma.EnumFieldKindFieldUpdateOperationsInput | $Enums.FieldKind | runtime.Types.Skip
+-  birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
++  birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | DateOnlyUtcIsoString | runtime.Types.Skip
++  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | DateOnlyUtcIsoString | null | runtime.Types.Skip
  }
  
  export type FieldStringDatesUncheckedUpdateManyInput = {
@@ -315,10 +467,15 @@ Index: FieldStringDates.ts
 +  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
 +  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | UtcIsoString | runtime.Types.Skip
    kind?: Prisma.EnumFieldKindFieldUpdateOperationsInput | $Enums.FieldKind | runtime.Types.Skip
+-  birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+-  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
++  birthDate?: Prisma.DateTimeFieldUpdateOperationsInput | DateOnlyUtcIsoString | runtime.Types.Skip
++  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | DateOnlyUtcIsoString | null | runtime.Types.Skip
  }
  
  export type FieldStringDatesCountOrderByAggregateInput = {
-@@ -287,9 +288,9 @@
+   id?: Prisma.SortOrder | runtime.Types.Skip
+@@ -331,17 +332,17 @@
    set?: string | runtime.Types.Skip
  }
  
@@ -329,7 +486,16 @@ Index: FieldStringDates.ts
  
  export type EnumFieldKindFieldUpdateOperationsInput = {
    set?: $Enums.FieldKind | runtime.Types.Skip
-@@ -331,10 +332,10 @@
+ }
+ 
+ export type NullableDateTimeFieldUpdateOperationsInput = {
+-  set?: Date | string | null | runtime.Types.Skip
++  set?: UtcIsoString | null | runtime.Types.Skip
+ }
+ 
+ 
+ 
+@@ -387,13 +388,13 @@
    name: "FieldStringDates"
    objects: {}
    scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -339,6 +505,11 @@ Index: FieldStringDates.ts
 +    createdAt: UtcIsoString
 +    updatedAt: UtcIsoString
      kind: $Enums.FieldKind
+-    birthDate: Date
+-    endDate: Date | null
++    birthDate: DateOnlyUtcIsoString
++    endDate: DateOnlyUtcIsoString | null
    }, ExtArgs["result"]["fieldStringDates"]>
    composites: {}
  }
+ 

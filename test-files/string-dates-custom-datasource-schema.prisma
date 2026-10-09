@@ -6,7 +6,7 @@ generator jsClientStringDates {
     moduleFormat    = "esm"
 }
 
-datasource db {
+datasource dbStringDates {
     provider = "postgres"
 }
 
@@ -21,6 +21,6 @@ model FieldStringDates {
     updatedAt DateTime  @updatedAt
 
     kind      FieldKind
-    birthDate DateTime  @db.Date
-    endDate   DateTime? @db.Date
+    birthDate DateTime  @dbStringDates.Date
+    endDate   DateTime? @dbStringDates.Date
 }

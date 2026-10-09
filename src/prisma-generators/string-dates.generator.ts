@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 
-/** This generator replaces all model `Date` types with `UtcIsoString` types. */
+/**
+ * This generator replaces all model `Date` types with `UtcIsoString` types, or with
+ * `DateOnlyUtcIsoString` types for `@db.Date` fields.
+ */
 
 import {addRegExpFlags, awaitedForEach} from '@augment-vir/common';
 import {joinFilesToDir, readDirRecursive} from '@augment-vir/node';
 import generatorHelper from '@prisma/generator-helper';
 import {readFile, writeFile} from 'node:fs/promises';
+import {basename, dirname} from 'node:path';
 import {resolveGeneratorOutput} from './generator-util/generator-output.js';
 import {generatorVersion} from './generator-util/version.js';
 
@@ -62,10 +66,12 @@ const {alwaysReplace, replaceIfChanged} = replacements.reduce(
     },
 );
 
-const insertAtTop = [
-    '// @ts-nocheck',
-    "import {type UtcIsoString} from 'date-vir';",
-];
+const dateOnlyReplacements: Replacement[] = alwaysReplace.map((replacement) => {
+    return {
+        ...replacement,
+        replace: replacement.replace.replace('UtcIsoString', 'DateOnlyUtcIsoString'),
+    };
+});
 
 generatorHelper.generatorHandler({
     onManifest() {
@@ -92,7 +98,18 @@ generatorHelper.generatorHandler({
 
             const contents = String(await readFile(filePath));
 
-            const definitelyReplaced = applyReplacements(contents, alwaysReplace);
+            const modelName =
+                basename(dirname(filePath)) === 'models' ? basename(filePath, '.ts') : undefined;
+            const dateOnlyFieldNames =
+                options.dmmf.datamodel.models
+                    .find((model) => model.name === modelName)
+                    ?.fields.filter((field) => field.nativeType?.[0] === 'Date')
+                    .map((field) => field.name) || [];
+
+            const definitelyReplaced = applyReplacements(
+                applyDateOnlyReplacements(contents, dateOnlyFieldNames),
+                alwaysReplace,
+            );
 
             if (contents === definitelyReplaced) {
                 /** No changes were made. */
@@ -101,7 +118,10 @@ generatorHelper.generatorHandler({
             const conditionallyReplaced = applyReplacements(definitelyReplaced, replaceIfChanged);
 
             const fixedContent = [
-                ...insertAtTop,
+                '// @ts-nocheck',
+                conditionallyReplaced.includes('DateOnlyUtcIsoString')
+                    ? "import {type DateOnlyUtcIsoString, type UtcIsoString} from 'date-vir';"
+                    : "import {type UtcIsoString} from 'date-vir';",
                 conditionallyReplaced,
             ].join('\n');
 
@@ -114,4 +134,16 @@ function applyReplacements(original: string, replacements: ReadonlyArray<Readonl
     return replacements.reduce((value, replacement) => {
         return value.replaceAll(addRegExpFlags(replacement.match, 'g'), replacement.replace);
     }, original);
+}
+
+/** Applies {@link dateOnlyReplacements} only to the type lines of the given fields. */
+function applyDateOnlyReplacements(original: string, fieldNames: ReadonlyArray<string>) {
+    if (!fieldNames.length) {
+        return original;
+    }
+
+    return original.replaceAll(
+        new RegExp(String.raw`^\s*(?:${fieldNames.join('|')})\??:.*$`, 'gm'),
+        (line) => applyReplacements(line, dateOnlyReplacements),
+    );
 }

@@ -1,7 +1,16 @@
 import {describe} from '@augment-vir/test';
-import {stringDatesPrismaConfigPath} from '../file-paths.mock.js';
+import {
+    stringDatesCustomDatasourcePrismaConfigPath,
+    stringDatesPrismaConfigPath,
+} from '../file-paths.mock.js';
 import {createGeneratorTest} from './test-generator.mock.js';
 
 describe('string-dates generator', () => {
-    createGeneratorTest(import.meta, stringDatesPrismaConfigPath);
+    describe('with @db.Date', () => {
+        createGeneratorTest(import.meta, stringDatesPrismaConfigPath);
+    });
+    /** Shares the same snapshot as `@db.Date` because the output must be identical. */
+    describe('with a custom datasource name', () => {
+        createGeneratorTest(import.meta, stringDatesCustomDatasourcePrismaConfigPath);
+    });
 });
