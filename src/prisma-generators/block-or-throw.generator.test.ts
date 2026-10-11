@@ -21,7 +21,11 @@ describe('block-or-throw generator', () => {
             }),
             key: 'block-or-throw-types',
             transform({originalSchemaContents}) {
-                return `${originalSchemaContents}
+                return `${originalSchemaContents.replace('"relationJoins"]', '"relationJoins", "views"]')}
+
+view UserMultiView {
+    email String
+}
 
 generator blockOrThrowTest {
     provider = "tsx ../src/prisma-generators/block-or-throw.generator.ts"
@@ -68,6 +72,11 @@ generator blockOrThrowTest {
                     'export const case6 = prismaClient.postMulti.findFirstOrThrow();',
                     "export const case7 = extendedClient.userMulti.findUniqueOrThrow({where: {id: 'a'}});",
                     'export const case8 = extendedClient.postMulti.findFirstOrThrow();',
+                    'export const case9 = prismaClient.userMultiView.findFirst();',
+                    'export const case10 = prismaClient.userMultiView.findMany();',
+                    'export const case11 = extendedClient.userMultiView.findMany();',
+                    'export const case12 = prismaClient.userMultiView.findFirstOrThrow();',
+                    'export const case13 = extendedClient.userMultiView.findFirstOrThrow();',
                     '',
                 ].join('\n'),
             );
@@ -79,6 +88,8 @@ generator blockOrThrowTest {
                     11,
                     12,
                     13,
+                    17,
+                    18,
                 ],
             );
         } finally {

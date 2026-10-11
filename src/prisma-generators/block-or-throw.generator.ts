@@ -17,11 +17,15 @@ import {generatorVersion} from './generator-util/version.js';
 const orThrowMethods = [
     'findUniqueOrThrow',
     'findFirstOrThrow',
-];
+] as const;
 
-/** A delegate method declaration plus its JSDoc block. */
+/**
+ * A delegate method declaration plus its JSDoc block. Prisma wraps a signature across several lines
+ * when its generics carry `take`/`skip` validators (as `findFirstOrThrow` on a view does), so the
+ * match runs through the line holding the method's return type.
+ */
 const delegateMethodRegExp = new RegExp(
-    String.raw`\n  /\*\*(?:(?!\*/)[\s\S])*\*/\n  (?:${orThrowMethods.join('|')})<[^\n]*\n`,
+    String.raw`\n  /\*\*(?:(?!\*/)[\s\S])*\*/\n  (?:${orThrowMethods.join('|')})<(?:[^\n]*\n)*?[^\n]*\): Prisma\.Prisma__\w+Client<[^\n]*\n`,
     'g',
 );
 
@@ -66,19 +70,28 @@ generatorHelper.generatorHandler({
     },
     async onGenerate(options) {
         const outputDir = resolveGeneratorOutput(options.generator.output);
-        const modelNames = options.dmmf.datamodel.models.map((model) => model.name);
+        /**
+         * Not every model has every OrThrow method: a view without a unique field has no
+         * `findUniqueOrThrow`. The DMMF mappings list the operations Prisma actually generated.
+         */
+        const modelOrThrowCounts = options.dmmf.mappings.modelOperations.map((mapping) => {
+            return {
+                modelName: mapping.model,
+                count: orThrowMethods.filter((method) => mapping[method]).length,
+            };
+        });
 
         await Promise.all([
             removeMatches({
                 filePath: join(outputDir, 'internal', 'prismaNamespace.ts'),
                 regExp: typeMapOperationRegExp,
-                expectedCount: orThrowMethods.length * modelNames.length,
+                expectedCount: modelOrThrowCounts.reduce((sum, {count}) => sum + count, 0),
             }),
-            ...modelNames.map(async (modelName) => {
+            ...modelOrThrowCounts.map(async ({modelName, count}) => {
                 await removeMatches({
                     filePath: join(outputDir, 'models', `${modelName}.ts`),
                     regExp: delegateMethodRegExp,
-                    expectedCount: orThrowMethods.length,
+                    expectedCount: count,
                 });
             }),
         ]);
