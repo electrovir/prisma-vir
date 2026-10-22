@@ -35,9 +35,9 @@ Index: commonInputTypes.ts
  
  export type DateTimeFilter<$PrismaModel = never> = {
    equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
-@@ -38,20 +38,20 @@
-   gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | runtime.Types.Skip
-   not?: Prisma.NestedDateTimeFilter<$PrismaModel> | Date | string | runtime.Types.Skip
+@@ -45,20 +45,20 @@
+   notIn?: $Enums.UserMultiRole[] | runtime.Types.Skip
+   not?: Prisma.NestedEnumUserMultiRoleFilter<$PrismaModel> | $Enums.UserMultiRole | runtime.Types.Skip
  }
  
 -export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -68,8 +68,8 @@ Index: commonInputTypes.ts
    _min?: Prisma.NestedStringFilter<$PrismaModel> | runtime.Types.Skip
    _max?: Prisma.NestedStringFilter<$PrismaModel> | runtime.Types.Skip
  }
-@@ -137,4 +137,9 @@
-   _max?: Prisma.NestedDateTimeFilter<$PrismaModel> | runtime.Types.Skip
+@@ -171,4 +171,9 @@
+   _max?: Prisma.NestedEnumUserMultiRoleFilter<$PrismaModel> | runtime.Types.Skip
  }
  
  
@@ -462,7 +462,7 @@ Index: UserMulti.ts
  /* eslint-disable */
  // biome-ignore-all lint: generated file
  // @ts-nocheck 
-@@ -24,21 +28,21 @@
+@@ -24,23 +28,23 @@
    _max: UserMultiMaxAggregateOutputType | null
  }
  
@@ -471,6 +471,7 @@ Index: UserMulti.ts
 +  id: UserMultiId | null
    createdAt: Date | null
    updatedAt: Date | null
+   role: $Enums.UserMultiRole | null
 -  extraId: string | null
 +  extraId: UserMultiExtraId | null
    email: string | null
@@ -482,13 +483,14 @@ Index: UserMulti.ts
 +  id: UserMultiId | null
    createdAt: Date | null
    updatedAt: Date | null
+   role: $Enums.UserMultiRole | null
 -  extraId: string | null
 +  extraId: UserMultiExtraId | null
    email: string | null
    password: string | null
  }
  
-@@ -153,12 +157,12 @@
+@@ -159,13 +163,13 @@
    _max?: UserMultiMaxAggregateInputType
  }
  
@@ -497,13 +499,14 @@ Index: UserMulti.ts
 +  id: UserMultiId
    createdAt: Date
    updatedAt: Date
+   role: $Enums.UserMultiRole
 -  extraId: string
 +  extraId: UserMultiExtraId
    email: string
    password: string
    _count: UserMultiCountAggregateOutputType | null
    _min: UserMultiMinAggregateOutputType | null
-@@ -183,12 +187,12 @@
+@@ -190,13 +194,13 @@
  export type UserMultiWhereInput = {
    AND?: Prisma.UserMultiWhereInput | Prisma.UserMultiWhereInput[] | runtime.Types.Skip
    OR?: Prisma.UserMultiWhereInput[] | runtime.Types.Skip
@@ -512,13 +515,14 @@ Index: UserMulti.ts
 +  id?: Prisma.StringFilter<"UserMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
    createdAt?: Prisma.DateTimeFilter<"UserMulti"> | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeFilter<"UserMulti"> | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleFilter<"UserMulti"> | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringFilter<"UserMulti"> | string | runtime.Types.Skip
 +  extraId?: Prisma.StringFilter<"UserMulti", UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringFilter<"UserMulti"> | string | runtime.Types.Skip
    password?: Prisma.StringFilter<"UserMulti"> | string | runtime.Types.Skip
    authorOf?: Prisma.PostMultiListRelationFilter | runtime.Types.Skip
    editorOf?: Prisma.PostMultiListRelationFilter | runtime.Types.Skip
-@@ -205,15 +209,15 @@
+@@ -214,16 +218,16 @@
    editorOf?: Prisma.PostMultiOrderByRelationAggregateInput | runtime.Types.Skip
  }
  
@@ -530,13 +534,14 @@ Index: UserMulti.ts
    NOT?: Prisma.UserMultiWhereInput | Prisma.UserMultiWhereInput[] | runtime.Types.Skip
    createdAt?: Prisma.DateTimeFilter<"UserMulti"> | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeFilter<"UserMulti"> | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleFilter<"UserMulti"> | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringFilter<"UserMulti"> | string | runtime.Types.Skip
 +  extraId?: Prisma.StringFilter<"UserMulti", UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringFilter<"UserMulti"> | string | runtime.Types.Skip
    password?: Prisma.StringFilter<"UserMulti"> | string | runtime.Types.Skip
    authorOf?: Prisma.PostMultiListRelationFilter | runtime.Types.Skip
    editorOf?: Prisma.PostMultiListRelationFilter | runtime.Types.Skip
-@@ -234,83 +238,83 @@
+@@ -245,91 +249,91 @@
  export type UserMultiScalarWhereWithAggregatesInput = {
    AND?: Prisma.UserMultiScalarWhereWithAggregatesInput | Prisma.UserMultiScalarWhereWithAggregatesInput[] | runtime.Types.Skip
    OR?: Prisma.UserMultiScalarWhereWithAggregatesInput[] | runtime.Types.Skip
@@ -545,6 +550,7 @@ Index: UserMulti.ts
 +  id?: Prisma.StringWithAggregatesFilter<"UserMulti", UserMultiId> | UserMultiId | runtime.Types.Skip
    createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserMulti"> | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserMulti"> | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleWithAggregatesFilter<"UserMulti"> | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringWithAggregatesFilter<"UserMulti"> | string | runtime.Types.Skip
 +  extraId?: Prisma.StringWithAggregatesFilter<"UserMulti", UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringWithAggregatesFilter<"UserMulti"> | string | runtime.Types.Skip
@@ -556,6 +562,7 @@ Index: UserMulti.ts
 +  id?: UserMultiId | runtime.Types.Skip
    createdAt?: Date | string | runtime.Types.Skip
    updatedAt?: Date | string | runtime.Types.Skip
+   role?: $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId: string
 +  extraId: UserMultiExtraId
    email: string
@@ -569,6 +576,7 @@ Index: UserMulti.ts
 +  id?: UserMultiId | runtime.Types.Skip
    createdAt?: Date | string | runtime.Types.Skip
    updatedAt?: Date | string | runtime.Types.Skip
+   role?: $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId: string
 +  extraId: UserMultiExtraId
    email: string
@@ -582,6 +590,7 @@ Index: UserMulti.ts
 +  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleFieldUpdateOperationsInput | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 +  extraId?: Prisma.StringFieldUpdateOperationsInput<UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
@@ -595,6 +604,7 @@ Index: UserMulti.ts
 +  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleFieldUpdateOperationsInput | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 +  extraId?: Prisma.StringFieldUpdateOperationsInput<UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
@@ -608,6 +618,7 @@ Index: UserMulti.ts
 +  id?: UserMultiId | runtime.Types.Skip
    createdAt?: Date | string | runtime.Types.Skip
    updatedAt?: Date | string | runtime.Types.Skip
+   role?: $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId: string
 +  extraId: UserMultiExtraId
    email: string
@@ -619,6 +630,7 @@ Index: UserMulti.ts
 +  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleFieldUpdateOperationsInput | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 +  extraId?: Prisma.StringFieldUpdateOperationsInput<UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
@@ -630,13 +642,14 @@ Index: UserMulti.ts
 +  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleFieldUpdateOperationsInput | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 +  extraId?: Prisma.StringFieldUpdateOperationsInput<UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
    password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
  }
  
-@@ -345,12 +349,10 @@
+@@ -367,12 +371,10 @@
    is?: Prisma.UserMultiWhereInput | runtime.Types.Skip
    isNot?: Prisma.UserMultiWhereInput | runtime.Types.Skip
  }
@@ -650,7 +663,7 @@ Index: UserMulti.ts
    set?: Date | string | runtime.Types.Skip
  }
  
-@@ -382,22 +384,22 @@
+@@ -408,24 +410,24 @@
    update?: Prisma.XOR<Prisma.XOR<Prisma.UserMultiUpdateToOneWithWhereWithoutEditorOfInput, Prisma.UserMultiUpdateWithoutEditorOfInput>, Prisma.UserMultiUncheckedUpdateWithoutEditorOfInput> | runtime.Types.Skip
  }
  
@@ -659,6 +672,7 @@ Index: UserMulti.ts
 +  id?: UserMultiId | runtime.Types.Skip
    createdAt?: Date | string | runtime.Types.Skip
    updatedAt?: Date | string | runtime.Types.Skip
+   role?: $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId: string
 +  extraId: UserMultiExtraId
    email: string
@@ -671,13 +685,14 @@ Index: UserMulti.ts
 +  id?: UserMultiId | runtime.Types.Skip
    createdAt?: Date | string | runtime.Types.Skip
    updatedAt?: Date | string | runtime.Types.Skip
+   role?: $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId: string
 +  extraId: UserMultiExtraId
    email: string
    password: string
    editorOf?: Prisma.PostMultiUncheckedCreateNestedManyWithoutEditorInput | runtime.Types.Skip
  }
-@@ -407,22 +409,22 @@
+@@ -435,24 +437,24 @@
    create: Prisma.XOR<Prisma.UserMultiCreateWithoutAuthorOfInput, Prisma.UserMultiUncheckedCreateWithoutAuthorOfInput>
  }
  
@@ -686,6 +701,7 @@ Index: UserMulti.ts
 +  id?: UserMultiId | runtime.Types.Skip
    createdAt?: Date | string | runtime.Types.Skip
    updatedAt?: Date | string | runtime.Types.Skip
+   role?: $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId: string
 +  extraId: UserMultiExtraId
    email: string
@@ -698,13 +714,14 @@ Index: UserMulti.ts
 +  id?: UserMultiId | runtime.Types.Skip
    createdAt?: Date | string | runtime.Types.Skip
    updatedAt?: Date | string | runtime.Types.Skip
+   role?: $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId: string
 +  extraId: UserMultiExtraId
    email: string
    password: string
    authorOf?: Prisma.PostMultiUncheckedCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
  }
-@@ -443,22 +445,22 @@
+@@ -473,24 +475,24 @@
    data: Prisma.XOR<Prisma.UserMultiUpdateWithoutAuthorOfInput, Prisma.UserMultiUncheckedUpdateWithoutAuthorOfInput>
  }
  
@@ -713,6 +730,7 @@ Index: UserMulti.ts
 +  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleFieldUpdateOperationsInput | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 +  extraId?: Prisma.StringFieldUpdateOperationsInput<UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
@@ -725,13 +743,14 @@ Index: UserMulti.ts
 +  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleFieldUpdateOperationsInput | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 +  extraId?: Prisma.StringFieldUpdateOperationsInput<UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
    password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
    editorOf?: Prisma.PostMultiUncheckedUpdateManyWithoutEditorNestedInput | runtime.Types.Skip
  }
-@@ -474,22 +476,22 @@
+@@ -506,24 +508,24 @@
    data: Prisma.XOR<Prisma.UserMultiUpdateWithoutEditorOfInput, Prisma.UserMultiUncheckedUpdateWithoutEditorOfInput>
  }
  
@@ -740,6 +759,7 @@ Index: UserMulti.ts
 +  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleFieldUpdateOperationsInput | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 +  extraId?: Prisma.StringFieldUpdateOperationsInput<UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
@@ -752,13 +772,14 @@ Index: UserMulti.ts
 +  id?: Prisma.StringFieldUpdateOperationsInput<UserMultiId> | UserMultiId | runtime.Types.Skip
    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+   role?: Prisma.EnumUserMultiRoleFieldUpdateOperationsInput | $Enums.UserMultiRole | runtime.Types.Skip
 -  extraId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 +  extraId?: Prisma.StringFieldUpdateOperationsInput<UserMultiExtraId> | UserMultiExtraId | runtime.Types.Skip
    email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
    password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
    authorOf?: Prisma.PostMultiUncheckedUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
  }
-@@ -588,16 +590,16 @@
+@@ -626,17 +628,17 @@
      authorOf: Prisma.$PostMultiPayload<ExtArgs>[]
      editorOf: Prisma.$PostMultiPayload<ExtArgs>[]
    }
@@ -767,6 +788,7 @@ Index: UserMulti.ts
 +    id: UserMultiId
      createdAt: Date
      updatedAt: Date
+     role: $Enums.UserMultiRole
      /**
       * This id is used for tracking extra stuff.
       * @branded()

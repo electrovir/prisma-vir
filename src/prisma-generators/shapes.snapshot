@@ -1,29 +1,44 @@
-Index: shapes.gen.ts
+Index: UserMultiRole.ts
 ===================================================================
---- shapes.gen.ts
-+++ shapes.gen.ts
-@@ -0,0 +1,29 @@
+--- UserMultiRole.ts
++++ UserMultiRole.ts
+@@ -0,0 +1,8 @@
 +/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */
 +// @ts-nocheck
-+import {defineShape, enumShape, unionShape, unknownShape, typedStringShape} from 'object-shape-tester';
++export const UserMultiRole = {
++    Admin: 'Admin',
++    Member: 'Member',
++} as const;
++
++export type UserMultiRole = (typeof UserMultiRole)[keyof typeof UserMultiRole];
+
+
+Index: PostMultiIdShape.ts
+===================================================================
+--- PostMultiIdShape.ts
++++ PostMultiIdShape.ts
+@@ -0,0 +1,6 @@
++/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */
++// @ts-nocheck
++import {typedStringShape} from 'object-shape-tester';
++import {type PostMultiId} from '../models/PostMulti.js';
++
++export const PostMultiIdShape = typedStringShape<PostMultiId>();
+
+
+Index: PostMultiShape.ts
+===================================================================
+--- PostMultiShape.ts
++++ PostMultiShape.ts
+@@ -0,0 +1,16 @@
++/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */
++// @ts-nocheck
++import {defineShape, enumShape, unionShape, unknownShape} from 'object-shape-tester';
 +import {JsonValue} from '@prisma/client/runtime/client.js';
 +import {utcIsoStringShape} from 'date-vir';
-+import {type UserMultiId} from './models/UserMulti.js';
-+import {type UserMultiExtraId} from './models/UserMulti.js';
-+import {type PostMultiId} from './models/PostMulti.js';
++import {PostMultiIdShape} from './PostMultiIdShape.js';
++import {UserMultiIdShape} from './UserMultiIdShape.js';
 +
-+export const UserMultiIdShape = typedStringShape<UserMultiId>();
-+export const UserMultiExtraIdShape = typedStringShape<UserMultiExtraId>();
-+export const PostMultiIdShape = typedStringShape<PostMultiId>();
-+
-+export const UserMultiShape = defineShape({
-+    id: UserMultiIdShape,
-+    createdAt: utcIsoStringShape(),
-+    updatedAt: utcIsoStringShape(),
-+    extraId: UserMultiExtraIdShape,
-+    email: '',
-+    password: '',
-+});
 +export const PostMultiShape = defineShape({
 +    id: PostMultiIdShape,
 +    createdAt: utcIsoStringShape(),
@@ -32,3 +47,68 @@ Index: shapes.gen.ts
 +    authorId: UserMultiIdShape,
 +    editorId: UserMultiIdShape,
 +});
+
+
+Index: UserMultiExtraIdShape.ts
+===================================================================
+--- UserMultiExtraIdShape.ts
++++ UserMultiExtraIdShape.ts
+@@ -0,0 +1,6 @@
++/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */
++// @ts-nocheck
++import {typedStringShape} from 'object-shape-tester';
++import {type UserMultiExtraId} from '../models/UserMulti.js';
++
++export const UserMultiExtraIdShape = typedStringShape<UserMultiExtraId>();
+
+
+Index: UserMultiIdShape.ts
+===================================================================
+--- UserMultiIdShape.ts
++++ UserMultiIdShape.ts
+@@ -0,0 +1,6 @@
++/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */
++// @ts-nocheck
++import {typedStringShape} from 'object-shape-tester';
++import {type UserMultiId} from '../models/UserMulti.js';
++
++export const UserMultiIdShape = typedStringShape<UserMultiId>();
+
+
+Index: UserMultiShape.ts
+===================================================================
+--- UserMultiShape.ts
++++ UserMultiShape.ts
+@@ -0,0 +1,18 @@
++/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */
++// @ts-nocheck
++import {defineShape, enumShape, unionShape, unknownShape} from 'object-shape-tester';
++import {JsonValue} from '@prisma/client/runtime/client.js';
++import {utcIsoStringShape} from 'date-vir';
++import {UserMultiRole} from '../enums/UserMultiRole.js';
++import {UserMultiExtraIdShape} from './UserMultiExtraIdShape.js';
++import {UserMultiIdShape} from './UserMultiIdShape.js';
++
++export const UserMultiShape = defineShape({
++    id: UserMultiIdShape,
++    createdAt: utcIsoStringShape(),
++    updatedAt: utcIsoStringShape(),
++    role: enumShape(UserMultiRole),
++    extraId: UserMultiExtraIdShape,
++    email: '',
++    password: '',
++});
+
+
+Index: shapes.gen.ts
+===================================================================
+--- shapes.gen.ts
++++ shapes.gen.ts
+@@ -0,0 +1,7 @@
++/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */
++// @ts-nocheck
++export * from './shapes/UserMultiIdShape.js';
++export * from './shapes/UserMultiExtraIdShape.js';
++export * from './shapes/PostMultiIdShape.js';
++export * from './shapes/UserMultiShape.js';
++export * from './shapes/PostMultiShape.js';

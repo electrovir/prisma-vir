@@ -104,7 +104,7 @@ Index: UserMulti.ts
 ===================================================================
 --- UserMulti.ts
 +++ UserMulti.ts
-@@ -625,22 +625,8 @@
+@@ -664,22 +664,8 @@
     */
    findUnique<T extends UserMultiFindUniqueArgs>(args: Prisma.SelectSubset<T, UserMultiFindUniqueArgs<ExtArgs>>): Prisma.Prisma__UserMultiClient<runtime.Types.Result.GetResult<Prisma.$UserMultiPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
  
@@ -127,7 +127,7 @@ Index: UserMulti.ts
     * Note, that providing `undefined` is treated as the value not being there.
     * Read more here: https://pris.ly/d/null-undefined
     * @param {UserMultiFindFirstArgs} args - Arguments to find a UserMulti
-@@ -654,24 +640,8 @@
+@@ -693,24 +679,8 @@
     */
    findFirst<T extends UserMultiFindFirstArgs>(args?: Prisma.SelectSubset<T, UserMultiFindFirstArgs<ExtArgs>>): Prisma.Prisma__UserMultiClient<runtime.Types.Result.GetResult<Prisma.$UserMultiPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
  

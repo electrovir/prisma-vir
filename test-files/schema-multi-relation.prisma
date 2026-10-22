@@ -10,10 +10,16 @@ datasource dbMulti {
     provider = "sqlite"
 }
 
+enum UserMultiRole {
+    Admin
+    Member
+}
+
 model UserMulti {
     id        String   @id @default(cuid(2))
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    role      UserMultiRole @default(Member)
 
     /// This id is used for tracking extra stuff.
     /// @branded()
