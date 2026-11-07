@@ -25,3 +25,4 @@ export const stringDatesCustomDatasourcePrismaConfigPath = join(
     'config-string-dates-custom-datasource.ts',
 );
 export const testPrismaConfigMultiRelation = join(testFilesDir, 'config-multi-relation.ts');
+export const testPrismaConfigJoinTables = join(testFilesDir, 'config-join-tables.ts');

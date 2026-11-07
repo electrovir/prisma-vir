@@ -1,0 +1,25 @@
+Index: join-tables.ts
+===================================================================
+--- join-tables.ts
++++ join-tables.ts
+@@ -0,0 +1,20 @@
++/** AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. */
++
++/**
++ * Every implicit many-to-many join table, keyed by its database table name. `modelA` and
++ * `modelB` are the models referenced by the table's `A` and `B` columns.
++ */
++export const joinTables = {
++    "_PostAssignedUsers": {
++        modelA: "PostJoin",
++        modelB: "UserJoin",
++    },
++    "_TagJoinToUserJoin": {
++        modelA: "TagJoin",
++        modelB: "UserJoin",
++    },
++    "_UserFollows": {
++        modelA: "UserJoin",
++        modelB: "UserJoin",
++    },
++} as const;

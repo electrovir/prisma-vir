@@ -1,0 +1,34 @@
+generator jsClientJoinTables {
+    provider     = "prisma-client"
+    output       = "./generated"
+    engineType   = "client"
+    moduleFormat = "esm"
+}
+
+datasource dbJoinTables {
+    provider = "sqlite"
+}
+
+model UserJoin {
+    id String @id @default(cuid(2))
+
+    assignedPosts PostJoin[] @relation("PostAssignedUsers")
+    tags          TagJoin[]
+    authoredPosts PostJoin[] @relation("PostAuthor")
+    following     UserJoin[] @relation("UserFollows")
+    followers     UserJoin[] @relation("UserFollows")
+}
+
+model PostJoin {
+    id String @id @default(cuid(2))
+
+    assignedUsers UserJoin[] @relation("PostAssignedUsers")
+    author        UserJoin   @relation("PostAuthor", fields: [authorId], references: [id])
+    authorId      String
+}
+
+model TagJoin {
+    id String @id @default(cuid(2))
+
+    users UserJoin[]
+}
