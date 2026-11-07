@@ -3,6 +3,7 @@
 import {log} from '@augment-vir/common';
 import {parseArgs} from 'cli-vir';
 import {relative, resolve} from 'node:path';
+import {packageJsonPath} from '../file-paths.js';
 import {formatPrismaSchema, PrismaFormatMode} from './format-prisma-schema.js';
 
 const successMessagePrefixes: Record<PrismaFormatMode, string> = {
@@ -29,6 +30,7 @@ const {mode, schemaPath} = parseArgs(
         binName: 'prisma-format',
         commandDescription: 'Format a Prisma schema with four-space indentation.',
         importMeta: import.meta,
+        packageJsonPath,
     },
 );
 
